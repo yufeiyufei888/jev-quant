@@ -74,6 +74,29 @@ def test_sourced_dividend_uses_record_date_holdings_and_books_payment_once():
     assert account.cash_available == D("1000200.00")
 
 
+def test_all_sourced_moutai_dividends_replay_to_expected_cash():
+    from pathlib import Path
+    from jevquant.actions import load_cash_dividends
+
+    config = Path(__file__).parents[1] / "configs" / "moutai_2023_2024_cash_dividends.json"
+    events = load_cash_dividends(config, "600519.SH")
+    account = Account(D("1000000"))
+    account.lots.append(PositionLot("opening", "600519.SH", date(2023, 1, 1),
+                                    date(2023, 1, 1), 100, D("100"), D("0")))
+    for event in events:
+        for effective_day in (event.record_date, event.ex_date, event.payment_date):
+            account.apply_cash_dividend_event(event, effective_day)
+    expected_dividend = sum((event.cash_per_share * 100 for event in events), D("0")).quantize(D("0.01"))
+    assert expected_dividend == D("9977.50")
+    assert account.cash_available == D("1009977.50")
+    assert account.receivables == D("0.00")
+    from jevquant.reconciliation import reconcile_account_events
+    result = reconcile_account_events(D("1000000"), [], events, date(2024, 12, 20),
+                                      account.cash_available, account.receivables,
+                                      {"600519.SH": 100}, {"600519.SH": 100})
+    assert result.passed
+
+
 def test_buy_reservation_is_an_asset_and_partial_fills_share_order_minimum_fee():
     fees = FeeSchedule()
     account = Account(D("1000000"))
