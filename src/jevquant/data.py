@@ -513,7 +513,7 @@ def inspect_dataset(root: Path, symbol: str = "600519.SH") -> dict[str, object]:
         },
         "unresolved": [
             "Moutai status files exist for 2022–2026, but their source-time metadata explicitly prevents PIT use; listing/delisting lifecycle and daily suspension/ST eligibility still require an accepted point-in-time source.",
-            "The mapped PIT calendar begins 2024-01-02; a 2023 exchange calendar is not yet mapped. Current-session scheduling cannot be inferred from natural weekdays.",
+            "2022–2023 sessions are now derived from pre-published SSE closure schedules; 2024–2026 sessions come from the mapped official calendar. The full planned interval still requires the generated calendar to match supplied daily/status dates before use.",
             "Daily source limit-up/down fields cover the 2023–2024 window and match a rounded 10% previous-close arithmetic check; source provenance and effective-date rule evidence still require verification before they can serve as formal execution constraints.",
             "Four official 2023–2024 Moutai cash-dividend events are mapped; announcement-correction availability, tax treatment, non-cash actions and full event completeness remain open.",
             "Adjustment-factor publication/availability time is unknown; do not use it in point-in-time features.",

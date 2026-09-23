@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from jevquant.support_data import audit_local_support_data
+from jevquant.support_data import audit_local_support_data, load_official_sse_annual_calendar
 
 
 def _write(path: Path, payload: dict) -> None:
@@ -82,3 +82,17 @@ def test_support_audit_flags_duplicate_status_dates_and_wrong_symbol(tmp_path: P
     assert entry["symbol_matches"] is False
     assert entry["duplicate_dates"] == ["2023-01-03"]
     assert entry["classification"] == "RESEARCH_ONLY_NOT_PIT_READY"
+
+
+def test_official_sse_closure_schedules_derive_expected_2022_2023_sessions():
+    calendar_2022 = load_official_sse_annual_calendar(2022)
+    calendar_2023 = load_official_sse_annual_calendar(2023)
+    assert calendar_2022["session_count"] == 242
+    assert calendar_2022["first_session"] == "2022-01-04"
+    assert calendar_2022["last_session"] == "2022-12-30"
+    assert calendar_2023["session_count"] == 242
+    assert calendar_2023["first_session"] == "2023-01-03"
+    assert calendar_2023["last_session"] == "2023-12-29"
+    assert "2023-04-23" not in calendar_2023["sessions"]
+    assert "2023-05-06" not in calendar_2023["sessions"]
+    assert calendar_2023["source_published_on"] == "2022-12-27"

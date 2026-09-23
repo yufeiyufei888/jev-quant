@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 import hashlib
 import json
 from pathlib import Path
@@ -129,7 +129,56 @@ def _calendar_source(path: Path) -> dict[str, Any]:
     }
 
 
-def audit_local_support_data(project_data_root: Path, symbol: str = "600519.SH") -> dict[str, Any]:
+def load_official_sse_annual_calendar(year: int, config_path: Path | None = None) -> dict[str, Any]:
+    """Derive an exchange session calendar from the SSE's pre-published closure schedule."""
+    if config_path is None:
+        config_path = Path(__file__).resolve().parents[2] / "configs" / "sse_annual_closures_v1.json"
+    payload, digest = _load_json(Path(config_path))
+    if payload.get("schema") != "jevquant-sse-annual-closures/v1" or payload.get("exchange") != "SSE":
+        raise ValueError("unsupported official SSE closure schedule config")
+    calendar = next((entry for entry in payload.get("calendars", []) if entry.get("year") == year), None)
+    if calendar is None:
+        raise ValueError(f"no SSE closure schedule for {year}")
+    published_on = date.fromisoformat(calendar["published_on"])
+    if published_on >= date(year, 1, 1):
+        raise ValueError(f"SSE {year} closure schedule was not published before the calendar year")
+
+    closed: set[date] = set()
+    for start_text, end_text in calendar["closure_ranges"]:
+        start, end = date.fromisoformat(start_text), date.fromisoformat(end_text)
+        if end < start:
+            raise ValueError("closure interval end precedes start")
+        day = start
+        while day <= end:
+            if day.year == year:
+                if day in closed:
+                    raise ValueError(f"overlapping closure ranges for {year}: {day.isoformat()}")
+                closed.add(day)
+            day += timedelta(days=1)
+
+    sessions = []
+    day = date(year, 1, 1)
+    while day.year == year:
+        if day.weekday() < 5 and day not in closed:
+            sessions.append(day.isoformat())
+        day += timedelta(days=1)
+    if not sessions:
+        raise ValueError(f"derived empty SSE calendar for {year}")
+    return {
+        "year": year,
+        "source_url": calendar["source_url"],
+        "source_published_on": published_on.isoformat(),
+        "schedule_config_sha256": digest,
+        "sessions": sessions,
+        "session_count": len(sessions),
+        "first_session": sessions[0],
+        "last_session": sessions[-1],
+        "classification": "PIT_READY_FROM_PREPUBLISHED_SSE_CLOSURE_SCHEDULE",
+    }
+
+
+def audit_local_support_data(project_data_root: Path, symbol: str = "600519.SH",
+                             daily_csv: Path | None = None) -> dict[str, Any]:
     """Inventory already-collected calendar and status evidence without modifying sources.
 
     This deliberately reports point-in-time readiness separately from file coverage.
@@ -148,6 +197,39 @@ def audit_local_support_data(project_data_root: Path, symbol: str = "600519.SH")
     statuses = {name: _status_source(path, symbol) for name, path in status_paths.items()}
     calendar = _calendar_source(calendar_path)
     proxies = [_calendar_source(path) for path in proxy_paths]
+    annual_calendars = [load_official_sse_annual_calendar(year) for year in (2022, 2023)]
+
+    early_payload = _load_json(status_paths["2022_2023_strict_capture"])[0]
+    early_fields = early_payload["status_fields"]
+    early_date_index = early_fields.index("date")
+    early_status_dates = {str(row[early_date_index]) for row in early_payload["status_rows"]}
+    annual_coverage_checks: dict[str, Any] = {}
+    daily_dates: set[str] | None = None
+    if daily_csv is not None and Path(daily_csv).is_file():
+        from .data import read_daily_vendor_csv
+        daily_dates = {row["trade_date"].isoformat() for row in read_daily_vendor_csv(Path(daily_csv), symbol)}
+    for annual in annual_calendars:
+        year = annual["year"]
+        expected = set(annual["sessions"])
+        observed_status = {day for day in early_status_dates if day.startswith(str(year))}
+        check: dict[str, Any] = {
+            "year": year,
+            "official_sessions": len(expected),
+            "status_dates": len(observed_status),
+            "status_date_match": expected == observed_status,
+            "status_only_dates": sorted(observed_status - expected),
+            "calendar_only_dates": sorted(expected - observed_status),
+            "status_is_pit_ready": statuses["2022_2023_strict_capture"]["usable_for_pit"],
+        }
+        if daily_dates is not None:
+            observed_daily = {day for day in daily_dates if day.startswith(str(year))}
+            check.update({
+                "daily_dates": len(observed_daily),
+                "daily_date_match": expected == observed_daily,
+                "daily_only_dates": sorted(observed_daily - expected),
+                "daily_missing_calendar_dates": sorted(expected - observed_daily),
+            })
+        annual_coverage_checks[str(year)] = check
 
     comparison: dict[str, Any] = {"comparable": False}
     status_after_2024 = statuses["2024_plus_capture"]
@@ -183,6 +265,8 @@ def audit_local_support_data(project_data_root: Path, symbol: str = "600519.SH")
         "read_only": True,
         "status_sources": statuses,
         "calendar_source": calendar,
+        "annual_schedule_calendars": annual_calendars,
+        "annual_calendar_coverage_checks": annual_coverage_checks,
         "calendar_status_coverage_comparison": comparison,
         "session_window_proxies": proxies,
         "formal_pit_status_gate": "BLOCKED_WHERE_SOURCE_IS_NOT_PIT_READY",

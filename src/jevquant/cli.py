@@ -36,6 +36,7 @@ def main() -> None:
     inventory.add_argument("--symbol", default="600519.SH")
     support_audit = sub.add_parser("audit-support", help="inventory existing calendar/status evidence without modifying it")
     support_audit.add_argument("--project-data-root", type=Path, required=True)
+    support_audit.add_argument("--daily-csv", type=Path, default=None)
     support_audit.add_argument("--output", type=Path, default=Path("artifacts/preflight/support_data_audit.json"))
     support_audit.add_argument("--symbol", default="600519.SH")
     minute_audit = sub.add_parser("audit-minutes", help="audit all raw minute partitions for one symbol")
@@ -80,7 +81,7 @@ def main() -> None:
         return
     if args.command == "audit-support":
         from .support_data import audit_local_support_data
-        report = audit_local_support_data(args.project_data_root, args.symbol)
+        report = audit_local_support_data(args.project_data_root, args.symbol, args.daily_csv)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({
@@ -97,6 +98,7 @@ def main() -> None:
                          "coverage_start": report["calendar_source"].get("coverage_start"),
                          "coverage_end": report["calendar_source"].get("coverage_end")},
             "calendar_status_coverage_comparison": report["calendar_status_coverage_comparison"],
+            "annual_calendar_coverage_checks": report["annual_calendar_coverage_checks"],
             "formal_pit_status_gate": report["formal_pit_status_gate"],
         }, ensure_ascii=False, indent=2))
         return
