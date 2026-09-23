@@ -79,6 +79,38 @@ def test_parquet_reader_preserves_labels_and_flags_special_endpoints(tmp_path: P
     assert [b.volume_shares for b in bars] == [52600, 53912]
 
 
+def test_float32_ohlc_roundoff_is_bounded_to_legal_cent_prices(tmp_path: Path):
+    path = tmp_path / "20240102.parquet"
+    pq.write_table(pa.table({
+        "code": ["600519.SH", "600519.SH"],
+        "trade_time": ["2024-01-02 09:30:00", "2024-01-02 09:35:00"],
+        "open": pa.array([11.81, 11.80], type=pa.float32()),
+        "high": pa.array([11.81, 11.82], type=pa.float32()),
+        "low": pa.array([11.81, 11.79], type=pa.float32()),
+        "close": pa.array([11.81, 11.81], type=pa.float32()),
+        "vol": [100, 200], "amount": [1181.0, 2362.0], "date": ["20240102", "20240102"],
+    }), path)
+    bars = read_vendor_minute_day(path, "600519.SH")
+    assert bars[0].open == D("11.81")
+    assert bars[0].close == D("11.81")
+    assert "source_ohlc_float32_tick_checked" in bars[0].quality_flags
+    assert "source_ohlc_float32_tick_normalized" in bars[0].quality_flags
+
+
+def test_float32_ohlc_outside_tick_error_bound_is_rejected(tmp_path: Path):
+    path = tmp_path / "20240102.parquet"
+    pq.write_table(pa.table({
+        "code": ["600519.SH"], "trade_time": ["2024-01-02 09:30:00"],
+        "open": pa.array([11.812], type=pa.float32()),
+        "high": pa.array([11.812], type=pa.float32()),
+        "low": pa.array([11.812], type=pa.float32()),
+        "close": pa.array([11.812], type=pa.float32()),
+        "vol": [100], "amount": [1181.2], "date": ["20240102"],
+    }), path)
+    with pytest.raises(ValueError, match="outside Float32 legal-tick tolerance"):
+        read_vendor_minute_day(path, "600519.SH")
+
+
 def test_minute_audit_reports_writer_but_does_not_mislabel_it_as_market_provider(tmp_path: Path):
     path = tmp_path / "20240102.parquet"
     pq.write_table(pa.table({
@@ -89,6 +121,7 @@ def test_minute_audit_reports_writer_but_does_not_mislabel_it_as_market_provider
     report = audit_minute_partitions(tmp_path, "600519.SH")
     provenance = report["parquet_metadata_provenance"]
     assert provenance["files_examined"] == 1
+    assert provenance["ohlc_storage_type_counts"] == {"open=float64,high=float64,low=float64,close=float64": 1}
     assert sum(provenance["writer_counts"].values()) == 1
     assert provenance["files_declaring_market_provider"] == 0
     assert provenance["files_declaring_bar_interval_semantics"] == 0
