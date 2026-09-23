@@ -5,12 +5,22 @@ from zoneinfo import ZoneInfo
 from jevquant.models import Bar
 from jevquant.ledger import Account, FeeSchedule
 from jevquant.models import Fill, Side
-from jevquant.p6_sample import (_eligible_execution_bars, _next_order_cutoff, _read_jsonl,
+from jevquant.p6_sample import (_eligible_execution_bars, _execution_bar_at_arrival, _read_jsonl,
                                _rebuild_account_from_fills, _save_checkpoint,
+                               _unresolved_provider_hashes,
                                _state, _truncate_run_logs)
 from jevquant.reconciliation import reconcile_account_events
 
 TZ = ZoneInfo("Asia/Shanghai")
+
+
+def test_p6_retry_success_resolves_old_api_error_on_later_checkpoint_resume():
+    errors = [
+        {"request_hash": "retried", "api_request_attempted": True},
+        {"request_hash": "still-failed", "api_request_attempted": True},
+        {"request_hash": "local-validation", "api_request_attempted": False},
+    ]
+    assert _unresolved_provider_hashes(errors, {"retried"}) == {"still-failed"}
 
 
 def _bar(start: time, end: time) -> Bar:
@@ -22,12 +32,16 @@ def _bar(start: time, end: time) -> Bar:
                interval_end=interval_end)
 
 
-def test_p6_orders_expire_at_next_decision_or_session_close():
+def test_p6_five_minute_arrival_uses_exact_next_execution_bar_without_crossing_breaks():
     day = date(2023, 1, 3)
-    assert _next_order_cutoff(day, 0) == datetime.combine(day, time(10, 5), TZ)
-    assert _next_order_cutoff(day, 3) == datetime.combine(day, time(11, 30), TZ)
-    assert _next_order_cutoff(day, 4) == datetime.combine(day, time(13, 35), TZ)
-    assert _next_order_cutoff(day, 7) == datetime.combine(day, time(15, 0), TZ)
+    morning = _bar(time(9, 40), time(9, 45))
+    lunch = _bar(time(11, 30), time(11, 35))
+    close = _bar(time(14, 55), time(15, 0))
+    bars = {morning.interval_start: morning, lunch.interval_start: lunch,
+            close.interval_start: close}
+    assert _execution_bar_at_arrival(bars, datetime.combine(day, time(9, 35), TZ)) is morning
+    assert _execution_bar_at_arrival(bars, datetime.combine(day, time(11, 25), TZ)) is None
+    assert _execution_bar_at_arrival(bars, datetime.combine(day, time(14, 50), TZ)) is close
 
 
 def test_p6_execution_uses_only_full_post_arrival_bars_before_expiry():
@@ -132,3 +146,16 @@ def test_p6_checkpoint_restores_from_fill_events_and_truncates_incomplete_day(tm
     assert len(fills) == checkpoint["fill_count"] == 1
     _truncate_run_logs(tmp_path, first)
     assert len(_read_jsonl(tmp_path / "decisions.jsonl")) == 1
+
+
+def test_p6_cache_only_resume_restarts_incomplete_first_session(tmp_path):
+    cache = tmp_path / "jev-response-cache.json"
+    cache.write_text('{"validated":true}', encoding="utf-8")
+    decisions = tmp_path / "decisions.jsonl"
+    decisions.write_text('{"trade_date":"2023-01-03"}\n', encoding="utf-8")
+    errors = tmp_path / "errors.jsonl"
+    errors.write_text('{"trade_date":"2023-01-03"}\n', encoding="utf-8")
+    _truncate_run_logs(tmp_path, None)
+    assert cache.read_text(encoding="utf-8") == '{"validated":true}'
+    assert decisions.read_text(encoding="utf-8") == ""
+    assert len(_read_jsonl(errors)) == 1

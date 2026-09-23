@@ -36,8 +36,7 @@ try:
     PROVIDER_ERRORS = (JevConfigurationError, JevResponseError, TypeSafeError)
 except ImportError:
     PROVIDER_ERRORS = (JevConfigurationError, JevResponseError)
-DECISION_ENDS = (time(9, 35), time(10, 5), time(10, 35), time(11, 5),
-                 time(13, 5), time(13, 35), time(14, 5), time(14, 35))
+DECISION_INTERVAL = timedelta(minutes=5)
 INSTRUCTIONS = (
     "你是研究模拟中的受限动作判断器。只依据输入快照决定现在请求BUY还是WAIT；"
     "已有可卖持仓时决定HOLD还是SELL。不要计算股数或改写规则。"
@@ -184,21 +183,22 @@ def _json_line(path: Path, row: dict[str, Any]) -> None:
         stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
 
 
-def _next_order_cutoff(day: date, decision_index: int) -> datetime:
-    """Cancel intraday orders at the next decision or the session boundary."""
-    next_time = DECISION_ENDS[decision_index + 1] if decision_index + 1 < len(DECISION_ENDS) else None
-    if next_time is None:
-        return datetime.combine(day, time(15, 0), TZ)
-    if next_time >= time(13, 0):
-        return datetime.combine(day, time(11, 30), TZ) if DECISION_ENDS[decision_index] < time(12, 0) else datetime.combine(day, next_time, TZ)
-    return datetime.combine(day, next_time, TZ)
-
-
 def _eligible_execution_bars(bars: list[Bar], arrival: datetime, cutoff: datetime) -> list[Bar]:
     return [bar for bar in bars if bar.interval_start is not None and bar.interval_end is not None
             and bar.interval_start >= arrival and bar.interval_end <= cutoff
             and (time(9, 35) <= bar.interval_start.time() <= time(11, 25)
                  or time(13, 5) <= bar.interval_start.time() <= time(14, 50))]
+
+
+def _execution_bar_at_arrival(bars_by_start: dict[datetime, Bar], decision_at: datetime) -> Bar | None:
+    arrival = decision_at + DECISION_INTERVAL
+    bar = bars_by_start.get(arrival)
+    if bar is None or bar.interval_end is None:
+        return None
+    start_clock, end_clock = arrival.time(), bar.interval_end.time()
+    morning = time(9, 30) <= start_clock < time(11, 30) and end_clock <= time(11, 30)
+    afternoon = time(13, 0) <= start_clock < time(15, 0) and end_clock <= time(15, 0)
+    return bar if morning or afternoon else None
 
 
 def _sha256_file(path: Path) -> str:
@@ -219,15 +219,22 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def _truncate_run_logs(output: Path, checkpoint_day: date) -> None:
-    for name in ("decisions.jsonl", "orders.jsonl", "fills.jsonl", "nav.jsonl", "errors.jsonl"):
+def _unresolved_provider_hashes(errors: list[dict[str, Any]], successful_hashes: set[str]) -> set[str]:
+    failed = {row["request_hash"] for row in errors
+              if row.get("api_request_attempted") and row.get("request_hash")}
+    return failed - successful_hashes
+
+
+def _truncate_run_logs(output: Path, checkpoint_day: date | None) -> None:
+    # Errors are attempt evidence and remain append-only across event replay.
+    for name in ("decisions.jsonl", "orders.jsonl", "fills.jsonl", "nav.jsonl"):
         path = output / name
         if not path.exists():
             continue
         retained = []
         for row in _read_jsonl(path):
             day_text = row.get("trade_date")
-            if day_text and date.fromisoformat(day_text) <= checkpoint_day:
+            if checkpoint_day is not None and day_text and date.fromisoformat(day_text) <= checkpoint_day:
                 retained.append(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
         path.write_text("".join(row + "\n" for row in retained), encoding="utf-8", newline="\n")
 
@@ -308,8 +315,8 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "status_files": {str(path): _sha256_file(path) for path in status_paths},
         "minute_partitions": {day.isoformat(): _sha256_file(path) for day, path in minute_paths.items()}}
     run_identity = {"start": start.isoformat(), "sessions": sessions, "symbol": SYMBOL,
-                    "target_weight": "0.80", "decision_times": [value.isoformat() for value in DECISION_ENDS],
-                    "input_hashes": input_hashes, "run_version": "p6-sample-v2"}
+                    "target_weight": "0.80", "decision_interval_minutes": 5,
+                    "input_hashes": input_hashes, "run_version": "p6-sample-v3"}
     fingerprint = hashlib.sha256(json.dumps(run_identity, sort_keys=True, separators=(",", ":"))
                                  .encode("utf-8")).hexdigest()
     for day in warm_days:
@@ -322,15 +329,21 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
     checkpoint_path = output / "checkpoint.json"
     checkpoint_day: date | None = None
     if resume:
-        if not output.is_dir() or not checkpoint_path.is_file():
-            raise ValueError("resume requires an existing output directory with a completed-session checkpoint")
-        checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
-        if checkpoint.get("schema") != "jevquant-p6-checkpoint/v1" or checkpoint.get("run_fingerprint") != fingerprint:
-            raise ValueError("checkpoint schema or source/config fingerprint does not match this run")
-        checkpoint_day = date.fromisoformat(checkpoint["last_completed_session"])
-        if checkpoint_day not in trade_days:
-            raise ValueError("checkpoint session is outside the requested P6 window")
-        _truncate_run_logs(output, checkpoint_day)
+        if not output.is_dir():
+            raise ValueError("resume requires an existing output directory")
+        if checkpoint_path.is_file():
+            checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+            if checkpoint.get("schema") != "jevquant-p6-checkpoint/v1" or checkpoint.get("run_fingerprint") != fingerprint:
+                raise ValueError("checkpoint schema or source/config fingerprint does not match this run")
+            checkpoint_day = date.fromisoformat(checkpoint["last_completed_session"])
+            if checkpoint_day not in trade_days:
+                raise ValueError("checkpoint session is outside the requested P6 window")
+            _truncate_run_logs(output, checkpoint_day)
+        else:
+            # A cache-only retry directory starts from the initial account while
+            # reusing validated responses. This supports recovery when the first
+            # session was interrupted before its first durable checkpoint.
+            _truncate_run_logs(output, None)
     else:
         output.mkdir(parents=True, exist_ok=False)
     cache = output / "jev-response-cache.json"
@@ -378,8 +391,10 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                        if row.get("request_hash")}
         provider_calls = len(prior_usage)
     attempted_hashes = set(prior_usage)
-    failed_hashes = {row["request_hash"] for row in _read_jsonl(error_path)
-                     if row.get("api_request_attempted") and row.get("request_hash")}
+    # An error row is append-only evidence of a failed attempt. A later
+    # successful request with the same hash resolves it, even if resume starts
+    # after that decision's session.
+    failed_hashes = _unresolved_provider_hashes(_read_jsonl(error_path), prior_usage)
     attempted_hashes.update(failed_hashes)
     for day_index, day in enumerate(trade_days, 1):
         if checkpoint_day is not None and day <= checkpoint_day:
@@ -390,23 +405,71 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
             raise ValueError(f"historical status excludes {day}; P6 sample requires an eligible session")
         if day_row.get("limit_up_raw") is None or day_row.get("limit_down_raw") is None:
             raise ValueError(f"missing daily limit bands on {day}")
-        active_order: OrderIntent | None = None
-        for decision_index, decision_clock in enumerate(DECISION_ENDS):
-            decision_bar = next((bar for bar in bars if bar.interval_end and bar.interval_end.time() == decision_clock), None)
-            if decision_bar is None:
-                raise ValueError(f"missing decision-time closed bar {day} {decision_clock}")
+        pending: tuple[OrderIntent, FeeSchedule, int, int, Any] | None = None
+        bars_by_start = {bar.interval_start: bar for bar in bars if bar.interval_start is not None}
+        if len(bars_by_start) != len(bars):
+            raise ValueError(f"missing or duplicate interval start on {day}")
+        for bar_index, decision_bar in enumerate(bars):
             at = decision_bar.interval_end
-            assert at is not None
-            # A previous decision's order is valid only up to this decision point.
-            if active_order is not None:
-                _json_line(order_path, {"order_id": active_order.order_id, "side": active_order.side.value,
-                    "trade_date": day.isoformat(), "quantity": active_order.quantity, "status": "CANCELLED_AT_NEXT_DECISION",
-                    "decision_at": active_order.decision_at.isoformat(), "arrival_at": active_order.arrival_at.isoformat()})
-                if active_order.side is Side.BUY:
-                    account.cancel_buy(active_order.order_id)
-                else:
-                    account.cancel_sell(active_order.order_id)
-                active_order = None
+            if at is None or decision_bar.available_at is None or decision_bar.available_at != at:
+                raise ValueError(f"decision requires a closed and available bar on {day}")
+            # An order arriving at this bar's open is matched before this bar's
+            # close becomes a new decision snapshot. No future bar is processed
+            # ahead of its own event time.
+            if pending is not None:
+                order, fee_schedule, requested_quantity, target_quantity, liquidity = pending
+                if decision_bar.interval_start == order.arrival_at:
+                    matched = match_open_proxy(order, decision_bar, fee_schedule=fee_schedule,
+                        limit_up=day_row["limit_up_raw"], limit_down=day_row["limit_down_raw"])
+                    fill = matched.fill
+                    if fill is not None:
+                        if order.side is Side.BUY:
+                            following = next((candidate for candidate in all_days if candidate > day), None)
+                            if following is None:
+                                raise ValueError("daily data lacks next trade date for T+1 sellability")
+                            account.buy(fill, fee_schedule, following)
+                            account.cancel_buy(order.order_id)
+                        else:
+                            account.sell(fill, fee_schedule)
+                            account.cancel_sell(order.order_id)
+                        fills.append(fill)
+                        fee_total += fill.fee
+                        _json_line(fill_path, {"fill_id": fill.fill_id, "order_id": order.order_id,
+                            "side": fill.side.value, "quantity": fill.quantity, "price_cny": str(fill.price),
+                            "fee_cny": str(fill.fee), "trade_date": fill.trade_date.isoformat(),
+                            "filled_at": fill.filled_at.isoformat(),
+                            "source_bar": {"interval_start": decision_bar.interval_start.isoformat(),
+                                "interval_end": decision_bar.interval_end.isoformat(),
+                                "quality_flags": sorted(decision_bar.quality_flags)}})
+                    else:
+                        if order.side is Side.BUY:
+                            account.cancel_buy(order.order_id)
+                        else:
+                            account.cancel_sell(order.order_id)
+                    _json_line(order_path, {"order_id": order.order_id, "side": order.side.value,
+                        "trade_date": day.isoformat(), "quantity": requested_quantity,
+                        "target_quantity_before_liquidity_cap": target_quantity,
+                        "status": matched.reason, "decision_at": order.decision_at.isoformat(),
+                        "arrival_at": order.arrival_at.isoformat(), "expires_at": at.isoformat(),
+                        "liquidity_cap_shares": liquidity.cap_shares})
+                    pending = None
+                elif decision_bar.interval_start is not None and decision_bar.interval_start > order.arrival_at:
+                    if order.side is Side.BUY:
+                        account.cancel_buy(order.order_id)
+                    else:
+                        account.cancel_sell(order.order_id)
+                    _json_line(order_path, {"order_id": order.order_id, "side": order.side.value,
+                        "trade_date": day.isoformat(), "quantity": requested_quantity,
+                        "status": "ARRIVAL_BAR_MISSING", "decision_at": order.decision_at.isoformat(),
+                        "arrival_at": order.arrival_at.isoformat(), "expires_at": at.isoformat()})
+                    pending = None
+
+            decisions_count += 1
+            if pending is not None:
+                _json_line(decision_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                    "decision": {"action": "SKIP_PENDING_ORDER", "source": "execution_rule",
+                                 "request_hash": None}})
+                continue
             sellable = account.shares_sellable(day, SYMBOL)
             if account.shares_total and not sellable:
                 allowed = ["HOLD"]
@@ -414,9 +477,9 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                 allowed = ["HOLD", "SELL"]
             else:
                 allowed = ["BUY", "WAIT"]
-            state = _state(day, day_index, at, historical_bars + bars, daily_rows, warm_volumes, session_rank,
+            visible_bars = historical_bars + bars[:bar_index + 1]
+            state = _state(day, day_index, at, visible_bars, daily_rows, warm_volumes, session_rank,
                            account, allowed, day_row)
-            decisions_count += 1
             digest = request_hash(state, allowed, INSTRUCTIONS)
             api_attempted = allowed in (["BUY", "WAIT"], ["HOLD", "SELL"])
             if api_attempted and digest not in attempted_hashes:
@@ -431,7 +494,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                     "request_hash": digest, "api_request_attempted": api_attempted,
                     "error_type": type(exc).__name__, "error": str(exc),
                     "action": "SKIP_NO_ORDER", "account_mutated": False})
-                continue
+                raise RuntimeError(f"JEV decision failed at {day} {at:%H:%M}; resume from the last verified session") from exc
             if decision.source == "jev":
                 if decision.request_hash not in prior_usage:
                     usage.record(decision)
@@ -447,7 +510,14 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
             if decision.action_requested not in {"BUY", "SELL"}:
                 continue
             side = Side(decision.action_requested)
-            slot = (at + timedelta(minutes=5)).strftime("%H:%M")
+            arrival = at + DECISION_INTERVAL
+            execution_bar = _execution_bar_at_arrival(bars_by_start, at)
+            if execution_bar is None:
+                _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                    "side": side.value, "status": "NO_EXECUTION_BAR_AT_ARRIVAL",
+                    "arrival_at": arrival.isoformat()})
+                continue
+            slot = arrival.strftime("%H:%M")
             liquidity = build_liquidity_reference(warm_volumes, signal_date=day, slot=slot)
             if liquidity.cap_shares <= 0:
                 _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
@@ -466,8 +536,8 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                                         "side": side.value, "status": "REJECTED_ZERO_QUANTITY"})
                 continue
             order_id = f"p6-{day:%Y%m%d}-{at:%H%M}-{side.value.lower()}"
-            arrival = at + timedelta(minutes=5)
-            expire_at = _next_order_cutoff(day, decision_index)
+            expire_at = execution_bar.interval_end
+            assert expire_at is not None
             order = OrderIntent(order_id, SYMBOL, side, quantity,
                 make_protection_price(side, decision_bar.close), at, expire_at,
                 liquidity_reference=liquidity, decision_at=at, arrival_at=arrival)
@@ -477,64 +547,18 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                 account.reserve_buy(order_id, reserve)
             else:
                 account.reserve_sell(order_id, SYMBOL, quantity, day)
-            active_order = order
-            eligible = _eligible_execution_bars(bars, arrival, expire_at)
-            order_filled = False
-            for exec_bar in eligible:
-                matched = match_open_proxy(order, exec_bar, fee_schedule=fee_schedule,
-                    limit_up=day_row["limit_up_raw"], limit_down=day_row["limit_down_raw"])
-                if matched.fill is None:
-                    _json_line(order_path, {"order_id": order_id, "side": side.value,
-                        "trade_date": day.isoformat(), "quantity": quantity,
-                        "target_quantity_before_liquidity_cap": target if side is Side.BUY else sellable,
-                        "status": matched.reason,
-                        "decision_at": at.isoformat(), "arrival_at": arrival.isoformat(),
-                        "expires_at": expire_at.isoformat(), "attempt_interval_start": exec_bar.interval_start.isoformat(),
-                        "liquidity_reference": {"slot": liquidity.slot,
-                            "session_dates": [item.isoformat() for item in liquidity.session_dates],
-                            "session_volumes_shares": liquidity.session_volumes_shares,
-                            "median_volume_shares": str(liquidity.median_volume_shares),
-                            "fraction": str(liquidity.fraction), "cap_shares": liquidity.cap_shares}})
-                    continue
-                fill = matched.fill
-                if side is Side.BUY:
-                    following = next((candidate for candidate in all_days if candidate > day), None)
-                    if following is None:
-                        raise ValueError("daily data lacks next trade date for T+1 sellability")
-                    account.buy(fill, fee_schedule, following)
-                    # Release the price-protection reserve left after a cheaper fill.
-                    account.cancel_buy(order_id)
-                else:
-                    account.sell(fill, fee_schedule)
-                    account.cancel_sell(order_id)
-                fills.append(fill)
-                fee_total += fill.fee
-                _json_line(fill_path, {"fill_id": fill.fill_id, "order_id": order_id,
-                    "side": side.value, "quantity": fill.quantity, "price_cny": str(fill.price),
-                    "fee_cny": str(fill.fee), "trade_date": fill.trade_date.isoformat(),
-                    "filled_at": fill.filled_at.isoformat(),
-                    "source_bar": {"interval_start": exec_bar.interval_start.isoformat(),
-                                   "interval_end": exec_bar.interval_end.isoformat(),
-                                   "quality_flags": sorted(exec_bar.quality_flags)}})
-                _json_line(order_path, {"order_id": order_id, "side": side.value,
-                    "trade_date": day.isoformat(), "quantity": quantity,
-                    "target_quantity_before_liquidity_cap": target if side is Side.BUY else sellable,
-                    "status": matched.reason, "decision_at": at.isoformat(),
-                    "arrival_at": arrival.isoformat(), "expires_at": expire_at.isoformat(),
-                    "liquidity_cap_shares": liquidity.cap_shares})
-                order_filled = True
-                active_order = None
-                break
-            if not order_filled:
-                if side is Side.BUY:
-                    account.cancel_buy(order_id)
-                else:
-                    account.cancel_sell(order_id)
-                _json_line(order_path, {"order_id": order_id, "side": side.value,
-                    "trade_date": day.isoformat(), "quantity": quantity, "status": "NO_ELIGIBLE_FILL_OR_REJECTED",
-                    "decision_at": at.isoformat(), "arrival_at": arrival.isoformat(),
-                    "expires_at": expire_at.isoformat()})
-                active_order = None
+            pending = (order, fee_schedule, quantity,
+                       target if side is Side.BUY else sellable, liquidity)
+
+        if pending is not None:
+            order, _, _, _, _ = pending
+            if order.side is Side.BUY:
+                account.cancel_buy(order.order_id)
+            else:
+                account.cancel_sell(order.order_id)
+            _json_line(order_path, {"order_id": order.order_id, "side": order.side.value,
+                "trade_date": day.isoformat(), "status": "CANCELLED_AT_SESSION_END",
+                "decision_at": order.decision_at.isoformat(), "arrival_at": order.arrival_at.isoformat()})
 
         # Apply effective-date actions before the close valuation and checkpoint.
         for event in all_dividends:
@@ -575,14 +599,18 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
     errors = _read_jsonl(error_path)
     summary = {
         "schema": "jevquant-p6-live-sample/v1",
-        "run_status": ("RETROSPECTIVE_JEV_DIAGNOSTIC_WITH_API_GAPS" if errors
+        "run_status": ("RETROSPECTIVE_JEV_DIAGNOSTIC_WITH_API_GAPS" if failed_hashes
+                       else "RETROSPECTIVE_JEV_DIAGNOSTIC_AFTER_RECOVERED_API_RETRY" if errors
                        else "RETROSPECTIVE_JEV_DIAGNOSTIC_NOT_FORWARD_SIMULATION"),
         "symbol": SYMBOL, "initial_cash_cny": "1000000.00",
         "start_date": trade_days[0].isoformat(), "end_date": trade_days[-1].isoformat(),
         "sessions": len(trade_days), "decision_count": decisions_count,
         "provider_call_count": len(prior_usage) + len(failed_hashes),
-        "provider_call_attempt_count": len(attempted_hashes),
+        "provider_call_attempt_count": len(prior_usage) + sum(
+            1 for row in errors if row.get("api_request_attempted")),
         "failed_provider_request_count": len(failed_hashes),
+        "resolved_provider_error_count": len({row.get("request_hash") for row in errors
+            if row.get("api_request_attempted") and row.get("request_hash") not in failed_hashes}),
         "decision_error_count": len(errors), "resolved_model": "jev-1.13.0",
         "target_entry_fraction": "0.80", "ending_cash_cny": str(account.cash_total),
         "ending_shares": account.shares_total, "ending_nav_cny": str(final_nav),
@@ -624,7 +652,8 @@ def main() -> None:
     parser.add_argument("--start", type=date.fromisoformat, required=True)
     parser.add_argument("--sessions", type=int, choices=(1, 20), required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--resume", action="store_true", help="restore from the last verified daily checkpoint")
+    parser.add_argument("--resume", action="store_true",
+                        help="restore from the last verified session, or replay from initial cash in a cache-only retry directory")
     parser.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
                         help="acknowledge sending historical price/account snapshots to the configured JEV provider")
     args = parser.parse_args()
