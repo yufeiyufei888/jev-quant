@@ -79,6 +79,22 @@ def test_parquet_reader_preserves_labels_and_flags_special_endpoints(tmp_path: P
     assert [b.volume_shares for b in bars] == [52600, 53912]
 
 
+def test_minute_audit_reports_writer_but_does_not_mislabel_it_as_market_provider(tmp_path: Path):
+    path = tmp_path / "20240102.parquet"
+    pq.write_table(pa.table({
+        "code": ["600519.SH"], "trade_time": ["2024-01-02 09:35:00"],
+        "open": [10.0], "high": [10.0], "low": [10.0], "close": [10.0],
+        "vol": [100], "amount": [1000.0], "date": ["20240102"],
+    }), path)
+    report = audit_minute_partitions(tmp_path, "600519.SH")
+    provenance = report["parquet_metadata_provenance"]
+    assert provenance["files_examined"] == 1
+    assert sum(provenance["writer_counts"].values()) == 1
+    assert provenance["files_declaring_market_provider"] == 0
+    assert provenance["files_declaring_bar_interval_semantics"] == 0
+    assert "serialization only" in provenance["interpretation"]
+
+
 def test_daily_features_ignore_data_after_the_requested_asof_date():
     history = [(date(2024, 1, day), D(str(day))) for day in range(1, 8)]
     asof = date(2024, 1, 5)
