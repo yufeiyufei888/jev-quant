@@ -1,12 +1,13 @@
 from datetime import date, datetime
 from decimal import Decimal as D
 from pathlib import Path
+import hashlib
 
 import pytest
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from jevquant.data import read_daily_vendor_csv, read_vendor_minute_day
+from jevquant.data import audit_minute_partitions, read_daily_vendor_csv, read_vendor_minute_day
 from jevquant.features import daily_features_asof
 from jevquant.models import Bar
 
@@ -66,3 +67,70 @@ def test_daily_features_ignore_data_after_the_requested_asof_date():
     assert baseline["raw_sma_3"] == D("4")
     assert baseline["raw_sma_5"] == D("3")
     assert baseline["return_basis"] == "raw_close_unadjusted_actions_not_applied"
+
+
+def test_full_partition_audit_counts_symbol_bars_and_reconciles_daily_values(tmp_path: Path):
+    root = tmp_path / "minutes"
+    year = root / "2024"
+    year.mkdir(parents=True)
+    pq.write_table(pa.table({
+        "code": ["600519.SH", "600519.SH", "000001.SZ"],
+        "trade_time": ["2024-01-02 09:30:00", "2024-01-02 09:35:00", "2024-01-02 09:30:00"],
+        "open": [10.0, 10.0, 8.0], "high": [10.1, 10.2, 8.1],
+        "low": [9.9, 9.9, 7.9], "close": [10.0, 10.1, 8.0],
+        "vol": [100.0, 200.0, 100.0], "amount": [1000.0, 2020.0, 800.0],
+        "date": ["20240102", "20240102", "20240102"],
+    }), year / "20240102.parquet")
+    daily = tmp_path / "600519.SH.csv"
+    daily.write_text(
+        "股票代码,交易日,开盘价,最高价,最低价,收盘价,成交量（手）,成交额（千元）,复权因子\n"
+        "600519.SH,20240102,10,10.2,9.9,10.1,3,3.02,1\n",
+        encoding="utf-8",
+    )
+    pq.write_table(pa.table({
+        "code": ["600519.SH", "600519.SH"],
+        "trade_time": ["2024-01-03 09:30:00", "2024-01-03 09:35:00"],
+        "open": [11.0, 11.0], "high": [11.1, 11.2], "low": [10.9, 10.9],
+        "close": [11.0, 11.1], "vol": [100.0, 200.0], "amount": [1100.0, 2220.0],
+        "date": ["20240103", "20240103"],
+    }), year / "20240103.parquet")
+    supplemental = tmp_path / "supplement"
+    supplemental.mkdir()
+    pq.write_table(pa.table({
+        "code": ["600519.SH"], "date": ["2024-01-03"], "open": [11.0],
+        "high": [11.2], "low": [10.9], "close": [11.1], "volume": [300.0],
+        "amount": [3320.0],
+    }), supplemental / "daily.parquet")
+    report = audit_minute_partitions(root, "600519.SH", daily, supplemental_daily_parquet_root=supplemental)
+    assert report["partition_files"] == 2
+    assert report["symbol_rows_per_file_distribution"] == {"2": 2}
+    assert report["supplemental_daily_rows_loaded"] == 1
+    assert report["daily_crosscheck"]["overlap_by_daily_source"] == {
+        "user_daily_csv": 1, "baostock_raw_supplement_captured_2026": 1,
+    }
+    assert report["daily_crosscheck"]["volume_exact_match_days"] == 2
+    assert report["daily_crosscheck"]["amount_exact_match_days"] == 2
+    assert report["files_without_symbol_rows"] == []
+    assert len(report["expected_raw_time_labels"]) == 49
+    assert [row["date"] for row in report["nonstandard_time_grid_dates"]] == ["20240102", "20240103"]
+    assert "interval role" in report["semantics"] and "unverified" in report["semantics"]
+
+
+def test_moutai_volume_unit_override_is_date_and_source_hash_bound(tmp_path: Path):
+    path = tmp_path / "20240403.parquet"
+    pq.write_table(pa.table({
+        "code": ["600519.SH", "600519.SH"],
+        "trade_time": ["2024-04-03 09:30:00", "2024-04-03 09:35:00"],
+        "open": [1700.0, 1700.0], "high": [1710.0, 1710.0],
+        "low": [1690.0, 1690.0], "close": [1700.0, 1705.0],
+        "vol": [10000.0, 20000.0], "amount": [170000.0, 340000.0],
+        "date": ["20240403", "20240403"],
+    }), path)
+    entry = {"raw_volume_to_shares": "0.01", "source_file_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+    overrides = {("600519.SH", "2024-04-03"): entry}
+    bars = read_vendor_minute_day(path, "600519.SH", volume_unit_overrides=overrides)
+    assert [bar.volume_shares for bar in bars] == [100, 200]
+    assert "source_volume_unit_corrected_by_hash_bound_rule" in bars[0].quality_flags
+    path.write_bytes(path.read_bytes() + b"tamper")
+    with pytest.raises(ValueError, match="source hash mismatch"):
+        read_vendor_minute_day(path, "600519.SH", volume_unit_overrides=overrides)

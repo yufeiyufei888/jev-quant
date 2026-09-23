@@ -4,14 +4,14 @@ Updated: 2026-09-23
 
 ## Complete in this checkout
 
-- P0: read-only local inventory for Moutai daily and five-minute files; added 154-row BaoStock raw supplement inventory (2026-01-05 to 2026-08-21) with its late capture time recorded.
+- P0: read-only Moutai inventory plus a full five-minute audit of 1,032 date partitions. Every date has 49 rows on the same clock-label grid, with no missing Moutai date rows, duplicate timestamps, or structural invalids. Seven mixed-unit volume dates are normalized by source-hash-bound rules, yielding exact volume reconciliation on all 1,032 dates. Amounts exactly reconcile on only 22 days; max delta is CNY 191. Timestamp interval meaning, endpoint execution semantics, history status/rules, corporate actions and 74 daily missing-value rows remain open.
 - P1/P2: Python 3.11 environment, locked dependencies, CLI, basic account, dated fee schedule, T+1 lots, order reservations, execution proxy, SQLite event log, synthetic examples.
 - P5: pinned SDK adapter contract, strict response validation, identical-request cache and usage receipts. One real connectivity/schema request using only synthetic state resolved to `jev-1.13.0` and passed validation.
-- Synthetic integration: two-session Mock decision → order → fill → T+1 → cash/NAV; 34 tests pass.
+- Synthetic integration: two-session Mock decision → order → fill → T+1 → cash/NAV; 36 tests pass.
 
 ## Not accepted yet
 
-- P0 data gates remain open: five-minute time-label meaning, special 09:30/15:00 rows, full daily cross-check, status/calendar/rule tables and corporate actions.
+- P0 remains blocked for formal historical execution pending timestamp semantics, status/calendar/rule tables, corporate-action accounting and investigation of missing daily rows. The 49-label clock grid is verified but does not prove interval meaning or that endpoints are executable.
 - The existing A-share `quant_v2` integration has a configured private `.env`. JevQuant references that file locally through its ignored `.env`; it reads the key in memory without copying or printing it. The live smoke call used synthetic state only and did not place an order.
 - P6's planned real one-day and 20-trading-day runs have not run. The two-session Mock flow is only an engineering test, not strategy evidence.
 - No historical strategy comparison, forward simulation, or profitability claim has been made.

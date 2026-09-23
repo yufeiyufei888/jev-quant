@@ -34,6 +34,12 @@ def main() -> None:
     inventory.add_argument("--root", type=Path, default=None)
     inventory.add_argument("--output", type=Path, default=Path("artifacts/preflight"))
     inventory.add_argument("--symbol", default="600519.SH")
+    minute_audit = sub.add_parser("audit-minutes", help="audit all raw minute partitions for one symbol")
+    minute_audit.add_argument("--root", type=Path, required=True)
+    minute_audit.add_argument("--daily-csv", type=Path, default=None)
+    minute_audit.add_argument("--supplemental-daily-parquet-root", type=Path, default=None)
+    minute_audit.add_argument("--output", type=Path, default=Path("artifacts/preflight/moutai_minute_audit.json"))
+    minute_audit.add_argument("--symbol", default="600519.SH")
     sub.add_parser("offline-demo", help="run the synthetic ledger golden example")
     workflow = sub.add_parser("mock-round-trip", help="run synthetic decision-to-NAV flow; no live API")
     workflow.add_argument("--output", type=Path, default=Path("artifacts/mock-round-trip"))
@@ -60,6 +66,27 @@ def main() -> None:
         from .data import write_inventory
         path = write_inventory(root, args.output, args.symbol)
         print(path.resolve())
+        return
+    if args.command == "audit-minutes":
+        from .data import audit_minute_partitions
+        report = audit_minute_partitions(
+            args.root, args.symbol, args.daily_csv,
+            progress_callback=lambda done, total: print(f"audited {done}/{total} minute partitions", flush=True),
+            supplemental_daily_parquet_root=args.supplemental_daily_parquet_root,
+        )
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({
+            "output": str(args.output.resolve()),
+            "partition_files": report["partition_files"],
+            "symbol_rows_per_file_distribution": report["symbol_rows_per_file_distribution"],
+            "files_without_symbol_rows": len(report["files_without_symbol_rows"]),
+            "invalid_rows_count": report["invalid_rows_count"],
+            "nonstandard_time_grid_dates": len(report["nonstandard_time_grid_dates"]),
+            "volume_unit_override_dates_applied": report["volume_unit_override_dates_applied"],
+            "daily_crosscheck": report["daily_crosscheck"],
+            "semantics": report["semantics"],
+        }, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from dataclasses import asdict
+from collections import Counter
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pyarrow.compute as pc
+import pyarrow.dataset as ds
 import pyarrow.parquet as pq
 
 from .models import Bar
@@ -17,6 +20,33 @@ from .ledger import FeeSchedule, plan_entry_quantity, tick_up
 D = Decimal
 CN_TZ = ZoneInfo("Asia/Shanghai")
 MINUTE_COLUMNS = {"code", "trade_time", "open", "high", "low", "close", "vol", "amount", "date"}
+VOLUME_OVERRIDE_FILE = Path(__file__).resolve().parents[2] / "configs" / "moutai_minute_volume_unit_overrides.json"
+
+
+def _load_volume_unit_overrides() -> dict[tuple[str, str], dict[str, str]]:
+    if not VOLUME_OVERRIDE_FILE.is_file():
+        return {}
+    data = json.loads(VOLUME_OVERRIDE_FILE.read_text(encoding="utf-8"))
+    if data.get("schema") != "jevquant-minute-volume-unit-overrides/v1":
+        raise ValueError("unknown minute volume override schema")
+    result: dict[tuple[str, str], dict[str, str]] = {}
+    for item in data.get("corrections", []):
+        key = (data["symbol"], item["date"])
+        if key in result or D(item["raw_volume_to_shares"]) <= 0:
+            raise ValueError("duplicate or invalid minute volume correction")
+        result[key] = item
+    return result
+
+
+def _verify_volume_override(path: Path, symbol: str, day: str,
+                            overrides: dict[tuple[str, str], dict[str, str]]) -> Decimal:
+    item = overrides.get((symbol, day))
+    if item is None:
+        return D("1")
+    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    if item.get("source_file_sha256") != actual:
+        raise ValueError(f"minute volume correction source hash mismatch for {day}")
+    return D(item["raw_volume_to_shares"])
 
 
 def _decimal(value: object, field: str) -> Decimal:
@@ -34,13 +64,19 @@ def _optional_decimal(value: object, field: str) -> Decimal | None:
     return _decimal(value, field)
 
 
-def read_vendor_minute_day(path: Path, symbol: str) -> list[Bar]:
+def read_vendor_minute_day(path: Path, symbol: str, *,
+                           volume_unit_overrides: dict[tuple[str, str], dict[str, str]] | None = None) -> list[Bar]:
     """Read one raw 5-minute vendor partition while preserving its timestamp label.
 
     The label-to-interval mapping is deliberately not inferred here. 09:30/15:00
     rows are flagged as unsafe execution references until the source semantics
     have been independently documented.
     """
+    overrides = _load_volume_unit_overrides() if volume_unit_overrides is None else volume_unit_overrides
+    file_date = path.stem
+    file_date_iso = f"{file_date[:4]}-{file_date[4:6]}-{file_date[6:8]}" if len(file_date) == 8 and file_date.isdigit() else None
+    volume_scale = (_verify_volume_override(path, symbol, file_date_iso, overrides)
+                    if file_date_iso else D("1"))
     table = pq.read_table(path)
     missing = MINUTE_COLUMNS - set(table.column_names)
     if missing:
@@ -55,7 +91,9 @@ def read_vendor_minute_day(path: Path, symbol: str) -> list[Bar]:
             flags.add("opening_record")
         if label.time().isoformat() == "15:00:00":
             flags.add("closing_record")
-        volume = _decimal(row["vol"], "vol")
+        if volume_scale != 1:
+            flags.add("source_volume_unit_corrected_by_hash_bound_rule")
+        volume = _decimal(row["vol"], "vol") * volume_scale
         if volume != volume.to_integral_value():
             raise ValueError(f"minute volume is fractional shares at {label.isoformat()}")
         amount = row.get("amount")
@@ -107,6 +145,203 @@ def read_daily_vendor_csv(path: Path, symbol: str) -> list[dict[str, object]]:
                 "price_basis": "raw-price-inferred-from-sample-cross-check",
             })
     return rows
+
+
+def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = None,
+                            progress_callback=None,
+                            supplemental_daily_parquet_root: Path | None = None) -> dict[str, object]:
+    """Read every date partition and report symbol coverage and daily aggregates.
+
+    This audit records raw labels and reconciles values, but deliberately does
+    not infer whether labels mark bar starts/ends or whether 09:30 is executable.
+    """
+    files = sorted(p for p in root.rglob("*.parquet")
+                   if p.stem.isdigit() and len(p.stem) == 8)
+    daily_map: dict[date, dict[str, object]] = {}
+    if daily_csv is not None:
+        daily_map.update({row["trade_date"]: row for row in read_daily_vendor_csv(daily_csv, symbol)})
+    supplemental_rows = 0
+    if supplemental_daily_parquet_root is not None:
+        supplement_files = list(supplemental_daily_parquet_root.rglob("*.parquet"))
+        if supplement_files:
+            supplement = ds.dataset(supplement_files, format="parquet")
+            table = supplement.to_table(filter=(ds.field("code") == symbol),
+                                        columns=["date", "open", "high", "low", "close", "volume", "amount"])
+            for row in table.to_pylist():
+                day_text = str(row["date"])
+                day = (date(int(day_text[:4]), int(day_text[5:7]), int(day_text[8:10]))
+                       if "-" in day_text else date(int(day_text[:4]), int(day_text[4:6]), int(day_text[6:8])))
+                daily_map.setdefault(day, {
+                    "trade_date": day,
+                    "open_raw": _optional_decimal(row["open"], "open"),
+                    "high_raw": _optional_decimal(row["high"], "high"),
+                    "low_raw": _optional_decimal(row["low"], "low"),
+                    "close_raw": _optional_decimal(row["close"], "close"),
+                    "volume_shares": int(_decimal(row["volume"], "volume")) if row["volume"] is not None else None,
+                    "amount_cny": _optional_decimal(row["amount"], "amount"),
+                    "daily_source": "baostock_raw_supplement_captured_2026",
+                })
+                supplemental_rows += 1
+    for row in daily_map.values():
+        row.setdefault("daily_source", "user_daily_csv")
+    row_counts: Counter[int] = Counter()
+    missing_symbol_dates: list[str] = []
+    duplicate_label_dates: list[str] = []
+    nonstandard_time_grid_dates: list[dict[str, object]] = []
+    invalid_rows: list[dict[str, str]] = []
+    date_mismatch_rows = 0
+    opening_label_days = 0
+    closing_label_days = 0
+    volume_override_dates_applied: list[str] = []
+    volume_override_failures: list[dict[str, str]] = []
+    unit_overrides = _load_volume_unit_overrides()
+    daily_overlaps = 0
+    daily_overlap_by_source: Counter[str] = Counter()
+    volume_matches = 0
+    volume_mismatches: list[dict[str, str]] = []
+    amount_exact_matches = 0
+    amount_deltas: list[tuple[str, Decimal, Decimal]] = []
+    open_matches = 0
+    close_within_tick = 0
+    first_label: str | None = None
+    last_label: str | None = None
+    required = {"code", "trade_time", "open", "high", "low", "close", "vol", "amount", "date"}
+    expected_labels = (["09:30:00"]
+                       + [f"{hour:02d}:{minute:02d}:00"
+                          for hour, start, end in ((9, 35, 60), (10, 0, 60), (11, 0, 35),
+                                                   (13, 5, 60), (14, 0, 60))
+                          for minute in range(start, end, 5)]
+                       + ["15:00:00"])
+
+    for index, path in enumerate(files, start=1):
+        schema = pq.read_schema(path)
+        missing = required - set(schema.names)
+        if missing:
+            invalid_rows.append({"file": path.name, "reason": "missing_columns:" + ",".join(sorted(missing))})
+            continue
+        table = pq.read_table(path, columns=sorted(required))
+        selected = table.filter(pc.equal(table["code"], symbol))
+        rows = selected.to_pylist()
+        row_counts[len(rows)] += 1
+        if not rows:
+            missing_symbol_dates.append(path.stem)
+            continue
+        try:
+            date_iso = f"{path.stem[:4]}-{path.stem[4:6]}-{path.stem[6:8]}"
+            try:
+                volume_scale = _verify_volume_override(path, symbol, date_iso, unit_overrides)
+                if volume_scale != 1 and date_iso not in volume_override_dates_applied:
+                    volume_override_dates_applied.append(date_iso)
+            except ValueError as exc:
+                volume_override_failures.append({"date": date_iso, "reason": str(exc)})
+                invalid_rows.append({"file": path.name, "reason": "unit_override_rejected_source_hash_mismatch"})
+                volume_scale = D("1")
+            stamps = [datetime.fromisoformat(str(r["trade_time"])) for r in rows]
+            labels = [stamp.strftime("%H:%M:%S") for stamp in stamps]
+            if len(set(stamps)) != len(stamps):
+                duplicate_label_dates.append(path.stem)
+            if labels != expected_labels:
+                nonstandard_time_grid_dates.append({
+                    "date": path.stem,
+                    "actual_count": len(labels),
+                    "expected_count": len(expected_labels),
+                    "first_difference_index": next((i for i, pair in enumerate(zip(labels, expected_labels))
+                                                     if pair[0] != pair[1]),
+                                                    min(len(labels), len(expected_labels))),
+                })
+            if "09:30:00" in labels:
+                opening_label_days += 1
+            if "15:00:00" in labels:
+                closing_label_days += 1
+            if first_label is None:
+                first_label = stamps[0].isoformat()
+            last_label = stamps[-1].isoformat()
+            for row, stamp in zip(rows, stamps):
+                date_text = str(row["date"])
+                row_date = (date(int(date_text[:4]), int(date_text[4:6]), int(date_text[6:8]))
+                            if len(date_text) == 8 else date.fromisoformat(date_text[:10]))
+                if row_date.isoformat() != path.stem:
+                    date_mismatch_rows += 1
+                try:
+                    low, high = _decimal(row["low"], "low"), _decimal(row["high"], "high")
+                    op, close = _decimal(row["open"], "open"), _decimal(row["close"], "close")
+                    vol = _decimal(row["vol"], "vol") * volume_scale
+                    amount = _optional_decimal(row.get("amount"), "amount")
+                    if (low > min(op, close) or high < max(op, close) or low > high or vol < 0
+                            or vol != vol.to_integral_value() or (amount is not None and amount < 0)):
+                        invalid_rows.append({"file": path.name, "reason": f"ohlc_or_quantity_invalid:{stamp.isoformat()}"})
+                except (ValueError, ArithmeticError) as exc:
+                    invalid_rows.append({"file": path.name, "reason": f"invalid_numeric:{stamp.isoformat()}:{type(exc).__name__}"})
+        except (TypeError, ValueError, OverflowError) as exc:
+            invalid_rows.append({"file": path.name, "reason": f"invalid_time:{type(exc).__name__}"})
+            continue
+
+        day = date.fromisoformat(path.stem[:4] + "-" + path.stem[4:6] + "-" + path.stem[6:8])
+        daily = daily_map.get(day)
+        if daily is not None:
+            daily_overlaps += 1
+            daily_overlap_by_source[str(daily["daily_source"])] += 1
+            daily_volume = daily["volume_shares"]
+            minute_volume = sum(int(_decimal(r["vol"], "vol") * volume_scale) for r in rows)
+            if daily_volume is not None:
+                if minute_volume == daily_volume:
+                    volume_matches += 1
+                else:
+                    volume_mismatches.append({"date": day.isoformat(), "daily_shares": str(daily_volume),
+                                              "minute_shares": str(minute_volume),
+                                              "delta_shares": str(minute_volume - daily_volume),
+                                              "daily_source": str(daily["daily_source"])})
+            daily_amount = daily["amount_cny"]
+            minute_amounts = [_optional_decimal(r.get("amount"), "amount") for r in rows]
+            if daily_amount is not None and all(v is not None for v in minute_amounts):
+                amount = sum(minute_amounts, D("0"))
+                delta = abs(daily_amount - amount)
+                amount_deltas.append((day.isoformat(), delta, daily_amount))
+                if delta == 0:
+                    amount_exact_matches += 1
+            if daily["open_raw"] is not None and daily["open_raw"] == _decimal(rows[0]["open"], "open"):
+                open_matches += 1
+            if daily["close_raw"] is not None and abs(daily["close_raw"] - _decimal(rows[-1]["close"], "close")) <= D("0.01"):
+                close_within_tick += 1
+        if progress_callback is not None and (index % 100 == 0 or index == len(files)):
+            progress_callback(index, len(files))
+
+    return {
+        "report_version": "jevquant-minute-library-audit-v1",
+        "symbol": symbol,
+        "partition_root": str(root),
+        "partition_files": len(files),
+        "symbol_rows_per_file_distribution": {str(k): v for k, v in sorted(row_counts.items())},
+        "files_without_symbol_rows": missing_symbol_dates,
+        "volume_unit_override_dates_applied": sorted(volume_override_dates_applied),
+        "volume_unit_override_failures": volume_override_failures,
+        "duplicate_timestamp_dates": duplicate_label_dates,
+        "nonstandard_time_grid_dates": nonstandard_time_grid_dates,
+        "expected_raw_time_labels": expected_labels,
+        "invalid_rows_count": len(invalid_rows),
+        "invalid_rows_sample": invalid_rows[:20],
+        "row_trade_date_mismatches": date_mismatch_rows,
+        "supplemental_daily_rows_loaded": supplemental_rows,
+        "days_with_0930_label": opening_label_days,
+        "days_with_1500_label": closing_label_days,
+        "raw_first_label": first_label,
+        "raw_last_label": last_label,
+        "daily_crosscheck": {
+            "overlap_days": daily_overlaps,
+            "overlap_by_daily_source": dict(daily_overlap_by_source),
+            "volume_exact_match_days": volume_matches,
+            "volume_mismatch_days": volume_mismatches,
+            "amount_exact_match_days": amount_exact_matches,
+            "amount_delta_max_cny": str(max((x[1] for x in amount_deltas), default=0)) if amount_deltas else None,
+            "amount_delta_max_date": max(amount_deltas, key=lambda x: x[1])[0] if amount_deltas else None,
+            "amount_delta_median_cny": str(sorted(x[1] for x in amount_deltas)[len(amount_deltas)//2]) if amount_deltas else None,
+            "amount_delta_max_relative_bps": str(max((x[1] / x[2] * D("10000") for x in amount_deltas if x[2]), default=0)) if amount_deltas else None,
+            "first_row_open_equals_daily_open_days": open_matches,
+            "last_row_close_within_one_tick_days": close_within_tick,
+            "opening_and_closing_comparisons_are_descriptive_only": True,
+        },
+        "semantics": "validated clock-label sequence only; timestamp interval role and endpoint execution semantics remain unverified",
+    }
 
 
 def inspect_dataset(root: Path, symbol: str = "600519.SH") -> dict[str, object]:
