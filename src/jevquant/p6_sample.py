@@ -1,174 +1,641 @@
-YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éí×}¼İ:-jZ.¶›­–)Ş³R""%6ÖÆÂÂG&6V&ÆR¤Ub×FòÖ66÷VçB'Vç2öâF†R7WÆ–VBÖ÷WF’†—7F÷'’à ¤ÆÂ†—7F÷&–6Â÷WGWG2&RW‡Æ–6—FÇ’&WG&÷7V7F—fRF–væ÷7F–73¢F†R6÷W&6P¦Ö–çWFRÆ&VÇ2&RÖVBVæFW"âVçfW&–f–VB–çFW'fÂÖVæB‡—÷F†W6—2ÂæBF†P§7FGW2f–ÆW2&Ræ÷Bö–çBÖ–â×F–ÖR&V6÷&G2âF†—2ÖöGVÆRæWfW"6öææV7G2Fò¦'&ö¶W"à¢"" ¦g&öÒõögWGW&Uõò–×÷'Bææ÷FF–öç0 ¦–×÷'B&w'6P¦–×÷'B†6†Æ– ¦–×÷'B§6öà¦–×÷'B7FF—7F–70¦g&öÒFFWF–ÖR–×÷'BFFRÂFFWF–ÖRÂF–ÖRÂF–ÖVFVÇF¦g&öÒFV6–ÖÂ–×÷'BFV6–ÖÀ¦g&öÒF†Æ–"–×÷'BF€¦g&öÒG—–ær–×÷'Bç’Â6ÆÆ&ÆP¦g&öÒ¦öæV–æfò–×÷'B¦öæT–æfğ ¦g&öÒæ7F–öç2–×÷'BÆöEö66…öF—f–FVæG0¦g&öÒæFF–×÷'B&VEöF–Ç•÷fVæF÷%ö77`¦g&öÒæW†V7WF–öâ–×÷'BÖ¶U÷&÷FV7F–öå÷&–6RÂÖF6…ö÷Vå÷&÷‡¦g&öÒæÆVFvW"–×÷'B66÷VçBÂfVU66†VGVÆRÂÆåöVçG'•÷VçF—G¦g&öÒæÆ—V–F—G’–×÷'B'V–ÆEöÆ—V–F—G•÷&VfW&Væ6P¦g&öÒæÖöFVÇ2–×÷'B&"Â÷&FW$–çFVçBÂ6–FP¦g&öÒç&÷f–FW"–×÷'B„¦Wd6öæf–wW&F–öäW'&÷"Â¦We&W7öç6TW'&÷"ÂFV6–FUö66†VBÀ¢&WVW7Eö†6‚¦g&öÒç&V6öæ6–Æ–F–öâ–×÷'B&V6öæ6–ÆUö66÷VçEöWfVçG0¦g&öÒç&WG&÷7V7F—fU÷&WÆ’–×÷'B5”Ô$ôÂÂ÷'VWEöF’Â÷&VE÷7FGW2Âæ÷&ÖÆ—¦UöVæEöÆ&VÆVEöF–væ÷7F–0¦g&öÒçW6vR–×÷'BW6vTÆVFvW  ¤BÒFV6–ÖÀ¥E¢Ò¦öæT–æfò‚$6–õ6†æv†’"§G'“ ¢g&öÒG—W6fU÷6F²åö6÷&RæW'&÷'2–×÷'BG—U6fTW'&÷ ¢$õd”DU%ôU%$õ%2Ò„¦Wd6öæf–wW&F–öäW'&÷"Â¦We&W7öç6TW'&÷"ÂG—U6fTW'&÷"¦W†6WB–×÷'DW'&÷# ¢$õd”DU%ôU%$õ%2Ò„¦Wd6öæf–wW&F–öäW'&÷"Â¦We&W7öç6TW'&÷"¤DT4•4”ôåôTäE2Ò‡F–ÖRƒ’Â3R’ÂF–ÖRƒÂR’ÂF–ÖRƒÂ3R’ÂF–ÖRƒÂR’À¢F–ÖRƒ2ÂR’ÂF–ÖRƒ2Â3R’ÂF–ÖRƒBÂR’ÂF–ÖRƒBÂ3R’¤”å5E%T5D”ôå2Ò€¢.KÚiŠşz	Nz›njŠh¹şKŠŞy¨NXù~™™XªKÙÎXŠNijŞYš8.Xú®KéŞhÚî‹é>XZ^[ú¾xZ~Xk>Zé®xëYÊŠû~k$%U‹ùiŠõt•NûÉ² ¢.[{.iÈXúşXÙnhÈK¹>i{nXk>Zé¤„ôÄN‹ùiŠõ4TÄÎ8.KˆŞŠhŠêzé~ˆ*i[h‰niKXiŠxNX‰8" ¢.yºîj~K¹>KØŞY»®Zé®K‹®Kˆ¾jÊ[ÈK¹>i{nXx‹XNKª~y¨Cƒ^ûÈÎKº^iÊ®iÚ^{ªc^KŠ®KªNi‰>iz^y¨NhÈiÈK»~XÎK‹®XŠNijŞˆ8ÎišşûÈÂ ¢.‹ùKˆŞiŠşzÊÃ^iz^[Ë®X‹nXÙnX{®8.KˆŞXªK¹>8KˆŞiÚiØn8KˆŞ[Ù>iz^XÙnX{®8" ¢.XªKÙÎjh.xè~KˆŞiŠşy¸XŠjh.xè~ûÈÎŠøhÚîKˆŞ‹k>i{n˜hº•t•Nh‰d„ôÄN8" ¢  ¦FVböFV6–ÖÂ‡fÇVS¢ç’’ÓâFV6–ÖÂÂæöæS ¢&WGW&âfÇVR–b—6–ç7Fæ6R‡fÇVRÂFV6–ÖÂ’VÇ6R„B‡7G"‡fÇVR’’–bfÇVR—2æ÷BæöæRVÇ6RæöæR  ¦FVb÷7FFR†F“¢FFRÂ6W76–öåö–æFWƒ¢–çBÂC¢FFWF–ÖRÂ&'3¢Æ—7E´&%ÒÀ¢F–Ç•÷&÷w3¢Æ—7E¶F–7E·7G"Âç•ÕÒÂv&Õ÷föÇVÖUö†—7F÷'“¢Æ—7E·GWÆU¶FFRÂ7G"Â–çEÕÒÀ¢6W76–öå÷&æ³¢F–7E¶FFRÂ–çEÒÂ66÷VçC¢66÷VçBÂÆÆ÷vVC¢Æ—7E·7G%ÒÀ¢Æ–Ö—E÷&÷s¢F–7E·7G"Âç•Ò’ÓâF–7E·7G"Âç•Ó ¢f—6–&ÆRÒ¶&"f÷"&"–â&'2–b&"æ–çFW'fÅöVæB—2æ÷BæöæRæB&"æ–çFW'fÅöVæBÃÒEĞ¢–bæ÷Bf—6–&ÆR÷"f—6–&ÆU²ÓÒæ–çFW'fÅöVæBÒC ¢&—6RfÇVTW'&÷"‚&FV6—6–öâ6æ6†÷B×W7BVæBöâ6ö×ÆWFVBf—6–&ÆR&""¢7W'&VçE÷6W76–öåö&'2Ò¶&"f÷"&"–âf—6–&ÆR–b&"çG&FUöFFRÓÒF•Ğ¢†—7F÷'’Ò6÷'FVB‚‡&÷rf÷"&÷r–âF–Ç•÷&÷w0¢–b&÷u²'G&FUöFFR%ÒÂF’æB&÷rævWB‚&6Æ÷6U÷&r"’—2æ÷BæöæR’À¢¶W“ÖÆÖ&F&÷s¢&÷u²'G&FUöFFR%Ò¢Æ7C#BÒf—6–&ÆU²Ó#C¥Ğ¢–bÆVâ†Æ7C#B’Ò#C ¢&—6RfÇVTW'&÷"‚$¤Ub6ÆÇ2&WV—&R#B6ö×ÆWFVBf—fRÖÖ–çWFR&'27&÷72F†Rf—6–&ÆR6W76–öâ†—7F÷'’"¢7W'&VçE÷&–6RÒf—6–&ÆU²ÓÒæ6Æ÷6P¢æ6†÷"ÒÆ7C#E³Òæ÷Và¢F–Ç•ö6Æ÷6W2Ò´B‡&÷u²&6Æ÷6U÷&r%Ò’f÷"&÷r–â†—7F÷'•Ğ ¢FVbF–Ç•÷&WGW&â‡v–æF÷s¢–çB’ÓâFV6–ÖÂÂæöæS ¢–bÆVâ†F–Ç•ö6Æ÷6W2’ÃÒv–æF÷s ¢&WGW&âæöæP¢&WGW&âF–Ç•ö6Æ÷6W5²ÓÒòF–Ç•ö6Æ÷6W5²ÓÒv–æF÷uÒÒB‚#" ¢FVbÖVå÷F–Â‡fÇVW3¢Æ—7E´FV6–ÖÅÒÂã¢–çB’ÓâFV6–ÖÂÂæöæS ¢&WGW&â7VÒ‡fÇVW5²Öã¥ÒÂB‚#"’’òB†â’–bÆVâ‡fÇVW2’ãÒâVÇ6RæöæP ¢6Æ÷BÒf—6–&ÆU²ÓÒæ–çFW'fÅ÷7F'Bç7G&gF–ÖR‚"Tƒ¢TÒ"’–bf—6–&ÆU²ÓÒæ–çFW'fÅ÷7F'BVÇ6R" ¢6W76–öåö†–v‚ÒÖ‚†—FVÒæ†–v‚f÷"—FVÒ–â7W'&VçE÷6W76–öåö&'2¢6W76–öåöÆ÷rÒÖ–â†—FVÒæÆ÷rf÷"—FVÒ–â7W'&VçE÷6W76–öåö&'2¢6W76–öå÷&ævU÷÷6—F–öâÒ‚†7W'&VçE÷&–6RÒ6W76–öåöÆ÷r’ò‡6W76–öåö†–v‚Ò6W76–öåöÆ÷r¢–b6W76–öåö†–v‚â6W76–öåöÆ÷rVÇ6RæöæR¢F–Ç•÷&WGW&ç2Ò¶F–Ç•ö6Æ÷6W5¶–æFW…ÒòF–Ç•ö6Æ÷6W5¶–æFW‚ÒÒÒB‚#"¢f÷"–æFW‚–â&ævR†Ö‚ƒÂÆVâ†F–Ç•ö6Æ÷6W2’Ò#’ÂÆVâ†F–Ç•ö6Æ÷6W2’•Ğ¢†öÆF–æu÷6W76–öç2ÒÖ‚‚‡6W76–öå÷&æ²ævWB†F’Â’Ò6W76–öå÷&æ²ævWB†Æ÷Bæ7V—&VEööâÂ6W76–öå÷&æ²ævWB†F’Â’’²¢f÷"Æ÷B–â66÷VçBæÆ÷G2–bÆ÷Bç7–Ö&öÂÓÒ5”Ô$ôÂ’ÂFVfVÇCÓ¢÷6—F–öå÷fÇVRÒB†66÷VçBç6†&W5÷F÷FÂ’¢7W'&VçE÷&–6P¢æbÒ66÷VçBææb‡µ5”Ô$ôÃ¢7W'&VçE÷&–6WÒ¢6÷7Eö&6—2Ò7VÒ‚„B†Æ÷BçVçF—G’’¢Æ÷BæVçG'•÷&–6Rf÷"Æ÷B–â66÷VçBæÆ÷G2–bÆ÷Bç7–Ö&öÂÓÒ5”Ô$ôÂ’ÂB‚#"’¢Vç&VÆ—¦VBÒ7W'&VçE÷&–6R¢B†66÷VçBç6†&W5÷F÷FÂ’ò6÷7Eö&6—2ÒB‚#"’–b6÷7Eö&6—2VÇ6RæöæP¢&%÷&WGW&ç2Ò·Ğ¢f÷"â–âƒÂ2ÂbÂ"“ ¢&–÷%ö&"Òf—6–&ÆU²ÓÒåÒ–bÆVâ‡f—6–&ÆR’ââVÇ6RæöæP¢&%÷&WGW&ç5·7G"†â•ÒÒ‡f—6–&ÆU²ÓÒæ6Æ÷6Rò&–÷%ö&"æ6Æ÷6RÒB‚#"¢–b&–÷%ö&"—2æ÷BæöæRæB&–÷%ö&"çG&FUöFFRÓÒF’VÇ6RæöæR ¢FVb6ÖU÷6Æ÷E÷&VÆF—fU÷föÇVÖR†&#¢&"’Óâ7G"ÂæöæS ¢–b&"æ–çFW'fÅ÷7F'B—2æöæR÷"&"çG&FUöFFR—2æöæS ¢&WGW&âæöæP¢G'“ ¢&VbÒ'V–ÆEöÆ—V–F—G•÷&VfW&Væ6R‡v&Õ÷föÇVÖUö†—7F÷'’Â6–væÅöFFSÖ&"çG&FUöFFRÀ¢6Æ÷CÖ&"æ–çFW'fÅ÷7F'Bç7G&gF–ÖR‚"Tƒ¢TÒ"’¢W†6WBfÇVTW'&÷# ¢&WGW&âæöæP¢&WGW&â7G"„B†&"çföÇVÖU÷6†&W2’ò&VbæÖVF–å÷föÇVÖU÷6†&W2’–b&VbæÖVF–å÷föÇVÖU÷6†&W2VÇ6RæöæP ¢F—7F–æ7E÷6W76–öç2Ò6÷'FVB‡¶&"çG&FUöFFRf÷"&"–âÆ7C#B–b&"çG&FUöFFR—2æ÷BæöæWÒ¢6W76–öåööfg6WG2Ò·6W76–öã¢–æFW‚Ò†ÆVâ†F—7F–æ7E÷6W76–öç2’Ò¢f÷"–æFW‚Â6W76–öâ–âVçVÖW&FR†F—7F–æ7E÷6W76–öç2—Ğ¢&Wf–÷W5ö6Æ÷6RÒB††—7F÷'•²ÓÕ²&6Æ÷6U÷&r%Ò’–b†—7F÷'’VÇ6RæöæP ¢FVbæ÷&ÖÆ—¦VB‡fÇVS¢FV6–ÖÂ’Óâ7G# ¢&WGW&â7G"‡fÇVRòæ6†÷"¢B‚#"’ ¢&WGW&â°¢'66†VÖ÷fW'6–öâ#¢'7FFU÷c"À¢&–ç7G'VÖVçB#¢²&76WEö–B#¢$54UEó"Â&W†6†ævR#¢$4åôõ4„$R"Â'&–6Uö&6—2#¢'v–æF÷uöæ÷&ÖÆ—¦VB"À¢'F–ÖU÷¦öæR#¢$6–õ6†æv†’'ÒÀ¢'6æ6†÷B#¢²'6W76–öåö–æFW‚#¢6W76–öåö–æFW‚Â&&%÷6Æ÷Eö–æFW‚#¢ÆVâ†7W'&VçE÷6W76–öåö&'2’À¢&FV6—6–öåö6Æö6²#¢Bç7G&gF–ÖR‚"Tƒ¢TÒ"’Â'f—6–&ÆUö&%ö6÷VçB#¢ÆVâ‡f—6–&ÆR’À¢&7&÷76VE÷6W76–öåö–å÷&V6VçE÷v–æF÷r#¢ÆVâ†F—7F–æ7E÷6W76–öç2’âÀ¢'6æ6†÷EöÖöFR#¢'&WG&÷7V7F—fUöVæEöÆ&VÅöF–væ÷7F–2'ÒÀ¢&Ö&¶WB#¢°¢&7W'&VçEö6Æ÷6Uö–æFW…ó#¢æ÷&ÖÆ—¦VB†7W'&VçE÷&–6R’À¢&7W'&VçEö&"#¢²'6Æ÷B#¢6Æ÷BÂ&÷Våö–æFW…ó#¢æ÷&ÖÆ—¦VB‡f—6–&ÆU²ÓÒæ÷Vâ’À¢&†–v…ö–æFW…ó#¢æ÷&ÖÆ—¦VB‡f—6–&ÆU²ÓÒæ†–v‚’À¢&Æ÷uö–æFW…ó#¢æ÷&ÖÆ—¦VB‡f—6–&ÆU²ÓÒæÆ÷r’À¢&6Æ÷6Uö–æFW…ó#¢æ÷&ÖÆ—¦VB‡f—6–&ÆU²ÓÒæ6Æ÷6R’À¢'&VÆF—fU÷föÇVÖU÷6ÖU÷6Æ÷B#¢6ÖU÷6Æ÷E÷&VÆF—fU÷föÇVÖR‡f—6–&ÆU²ÓÒ—ÒÀ¢&6ö×ÆWFVEóVÕö&'2#¢·²'6W76–öåööfg6WB#¢6W76–öåööfg6WG2ævWB†&"çG&FUöFFRÂ’À¢&6Æö6µ÷6Æ÷B#¢&"æ–çFW'fÅ÷7F'Bç7G&gF–ÖR‚"Tƒ¢TÒ"’–b&"æ–çFW'fÅ÷7F'BVÇ6RæöæRÀ¢'6Æ÷Eö–æFW‚#¢7VÒƒf÷"&–÷"–âf—6–&ÆR–b&–÷"çG&FUöFFRÓÒ&"çG&FUöFFP¢æB&–÷"æ–çFW'fÅöVæBÃÒ&"æ–çFW'fÅöVæB’À¢&÷Våö–æFW…ó#¢æ÷&ÖÆ—¦VB†&"æ÷Vâ’Â&†–v…ö–æFW…ó#¢æ÷&ÖÆ—¦VB†&"æ†–v‚’À¢&Æ÷uö–æFW…ó#¢æ÷&ÖÆ—¦VB†&"æÆ÷r’Â&6Æ÷6Uö–æFW…ó#¢æ÷&ÖÆ—¦VB†&"æ6Æ÷6R’À¢'&VÆF—fU÷föÇVÖU÷6ÖU÷6Æ÷B#¢6ÖU÷6Æ÷E÷&VÆF—fU÷föÇVÖR†&"—Ğ¢f÷"&"–âÆ7C#EÒÀ¢&fVGW&W2#¢°¢¢§¶b'&WGW&å÷¶çÕö&'2#¢7G"‡fÇVR’–bfÇVR—2æ÷BæöæRVÇ6RæöæP¢f÷"âÂfÇVR–â&%÷&WGW&ç2æ—FV×2‚—ÒÀ¢¢§¶b'&WGW&å÷¶çÕ÷6W76–öç5÷&u÷VæF§W7FVB#¢7G"†F–Ç•÷&WGW&â†â’’–bF–Ç•÷&WGW&â†â’—2æ÷BæöæRVÇ6RæöæP¢f÷"â–âƒRÂ#Âc—ÒÀ¢'&–6U÷g5öÖ#÷&u÷VæF§W7FVB#¢‡7G"†7W'&VçE÷&–6RòÖVå÷F–Â†F–Ç•ö6Æ÷6W2Â#’ÒB‚#"’¢–bÖVå÷F–Â†F–Ç•ö6Æ÷6W2Â#’VÇ6RæöæR’À¢'&–6U÷g5öÖc÷&u÷VæF§W7FVB#¢‡7G"†7W'&VçE÷&–6RòÖVå÷F–Â†F–Ç•ö6Æ÷6W2Âc’ÒB‚#"’¢–bÖVå÷F–Â†F–Ç•ö6Æ÷6W2Âc’VÇ6RæöæR’À¢&F–Ç•÷föÆF–Æ—G•ó#÷&u÷VæF§W7FVB#¢7G"‡7FF—7F–72ç7FFWb†F–Ç•÷&WGW&ç2’’–bÆVâ†F–Ç•÷&WGW&ç2’ãÒ"VÇ6RæöæRÀ¢&–çG&F•÷&ævU÷÷6—F–öâ#¢7G"‡6W76–öå÷&ævU÷÷6—F–öâ’–b6W76–öå÷&ævU÷÷6—F–öâ—2æ÷BæöæRVÇ6RæöæRÀ¢&vög&öÕ÷&Wf–÷W5÷6W76–öå÷&u÷VæF§W7FVB#¢‡7G"†7W'&VçE÷6W76–öåö&'5³Òæ÷Vâò&Wf–÷W5ö6Æ÷6RÒB‚#"’¢–b7W'&VçE÷6W76–öåö&'2æB&Wf–÷W5ö6Æ÷6RVÇ6RæöæR’À¢ÒÀ¢'&–÷%öF–Ç•ö6Æ÷6Uö–æF–6W5ó#¢·7G"†6Æ÷6Ròæ6†÷"¢B‚#"’’f÷"6Æ÷6R–âF–Ç•ö6Æ÷6W5²ÓcS¥ÕÒÀ¢'&–6Uö&æE÷&ööÕög&7F–öâ#¢°¢'Fõ÷WW"#¢7G"„B†Æ–Ö—E÷&÷u²&Æ–Ö—E÷W÷&r%Ò’ò7W'&VçE÷&–6RÒB‚#"’’À¢'FõöÆ÷vW"#¢7G"„B†Æ–Ö—E÷&÷u²&Æ–Ö—EöF÷vå÷&r%Ò’ò7W'&VçE÷&–6RÒB‚#"’’À¢ÒÀ¢ÒÀ¢&66÷VçB#¢²'÷6—F–öå÷7FFR#¢$Äôär"–b66÷VçBç6†&W5÷F÷FÂVÇ6R$dÄB"À¢&æe÷&F–õ÷Fõö–æ—F–Â#¢7G"†æbò66÷VçBæ–æ—F–Åö66‚’À¢&66…÷vV–v‡B#¢7G"†66÷VçBæ66…÷F÷FÂòæb’À¢'÷6—F–öå÷vV–v‡B#¢7G"‡÷6—F–öå÷fÇVRòæb’À¢'6VÆÆ&ÆUög&7F–öâ#¢7G"„B†66÷VçBç6†&W5÷6VÆÆ&ÆR†F’Â5”Ô$ôÂ’’òB†66÷VçBç6†&W5÷F÷FÂ’¢–b66÷VçBç6†&W5÷F÷FÂVÇ6R#"À¢&†öÆF–æu÷6W76–öç2#¢†öÆF–æu÷6W76–öç2À¢'Vç&VÆ—¦VE÷&WGW&åö&Vf÷&Uö6÷7G2#¢7G"‡Vç&VÆ—¦VB’–bVç&VÆ—¦VB—2æ÷BæöæRVÇ6RæöæRÀ¢'&V6V—f&ÆW5÷&F–õ÷Fõö–æ—F–Â#¢7G"†66÷VçBç&V6V—f&ÆW2ò66÷VçBæ–æ—F–Åö66‚—ÒÀ¢'öÆ–7•ö6öçFW‡B#¢²&ÆöæuööæÇ’#¢G'VRÂ&VçG'•÷F&vWE÷vV–v‡B#¢#ãƒ"À¢'&Wf–Wuö†÷&—¦öå÷6W76–öç2#¢RÂ&æWu÷W&6†6W5÷6VÆÆ&ÆUöæW‡E÷6W76–öâ#¢G'VRÀ¢&W†V7WF–öåöFVÆ•öÖ–çWFW2#¢RÂ'6Æ—vUö'5÷W%÷6–FUö77V×F–öâ#¢RÀ¢&6åö÷VåöÖ–åöÆ÷B#¢7W'&VçE÷&–6R¢òæbÃÒB‚#ãƒ"’À¢&ÆÆ÷vVEö7F–öç2#¢ÆÆ÷vVBÂ&ÆWfW&vUöÆÆ÷vVB#¢fÇ6RÀ¢&'&ö¶W%ö÷&FW'5öVæ&ÆVB#¢fÇ6WÒÀ¢&FF÷VÆ—G’#¢²'&u÷&–6U÷&WGW&ç5÷VæF§W7FVEöf÷%÷VæÖVEö7F–öç2#¢G'VRÀ¢&f—fUöÖ–çWFUö–çFW'fÅöVæEö—5ö77VÖVEöæ÷E÷&÷f–FW%÷fW&–f–VB#¢G'VRÀ¢&f–Æ&–Æ—G•öEö–çFW'fÅöVæEö—5ö77VÖVB#¢G'VRÀ¢&†—7F÷&–6Å÷7FGW5ö—5÷&WG&÷7V7F—fUöæ÷E÷ö–çEö–å÷F–ÖR#¢G'VWÒÀ¢Ğ  ¦FVbö§6öåöÆ–æR‡Fƒ¢F‚Â&÷s¢F–7E·7G"Âç•Ò’ÓâæöæS ¢v—F‚F‚æ÷Vâ‚&"ÂVæ6öF–æsÒ'WFbÓ‚"ÂæWvÆ–æSÒ%Æâ"’27G&VÓ ¢7G&VÒçw&—FR†§6öâæGV×2‡&÷rÂVç7W&Uö66–“ÔfÇ6RÂ6÷'Eö¶W—3ÕG'VRÂ6W&F÷'3Ò‚"Â"Â#¢"’’²%Æâ"  ¦FVböæW‡Eö÷&FW%ö7WFöfb†F“¢FFRÂFV6—6–öåö–æFWƒ¢–çB’ÓâFFWF–ÖS ¢""$6æ6VÂ–çG&F’÷&FW'2BF†RæW‡BFV6—6–öâ÷"F†R6W76–öâ&÷VæF'’â"" ¢æW‡E÷F–ÖRÒDT4•4”ôåôTäE5¶FV6—6–öåö–æFW‚²Ò–bFV6—6–öåö–æFW‚²ÂÆVâ„DT4•4”ôåôTäE2’VÇ6RæöæP¢–bæW‡E÷F–ÖR—2æöæS ¢&WGW&âFFWF–ÖRæ6öÖ&–æR†F’ÂF–ÖRƒRÂ’ÂE¢¢–bæW‡E÷F–ÖRãÒF–ÖRƒ2Â“ ¢&WGW&âFFWF–ÖRæ6öÖ&–æR†F’ÂF–ÖRƒÂ3’ÂE¢’–bDT4•4”ôåôTäE5¶FV6—6–öåö–æFW…ÒÂF–ÖRƒ"Â’VÇ6RFFWF–ÖRæ6öÖ&–æR†F’ÂæW‡E÷F–ÖRÂE¢¢&WGW&âFFWF–ÖRæ6öÖ&–æR†F’ÂæW‡E÷F–ÖRÂE¢  ¦FVböVÆ–v–&ÆUöW†V7WF–öåö&'2†&'3¢Æ—7E´&%ÒÂ'&—fÃ¢FFWF–ÖRÂ7WFöfc¢FFWF–ÖR’ÓâÆ—7E´&%Ó ¢&WGW&â¶&"f÷"&"–â&'2–b&"æ–çFW'fÅ÷7F'B—2æ÷BæöæRæB&"æ–çFW'fÅöVæB—2æ÷BæöæP¢æB&"æ–çFW'fÅ÷7F'BãÒ'&—fÂæB&"æ–çFW'fÅöVæBÃÒ7WFöf`¢æB‡F–ÖRƒ’Â3R’ÃÒ&"æ–çFW'fÅ÷7F'BçF–ÖR‚’ÃÒF–ÖRƒÂ#R¢÷"F–ÖRƒ2ÂR’ÃÒ&"æ–çFW'fÅ÷7F'BçF–ÖR‚’ÃÒF–ÖRƒBÂS’•Ğ  ¦FVb÷6†#Seöf–ÆR‡Fƒ¢F‚’Óâ7G# ¢F–vW7BÒ†6†Æ–"ç6†#Sb‚¢v—F‚F‚æ÷Vâ‚'&""’27G&VÓ ¢f÷"6‡Væ²–â—FW"†ÆÖ&F¢7G&VÒç&VBƒ#B¢#B’Â"""“ ¢F–vW7BçWFFR†6‡Væ²¢&WGW&âF–vW7Bæ†W†F–vW7B‚  ¦FVb÷&VEö§6öæÂ‡Fƒ¢F‚’ÓâÆ—7E¶F–7E·7G"Âç•ÕÓ ¢–bæ÷BF‚æW†—7G2‚“ ¢&WGW&âµĞ¢&÷w2ÒµĞ¢f÷"Æ–æR–âF‚ç&VE÷FW‡B†Væ6öF–æsÒ'WFbÓ‚"’ç7Æ—FÆ–æW2‚“ ¢–bÆ–æRç7G&—‚“ ¢&÷w2æVæB†§6öâæÆöG2†Æ–æR’¢&WGW&â&÷w0  ¦FVb÷G'Væ6FU÷'VåöÆöw2†÷WGWC¢F‚Â6†V6·ö–çEöF“¢FFR’ÓâæöæS ¢f÷"æÖR–â‚&FV6—6–öç2æ§6öæÂ"Â&÷&FW'2æ§6öæÂ"Â&f–ÆÇ2æ§6öæÂ"Â&æbæ§6öæÂ"Â&W'&÷'2æ§6öæÂ"“ ¢F‚Ò÷WGWBòæÖP¢–bæ÷BF‚æW†—7G2‚“ ¢6öçF–çVP¢&WF–æVBÒµĞ¢f÷"&÷r–â÷&VEö§6öæÂ‡F‚“ ¢F•÷FW‡BÒ&÷rævWB‚'G&FUöFFR"¢–bF•÷FW‡BæBFFRæg&öÖ—6öf÷&ÖB†F•÷FW‡B’ÃÒ6†V6·ö–çEöF“ ¢&WF–æVBæVæB†§6öâæGV×2‡&÷rÂVç7W&Uö66–“ÔfÇ6RÂ6÷'Eö¶W—3ÕG'VRÂ6W&F÷'3Ò‚"Â"Â#¢"’’¢F‚çw&—FU÷FW‡B‚""æ¦ö–â‡&÷r²%Æâ"f÷"&÷r–â&WF–æVB’ÂVæ6öF–æsÒ'WFbÓ‚"ÂæWvÆ–æSÒ%Æâ"  ¦FVb÷&V'V–ÆEö66÷VçEög&öÕöf–ÆÇ2‚¢Â–æ—F–Åö66ƒ¢FV6–ÖÂÂG&FUöF—3¢GWÆU¶FFRÂââåÒÀ¢ÆÅö6ÆVæF%öF—3¢GWÆU¶FFRÂââåÒÀ¢f–ÆÇ5÷Fƒ¢F‚ÂF—f–FVæG3¢Æ—7E´ç•ÒÀ¢6†V6·ö–çEöF“¢FFR’ÓâGWÆU´66÷VçBÂÆ—7E´ç•ÕÓ ¢""%&W7F÷&RF†RÆVFvW"'’&WÆ––ærW'6—7FVBf–ÆÂö7F–öâWfVçG2Â–æFWVæFVçFÇ’öb–6¶ÆRâ"" ¢g&öÒæÖöFVÇ2–×÷'Bf–ÆÀ¢66÷VçBÒ66÷VçB†–æ—F–Åö66‚¢'6VBÒµĞ¢f÷"&÷r–â÷&VEö§6öæÂ†f–ÆÇ5÷F‚“ ¢f–ÆÂÒf–ÆÂ‡&÷u²&f–ÆÅö–B%ÒÂ&÷u²&÷&FW%ö–B%ÒÂ5”Ô$ôÂÂ6–FR‡&÷u²'6–FR%Ò’À¢–çB‡&÷u²'VçF—G’%Ò’ÂB‡&÷u²'&–6Uö6ç’%Ò’ÂB‡&÷u²&fVUö6ç’%Ò’À¢FFRæg&öÖ—6öf÷&ÖB‡&÷u²'G&FUöFFR%Ò’ÂFFWF–ÖRæg&öÖ—6öf÷&ÖB‡&÷u²&f–ÆÆVEöB%Ò’¢–bf–ÆÂçG&FUöFFRÃÒ6†V6·ö–çEöF“ ¢'6VBæVæB†f–ÆÂ¢'6VBç6÷'B†¶W“ÖÆÖ&F—FVÓ¢†—FVÒçG&FUöFFRÂ—FVÒæf–ÆÆVEöBÂ—FVÒæf–ÆÅö–B’¢f÷"F’–âG&FUöF—3 ¢–bF’â6†V6·ö–çEöF“ ¢'&V°¢F•öf–ÆÇ2Ò¶—FVÒf÷"—FVÒ–â'6VB–b—FVÒçG&FUöFFRÓÒF•Ğ¢fVW2ÒfVU66†VGVÆRæf÷%÷G&FUöFFR†F’¢f÷"f–ÆÂ–âF•öf–ÆÇ3 ¢–bf–ÆÂç6–FR—26–FRä%U“ ¢æW‡EöF’ÒæW‡B‚†6æF–FFRf÷"6æF–FFR–âÆÅö6ÆVæF%öF—2–b6æF–FFRâF’’ÂæöæR¢–bæW‡EöF’—2æöæS ¢&—6RfÇVTW'&÷"‚&F–Ç’6ÆVæF"Æ6·2æW‡B6W76–öâv†–ÆR&W7F÷&–ær'W’f–ÆÂ"¢66÷VçBæ'W’†f–ÆÂÂfVW2ÂæW‡EöF’¢VÇ6S ¢66÷VçBç6VÆÂ†f–ÆÂÂfVW2¢f÷"WfVçB–âF—f–FVæG3 ¢66÷VçBæÇ•ö66…öF—f–FVæEöWfVçB†WfVçBÂF’¢&WGW&â66÷VçBÂ'6V@  ¦FVb÷6fUö6†V6·ö–çB†÷WGWC¢F‚Â¢Âf–ævW'&–çC¢7G"ÂF“¢FFRÂ66÷VçC¢66÷VçBÀ¢æc¢FV6–ÖÂÂf–ÆÅö6÷VçC¢–çB’ÓâæöæS ¢–ÆöBÒ²'66†VÖ#¢&¦WgVçB×bÖ6†V6·ö–çB÷c"Â''Våöf–ævW'&–çB#¢f–ævW'&–çBÀ¢&Æ7Eö6ö×ÆWFVE÷6W76–öâ#¢F’æ—6öf÷&ÖB‚’Â&66…öföó{h‘éì¶»§q«^wÕ’QT—ÑT”“Ô”È\È^Î‚ˆYˆ\WØ][\Y‚ˆ˜Z[YÚ\Ú\Ë˜Y
-YÙ\İ
-BˆÚœÛÛ—Û[™J\œ›Ü—Ü]È˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+"""Small, traceable JEV-to-account runs on the supplied Moutai history.
 
-K™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
+All historical outputs are explicitly retrospective diagnostics: the source
+minute labels are mapped under an unverified interval-end hypothesis, and the
+status files are not point-in-time records. This module never connects to a
+broker.
+"""
+from __future__ import annotations
 
-Kˆœ™\]Y\İÚ\ÚˆYÙ\İ˜\WÜ™\]Y\İØ][\Yˆ\WØ][\Yˆ™\œ›Ü—İ\Hˆ\J^ÊK—×Û˜[YW×Ë™\œ›ÜˆˆİŠ^ÊKˆ˜Xİ[Ûˆˆ”ÒÒTÓ“×ÓÔ‘Tˆ‹˜XØÛİ[Û]]]Yˆ˜[Ù_JBˆÛÛ[YBˆYˆXÚ\Ú[Û‹œÛİ\˜ÙHOHš™]ˆ‚ˆYˆXÚ\Ú[Û‹œ™\]Y\İÚ\Ú›İ[ˆš[Ü—İ\ØYÙN‚ˆ\ØYÙKœ™XÛÜ™
-XÚ\Ú[ÛŠBˆš[Ü—İ\ØYÙK˜Y
-XÚ\Ú[Û‹œ™\]Y\İÚ\Ú
-Bˆ˜Z[YÚ\Ú\Ë™\ØØ\™
-XÚ\Ú[Û‹œ™\]Y\İÚ\Ú
-BˆÚœÛÛ—Û[™JXÚ\Ú[Û—Ü]È˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+import argparse
+import hashlib
+import json
+import statistics
+from datetime import date, datetime, time, timedelta
+from decimal import Decimal
+from pathlib import Path
+from typing import Any, Callable
+from zoneinfo import ZoneInfo
 
-K™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
+from .actions import load_cash_dividends
+from .data import read_daily_vendor_csv
+from .execution import make_protection_price, match_open_proxy
+from .ledger import Account, FeeSchedule, plan_entry_quantity
+from .liquidity import build_liquidity_reference
+from .models import Bar, OrderIntent, Side
+from .provider import (JevConfigurationError, JevResponseError, decide_cached,
+                       request_hash)
+from .reconciliation import reconcile_account_events
+from .retrospective_replay import SYMBOL, _parquet_day, _read_status, normalize_end_labeled_diagnostic
+from .usage import UsageLedger
 
-Kˆœİ]Hˆİ]K™XÚ\Ú[ÛˆˆÈ˜Xİ[ÛˆˆXÚ\Ú[Û‹˜Xİ[Û—Ü™\]Y\İYˆœ›Ø˜Xš[]Y\ÈˆXÚ\Ú[Û‹›Ü[Û—Ü›Ø˜Xš[]Y\Ë˜ÛÛ™šY[˜ÙHˆXÚ\Ú[Û‹™\İšX][Û—ØÛÛ™šY[˜ÙKˆœ›İšY\—ØÚÚXÙHˆXÚ\Ú[Û‹œ›İšY\—ØÚÚXÙK›[Ù[Ü™\]Y\İYˆXÚ\Ú[Û‹›[Ù[Ü™\]Y\İYˆ›[Ù[Ü™\ÛÛ™YˆXÚ\Ú[Û‹›[Ù[Ü™\ÛÛ™Yœ™\]Y\İÚ\ÚˆXÚ\Ú[Û‹œ™\]Y\İÚ\ÚˆœÛİ\˜ÙHˆXÚ\Ú[Û‹œÛİ\˜ÙKš[œ]İÚÙ[œÈˆXÚ\Ú[Û‹š[œ]İÚÙ[œËˆ›İ]]İÚÙ[œÈˆXÚ\Ú[Û‹›İ]]İÚÙ[œË™\İ[X]YØÛÜİİ\ÙˆXÚ\Ú[Û‹™\İ[X]YØÛÜİİ\Ù_JBˆYˆXÚ\Ú[Û‹˜Xİ[Û—Ü™\]Y\İY›İ[ˆÈ•VH‹”ÑSŸN‚ˆÛÛ[YBˆÚYHHÚYJXÚ\Ú[Û‹˜Xİ[Û—Ü™\]Y\İY
-BˆÛİH
-]
-È[YY[JZ[]\ÏMJJKœİ™[YJ‰R‰SHŠBˆ\]ZY]HHZ[Û\]ZY]WÜ™Y™\™[˜ÙJØ\›Wİ›Û[Y\ËÚYÛ˜[Ù]OY^KÛİ\Ûİ
-BˆYˆ\]ZY]K˜Ø\ÜÚ\™\ÈH‚ˆÚœÛÛ—Û[™JÜ™\—Ü]È˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+D = Decimal
+TZ = ZoneInfo("Asia/Shanghai")
+try:
+    from typesafe_sdk._core.errors import TypeSafeError
+    PROVIDER_ERRORS = (JevConfigurationError, JevResponseError, TypeSafeError)
+except ImportError:
+    PROVIDER_ERRORS = (JevConfigurationError, JevResponseError)
+DECISION_ENDS = (time(9, 35), time(10, 5), time(10, 35), time(11, 5),
+                 time(13, 5), time(13, 35), time(14, 5), time(14, 35))
+INSTRUCTIONS = (
+    "ä½ æ˜¯ç ”ç©¶æ¨¡æ‹Ÿä¸­çš„å—é™åŠ¨ä½œåˆ¤æ–­å™¨ã€‚åªä¾æ®è¾“å…¥å¿«ç…§å†³å®šç°åœ¨è¯·æ±‚BUYè¿˜æ˜¯WAITï¼›"
+    "å·²æœ‰å¯å–æŒä»“æ—¶å†³å®šHOLDè¿˜æ˜¯SELLã€‚ä¸è¦è®¡ç®—è‚¡æ•°æˆ–æ”¹å†™è§„åˆ™ã€‚"
+    "ç›®æ ‡ä»“ä½å›ºå®šä¸ºä¸‹æ¬¡å¼€ä»“æ—¶å‡€èµ„äº§çš„80%ï¼Œä»¥æœªæ¥çº¦5ä¸ªäº¤æ˜“æ—¥çš„æŒæœ‰ä»·å€¼ä¸ºåˆ¤æ–­èƒŒæ™¯ï¼Œ"
+    "è¿™ä¸æ˜¯ç¬¬5æ—¥å¼ºåˆ¶å–å‡ºã€‚ä¸åŠ ä»“ã€ä¸æ æ†ã€ä¸å½“æ—¥å–å‡ºã€‚"
+    "åŠ¨ä½œæ¦‚ç‡ä¸æ˜¯ç›ˆåˆ©æ¦‚ç‡ï¼Œè¯æ®ä¸è¶³æ—¶é€‰æ‹©WAITæˆ–HOLDã€‚"
+)
 
-K™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
 
-KˆœÚYHˆÚYK˜[YKœİ]\Èˆ”‘R‘PÕQÖ‘T“×ÓTURQUWĞĞTŸJBˆÛÛ[YBˆ™YWÜØÚY[HH™YTØÚY[K™›Ü—İ˜YWÙ]J^JBˆYˆÚYH\ÈÚYK•VN‚ˆ\™Ù]H[—Ù[WÜ]X[]JXØÛİ[›˜]ŠÔÖSP“ÓˆXÚ\Ú[Û—Ø˜\‹˜ÛÜÙ_JK
-ŒŠKˆXZÙWÜ›İXİ[Û—ÜšXÙJÚYKXÚ\Ú[Û—Ø˜\‹˜ÛÜÙJKXØÛİ[˜Ø\ÚØ]˜Z[X›Kˆ™\Ù\™OQ
-ŒŒŠKİÜÚ^™OLL™YWÜØÚY[OY™YWÜØÚY[JBˆ]X[]HHZ[Š\™Ù]\]ZY]K˜Ø\ÜÚ\™\ÊBˆ[ÙN‚ˆ]X[]HHZ[ŠÙ[X›K\]ZY]K˜Ø\ÜÚ\™\ÊBˆYˆ]X[]HH‚ˆÚœÛÛ—Û[™JÜ™\—Ü]È˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _decimal(value: Any) -> Decimal | None:
+    return value if isinstance(value, Decimal) else (D(str(value)) if value is not None else None)
 
-K™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
 
-KˆœÚYHˆÚYK˜[YKœİ]\Èˆ”‘R‘PÕQÖ‘T“×ÔUPS•UHŸJBˆÛÛ[YBˆÜ™\—ÚYHˆœ‹^Ù^N‰VI[IYK^Ø]‰R	S_K^ÜÚYK˜[YK›İÙ\Š
-_H‚ˆ\œš]˜[H]
-È[YY[JZ[]\ÏMJBˆ^\™WØ]HÛ™^ÛÜ™\—Øİ]Ù™Š^KXÚ\Ú[Û—Ú[™^
-BˆÜ™\ˆHÜ™\’[[
-Ü™\—ÚYÖSP“ÓÚYK]X[]KˆXZÙWÜ›İXİ[Û—ÜšXÙJÚYKXÚ\Ú[Û—Ø˜\‹˜ÛÜÙJK]^\™WØ]ˆ\]ZY]WÜ™Y™\™[˜ÙO[\]ZY]KXÚ\Ú[Û—Ø]X]\œš]˜[Ø]X\œš]˜[
-BˆYˆÚYH\ÈÚYK•VN‚ˆ™\Ù\™HH
-]X[]JH
-ˆÜ™\‹›[Z]ÜšXÙH
-È™YWÜØÚY[K™\İ[X]JÚYK•VK
-]X[]JH
-ˆÜ™\‹›[Z]ÜšXÙJBˆ™\Ù\™HHZ[ŠXØÛİ[˜Ø\ÚØ]˜Z[X›K™\Ù\™JBˆXØÛİ[œ™\Ù\™WØ^JÜ™\—ÚY™\Ù\™JBˆ[ÙN‚ˆXØÛİ[œ™\Ù\™WÜÙ[
-Ü™\—ÚYÖSP“Ó]X[]K^JBˆXİ]™WÛÜ™\ˆHÜ™\‚ˆ[YÚX›HHÙ[YÚX›WÙ^Xİ][Û—Ø˜\œÊ˜\œË\œš]˜[^\™WØ]
-BˆÜ™\—Ùš[YH˜[ÙBˆ›Üˆ^X×Ø˜\ˆ[ˆ[YÚX›N‚ˆX]ÚYHX]ÚÛÜ[—Ü›ŞJÜ™\‹^X×Ø˜\‹™YWÜØÚY[OY™YWÜØÚY[Kˆ[Z]İ\Y^WÜ›İÖÈ›[Z]İ\Ü˜]È—K[Z]ÙİÛY^WÜ›İÖÈ›[Z]ÙİÛ—Ü˜]È—JBˆYˆX]ÚY™š[\È›Û™N‚ˆÚœÛÛ—Û[™JÜ™\—Ü]È›Ü™\—ÚYˆÜ™\—ÚYœÚYHˆÚYK˜[YKˆ˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
+           daily_rows: list[dict[str, Any]], warm_volume_history: list[tuple[date, str, int]],
+           session_rank: dict[date, int], account: Account, allowed: list[str],
+           limit_row: dict[str, Any]) -> dict[str, Any]:
+    visible = [bar for bar in bars if bar.interval_end is not None and bar.interval_end <= at]
+    if not visible or visible[-1].interval_end != at:
+        raise ValueError("decision snapshot must end on a completed visible bar")
+    current_session_bars = [bar for bar in visible if bar.trade_date == day]
+    history = sorted((row for row in daily_rows
+                      if row["trade_date"] < day and row.get("close_raw") is not None),
+                     key=lambda row: row["trade_date"])
+    last24 = visible[-24:]
+    if len(last24) != 24:
+        raise ValueError("JEV calls require 24 completed five-minute bars across the visible session history")
+    current_price = visible[-1].close
+    anchor = last24[0].open
+    daily_closes = [D(row["close_raw"]) for row in history]
 
-Kœ]X[]Hˆ]X[]Kˆ\™Ù]Ü]X[]WØ™Y›Ü™WÛ\]ZY]WØØ\ˆ\™Ù]YˆÚYH\ÈÚYK•VH[ÙHÙ[X›Kˆœİ]\ÈˆX]ÚYœ™X\ÛÛ‹ˆ™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
+    def daily_return(window: int) -> Decimal | None:
+        if len(daily_closes) <= window:
+            return None
+        return daily_closes[-1] / daily_closes[-1 - window] - D("1")
 
-K˜\œš]˜[Ø]ˆ\œš]˜[š\ÛÙ›Ü›X]
+    def mean_tail(values: list[Decimal], n: int) -> Decimal | None:
+        return sum(values[-n:], D("0")) / D(n) if len(values) >= n else None
 
-Kˆ™^\™\×Ø]ˆ^\™WØ]š\ÛÙ›Ü›X]
+    slot = visible[-1].interval_start.strftime("%H:%M") if visible[-1].interval_start else ""
+    session_high = max(item.high for item in current_session_bars)
+    session_low = min(item.low for item in current_session_bars)
+    session_range_position = ((current_price - session_low) / (session_high - session_low)
+                              if session_high > session_low else None)
+    daily_returns = [daily_closes[index] / daily_closes[index - 1] - D("1")
+                     for index in range(max(1, len(daily_closes) - 20), len(daily_closes))]
+    holding_sessions = max((session_rank.get(day, 0) - session_rank.get(lot.acquired_on, session_rank.get(day, 0)) + 1
+        for lot in account.lots if lot.symbol == SYMBOL), default=0)
+    position_value = D(account.shares_total) * current_price
+    nav = account.nav({SYMBOL: current_price})
+    cost_basis = sum((D(lot.quantity) * lot.entry_price for lot in account.lots if lot.symbol == SYMBOL), D("0"))
+    unrealized = current_price * D(account.shares_total) / cost_basis - D("1") if cost_basis else None
+    bar_returns = {}
+    for n in (1, 3, 6, 12):
+        prior_bar = visible[-1 - n] if len(visible) > n else None
+        bar_returns[str(n)] = (visible[-1].close / prior_bar.close - D("1")
+            if prior_bar is not None and prior_bar.trade_date == day else None)
 
-K˜][\Ú[\˜[Üİ\ˆ^X×Ø˜\‹š[\˜[Üİ\š\ÛÙ›Ü›X]
+    def same_slot_relative_volume(bar: Bar) -> str | None:
+        if bar.interval_start is None or bar.trade_date is None:
+            return None
+        try:
+            ref = build_liquidity_reference(warm_volume_history, signal_date=bar.trade_date,
+                                            slot=bar.interval_start.strftime("%H:%M"))
+        except ValueError:
+            return None
+        return str(D(bar.volume_shares) / ref.median_volume_shares) if ref.median_volume_shares else None
 
-Kˆ›\]ZY]WÜ™Y™\™[˜ÙHˆÈœÛİˆ\]ZY]KœÛİˆœÙ\ÜÚ[Û—Ù]\ÈˆÚ][Kš\ÛÙ›Ü›X]
+    distinct_sessions = sorted({bar.trade_date for bar in last24 if bar.trade_date is not None})
+    session_offsets = {session: index - (len(distinct_sessions) - 1)
+                       for index, session in enumerate(distinct_sessions)}
+    previous_close = D(history[-1]["close_raw"]) if history else None
 
-H›Üˆ][H[ˆ\]ZY]KœÙ\ÜÚ[Û—Ù]\×KˆœÙ\ÜÚ[Û—İ›Û[Y\×ÜÚ\™\Èˆ\]ZY]KœÙ\ÜÚ[Û—İ›Û[Y\×ÜÚ\™\Ëˆ›YYX[—İ›Û[YWÜÚ\™\ÈˆİŠ\]ZY]K›YYX[—İ›Û[YWÜÚ\™\ÊKˆ™œ˜Xİ[ÛˆˆİŠ\]ZY]K™œ˜Xİ[ÛŠK˜Ø\ÜÚ\™\Èˆ\]ZY]K˜Ø\ÜÚ\™\ß_JBˆÛÛ[YBˆš[HX]ÚY™š[ˆYˆÚYH\ÈÚYK•VN‚ˆ›ÛİÚ[™ÈH™^
+    def normalized(value: Decimal) -> str:
+        return str(value / anchor * D("100"))
 
-Ø[™Y]H›ÜˆØ[™Y]H[ˆ[Ù^\ÈYˆØ[™Y]Hˆ^JK›Û™JBˆYˆ›ÛİÚ[™È\È›Û™N‚ˆ˜Z\ÙH˜[YQ\œ›ÜŠ™Z[H]HXÚÜÈ™^˜YH]H›Üˆ
-ÌHÙ[Xš[]HŠBˆXØÛİ[˜^Jš[™YWÜØÚY[K›ÛİÚ[™ÊBˆÈ™[X\ÙHHšXÙK\›İXİ[Ûˆ™\Ù\™HYY\ˆHÚX\\ˆš[‚ˆXØÛİ[˜Ø[˜Ù[Ø^JÜ™\—ÚY
-Bˆ[ÙN‚ˆXØÛİ[œÙ[
-š[™YWÜØÚY[JBˆXØÛİ[˜Ø[˜Ù[ÜÙ[
-Ü™\—ÚY
-Bˆš[Ë˜\[™
-š[
-Bˆ™YWİİ[
-ÏHš[™™YBˆÚœÛÛ—Û[™Jš[Ü]È™š[ÚYˆš[™š[ÚY›Ü™\—ÚYˆÜ™\—ÚYˆœÚYHˆÚYK˜[YKœ]X[]Hˆš[œ]X[]KœšXÙWØÛHˆİŠš[œšXÙJKˆ™™YWØÛHˆİŠš[™™YJK˜YWÙ]Hˆš[˜YWÙ]Kš\ÛÙ›Ü›X]
+    return {
+        "schema_version": "state_v1",
+        "instrument": {"asset_id": "ASSET_001", "exchange": "CN_A_SHARE", "price_basis": "window_normalized",
+                       "time_zone": "Asia/Shanghai"},
+        "snapshot": {"session_index": session_index, "bar_slot_index": len(current_session_bars),
+                     "decision_clock": at.strftime("%H:%M"), "visible_bar_count": len(visible),
+                     "crossed_session_in_recent_window": len(distinct_sessions) > 1,
+                     "snapshot_mode": "retrospective_end_label_diagnostic"},
+        "market": {
+            "current_close_index_100": normalized(current_price),
+            "current_bar": {"slot": slot, "open_index_100": normalized(visible[-1].open),
+                            "high_index_100": normalized(visible[-1].high),
+                            "low_index_100": normalized(visible[-1].low),
+                            "close_index_100": normalized(visible[-1].close),
+                            "relative_volume_same_slot": same_slot_relative_volume(visible[-1])},
+            "completed_5m_bars": [{"session_offset": session_offsets.get(bar.trade_date, 0),
+                "clock_slot": bar.interval_start.strftime("%H:%M") if bar.interval_start else None,
+                "slot_index": sum(1 for prior in visible if prior.trade_date == bar.trade_date
+                                  and prior.interval_end <= bar.interval_end),
+                "open_index_100": normalized(bar.open), "high_index_100": normalized(bar.high),
+                "low_index_100": normalized(bar.low), "close_index_100": normalized(bar.close),
+                "relative_volume_same_slot": same_slot_relative_volume(bar)}
+                for bar in last24],
+            "features": {
+                **{f"return_{n}_bars": str(value) if value is not None else None
+                   for n, value in bar_returns.items()},
+                **{f"return_{n}_sessions_raw_unadjusted": str(daily_return(n)) if daily_return(n) is not None else None
+                   for n in (5, 20, 60)},
+                "price_vs_ma20_raw_unadjusted": (str(current_price / mean_tail(daily_closes, 20) - D("1"))
+                    if mean_tail(daily_closes, 20) else None),
+                "price_vs_ma60_raw_unadjusted": (str(current_price / mean_tail(daily_closes, 60) - D("1"))
+                    if mean_tail(daily_closes, 60) else None),
+                "daily_volatility_20_raw_unadjusted": str(statistics.pstdev(daily_returns)) if len(daily_returns) >= 2 else None,
+                "intraday_range_position": str(session_range_position) if session_range_position is not None else None,
+                "gap_from_previous_session_raw_unadjusted": (str(current_session_bars[0].open / previous_close - D("1"))
+                    if current_session_bars and previous_close else None),
+            },
+            "prior_daily_close_indices_100": [str(close / anchor * D("100")) for close in daily_closes[-65:]],
+            "price_band_room_fraction": {
+                "to_upper": str(D(limit_row["limit_up_raw"]) / current_price - D("1")),
+                "to_lower": str(D(limit_row["limit_down_raw"]) / current_price - D("1")),
+            },
+        },
+        "account": {"position_state": "LONG" if account.shares_total else "FLAT",
+                    "nav_ratio_to_initial": str(nav / account.initial_cash),
+                    "cash_weight": str(account.cash_total / nav),
+                    "position_weight": str(position_value / nav),
+                    "sellable_fraction": str(D(account.shares_sellable(day, SYMBOL)) / D(account.shares_total))
+                        if account.shares_total else "0",
+                    "holding_sessions": holding_sessions,
+                    "unrealized_return_before_costs": str(unrealized) if unrealized is not None else None,
+                    "receivables_ratio_to_initial": str(account.receivables / account.initial_cash)},
+        "policy_context": {"long_only": True, "entry_target_weight": "0.80",
+                            "review_horizon_sessions": 5, "new_purchases_sellable_next_session": True,
+                            "execution_delay_minutes": 5, "slippage_bps_per_side_assumption": 5,
+                            "can_open_min_lot": current_price * 100 / nav <= D("0.80"),
+                            "allowed_actions": allowed, "leverage_allowed": False,
+                            "broker_orders_enabled": False},
+        "data_quality": {"raw_price_returns_unadjusted_for_unmapped_actions": True,
+            "five_minute_interval_end_is_assumed_not_provider_verified": True,
+            "availability_at_interval_end_is_assumed": True,
+            "historical_status_is_retrospective_not_point_in_time": True},
+    }
 
-Kˆ™š[YØ]ˆš[™š[YØ]š\ÛÙ›Ü›X]
 
-KˆœÛİ\˜ÙWØ˜\ˆˆÈš[\˜[Üİ\ˆ^X×Ø˜\‹š[\˜[Üİ\š\ÛÙ›Ü›X]
+def _json_line(path: Path, row: dict[str, Any]) -> None:
+    with path.open("a", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
 
-Kˆš[\˜[Ù[™ˆ^X×Ø˜\‹š[\˜[Ù[™š\ÛÙ›Ü›X]
 
-Kˆœ]X[]WÙ›YÜÈˆÛÜY
-^X×Ø˜\‹œ]X[]WÙ›YÜÊ__JBˆÚœÛÛ—Û[™JÜ™\—Ü]È›Ü™\—ÚYˆÜ™\—ÚYœÚYHˆÚYK˜[YKˆ˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _next_order_cutoff(day: date, decision_index: int) -> datetime:
+    """Cancel intraday orders at the next decision or the session boundary."""
+    next_time = DECISION_ENDS[decision_index + 1] if decision_index + 1 < len(DECISION_ENDS) else None
+    if next_time is None:
+        return datetime.combine(day, time(15, 0), TZ)
+    if next_time >= time(13, 0):
+        return datetime.combine(day, time(11, 30), TZ) if DECISION_ENDS[decision_index] < time(12, 0) else datetime.combine(day, next_time, TZ)
+    return datetime.combine(day, next_time, TZ)
 
-Kœ]X[]Hˆ]X[]Kˆ\™Ù]Ü]X[]WØ™Y›Ü™WÛ\]ZY]WØØ\ˆ\™Ù]YˆÚYH\ÈÚYK•VH[ÙHÙ[X›Kˆœİ]\ÈˆX]ÚYœ™X\ÛÛ‹™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
 
-Kˆ˜\œš]˜[Ø]ˆ\œš]˜[š\ÛÙ›Ü›X]
+def _eligible_execution_bars(bars: list[Bar], arrival: datetime, cutoff: datetime) -> list[Bar]:
+    return [bar for bar in bars if bar.interval_start is not None and bar.interval_end is not None
+            and bar.interval_start >= arrival and bar.interval_end <= cutoff
+            and (time(9, 35) <= bar.interval_start.time() <= time(11, 25)
+                 or time(13, 5) <= bar.interval_start.time() <= time(14, 50))]
 
-K™^\™\×Ø]ˆ^\™WØ]š\ÛÙ›Ü›X]
 
-Kˆ›\]ZY]WØØ\ÜÚ\™\Èˆ\]ZY]K˜Ø\ÜÚ\™\ßJBˆÜ™\—Ùš[YHYBˆXİ]™WÛÜ™\ˆH›Û™Bˆœ™XZÂˆYˆ›İÜ™\—Ùš[Y‚ˆYˆÚYH\ÈÚYK•VN‚ˆXØÛİ[˜Ø[˜Ù[Ø^JÜ™\—ÚY
-Bˆ[ÙN‚ˆXØÛİ[˜Ø[˜Ù[ÜÙ[
-Ü™\—ÚY
-BˆÚœÛÛ—Û[™JÜ™\—Ü]È›Ü™\—ÚYˆÜ™\—ÚYœÚYHˆÚYK˜[YKˆ˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
-Kœ]X[]Hˆ]X[]Kœİ]\Èˆ““×ÑSQÒP“WÑ’SÓÔ—Ô‘R‘PÕQ‹ˆ™XÚ\Ú[Û—Ø]ˆ]š\ÛÙ›Ü›X]
 
-K˜\œš]˜[Ø]ˆ\œš]˜[š\ÛÙ›Ü›X]
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            rows.append(json.loads(line))
+    return rows
 
-Kˆ™^\™\×Ø]ˆ^\™WØ]š\ÛÙ›Ü›X]
 
-_JBˆXİ]™WÛÜ™\ˆH›Û™B‚ˆÈ\HY™™Xİ]™KY]HXİ[ÛœÈ™Y›Ü™HHÛÜÙH˜[X][Ûˆ[™ÚXÚÜÚ[‚ˆ›Üˆ]™[[ˆ[Ù]šY[™Î‚ˆXØÛİ[˜\WØØ\ÚÙ]šY[™Ù]™[
-]™[^JBˆÈØ\œHX\šÜÈXÜ›ÜÜÈ]\ËˆZ[HÛÜÙH\ÈHX\šÈÛ›H[™Ù\È›İXÙHÜ™\œË‚ˆÛÜÙHHÙXÚ[X[
-^WÜ›İË™Ù]
-˜ÛÜÙWÜ˜]ÈŠJBˆYˆÛÜÙH\È›İ›Û™N‚ˆ\]Z]WÛX\šÜÖÔÖSP“ÓHHÛÜÙBˆ˜]ˆHXØÛİ[›˜]Š\]Z]WÛX\šÜÊBˆÚœÛÛ—Û[™J˜]—Ü]È˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _truncate_run_logs(output: Path, checkpoint_day: date) -> None:
+    for name in ("decisions.jsonl", "orders.jsonl", "fills.jsonl", "nav.jsonl", "errors.jsonl"):
+        path = output / name
+        if not path.exists():
+            continue
+        retained = []
+        for row in _read_jsonl(path):
+            day_text = row.get("trade_date")
+            if day_text and date.fromisoformat(day_text) <= checkpoint_day:
+                retained.append(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+        path.write_text("".join(row + "\n" for row in retained), encoding="utf-8", newline="\n")
 
-K˜[X][Û—Ø]ˆ]][YK˜ÛÛXš[™J^K[YJMK
-KŠKš\ÛÙ›Ü›X]
 
-Kˆ˜Ø\ÚØÛHˆİŠXØÛİ[˜Ø\Úİİ[
-KœÚ\™\ÈˆXØÛİ[œÚ\™\×İİ[ˆ›X\š×ÜšXÙWØÛHˆİŠ\]Z]WÛX\šÜË™Ù]
-ÖSP“Ó
-JHYˆÖSP“Ó[ˆ\]Z]WÛX\šÜÈ[ÙH›Û™Kˆœ™XÙZ]˜X›\×ØÛHˆİŠXØÛİ[œ™XÙZ]˜X›\ÊK›˜]—ØÛHˆİŠ˜]ŠKˆ™˜]ÙİÛ—Ùœ›ÛWÚ[š]X[ˆİŠ
-
-ŒLŠHH˜]ŠHÈ
-ŒLŠJ_JBˆ™XÈH™XÛÛ˜Ú[WØXØÛİ[Ù]™[Ê
-ŒLŒŠKš[Ë[Ù]šY[™Ë^KˆXØÛİ[˜Ø\Úİİ[XØÛİ[œ™XÙZ]˜X›\ËÔÖSP“ÓˆXØÛİ[œÚ\™\×İİ[JBˆYˆ›İ™XËœ\ÜÙY‚ˆ˜Z[\™HHÈœİ]\Èˆ”—Ô‘TVWÑRSQÒS‘TS‘S•ĞPĞÓÕS•Ô‘PÓÓÒSPUSÓˆ‹ˆ˜YWÙ]Hˆ^Kš\ÛÙ›Ü›X]
+def _rebuild_account_from_fills(*, initial_cash: Decimal, trade_days: tuple[date, ...],
+                                all_calendar_days: tuple[date, ...],
+                                fills_path: Path, dividends: list[Any],
+                                checkpoint_day: date) -> tuple[Account, list[Any]]:
+    """Restore the ledger by replaying persisted fill/action events, independently of a pickle."""
+    from .models import Fill
+    account = Account(initial_cash)
+    parsed = []
+    for row in _read_jsonl(fills_path):
+        fill = Fill(row["fill_id"], row["order_id"], SYMBOL, Side(row["side"]),
+                    int(row["quantity"]), D(row["price_cny"]), D(row["fee_cny"]),
+                    date.fromisoformat(row["trade_date"]), datetime.fromisoformat(row["filled_at"]))
+        if fill.trade_date <= checkpoint_day:
+            parsed.append(fill)
+    parsed.sort(key=lambda item: (item.trade_date, item.filled_at, item.fill_id))
+    for day in trade_days:
+        if day > checkpoint_day:
+            break
+        day_fills = [item for item in parsed if item.trade_date == day]
+        fees = FeeSchedule.for_trade_date(day)
+        for fill in day_fills:
+            if fill.side is Side.BUY:
+                next_day = next((candidate for candidate in all_calendar_days if candidate > day), None)
+                if next_day is None:
+                    raise ValueError("daily calendar lacks next session while restoring a buy fill")
+                account.buy(fill, fees, next_day)
+            else:
+                account.sell(fill, fees)
+        for event in dividends:
+            account.apply_cash_dividend_event(event, day)
+    return account, parsed
 
-Kœ™XÛÜ™YØØ\ÚØ]˜Z[X›WØÛHˆİŠXØÛİ[˜Ø\ÚØ]˜Z[X›JKˆœ™XÛÜ™YØØ\ÚÜ™\Ù\™YØÛHˆİŠXØÛİ[˜Ø\ÚÜ™\Ù\™Y
-Kˆ™^XİYØØ\ÚØÛHˆİŠ™XË™^XİYØØ\Ú
-Kœ™XÛÜ™YØØ\Úİİ[ØÛHˆİŠ™XËœ™XÛÜ™YØØ\Ú
-Kˆ˜Ø\ÚÙY™™\™[˜ÙWØÛHˆİŠ™XË˜Ø\ÚÙY™™\™[˜ÙJKˆ™^XİYÜÚ\™\ÈˆXİ
-™XË™^XİYÜÚ\™\ÊKˆœ™XÛÜ™YÜÚ\™\ÈˆXİ
-™XËœ™XÛÜ™YÜÚ\™\ÊKœÚ\™WÙY™™\™[˜Ù\ÈˆXİ
-™XËœÚ\™WÙY™™\™[˜Ù\Ê_Bˆ
-İ]]È™˜Z[\™KšœÛÛˆŠKÜš]Wİ^
-œÛÛ‹™[\Ê˜Z[\™K[œİ\™WØ\ØÚZOQ˜[ÙK[™[LŠK[˜ÛÙ[™ÏH]‹NŠBˆ˜Z\ÙH[[YQ\œ›ÜŠˆš[™\[™[™XÛÛ˜Ú[X][Ûˆ˜Z[YÛˆÙ^_NˆÜ™XßHŠBˆØ\ÚÜ™XÛÛ˜Ú[X][ÛˆH™XÂˆÜØ]™WØÚXÚÜÚ[
-İ]]š[™Ù\œš[Yš[™Ù\œš[^OY^KXØÛİ[XXØÛİ[ˆ˜][˜]‹š[ØÛİ[[[Šš[ÊJBˆYˆ›ÙÜ™\ÜÎ‚ˆ›ÙÜ™\ÜÊˆ”ˆÙ^WÚ[™^KŞÛ[Š˜YWÙ^\Ê_HÙ\ÜÚ[ÛœÎÈXÚ\Ú[ÛœÏ^ÙXÚ\Ú[Ûœ×ØÛİ[NÈ[š\]YWØ\WÜ™\]Y\İÏ^Û[Š][\YÚ\Ú\Ê_NÈU^Û˜]ŸHŠBˆ\İÜšXØ[Ø˜\œÈH
-\İÜšXØ[Ø˜\œÈ
-È˜\œÊVËM—BˆØ\›Wİ›Û[Y\Ë™^[™
 
-^K˜\‹š[\˜[Üİ\œİ™[YJ‰R‰SHŠK˜\‹›Û[YWÜÚ\™\ÊBˆ›Üˆ˜\ˆ[ˆ˜\œÈYˆ˜\‹š[\˜[Üİ\\È›İ›Û™JB‚ˆš[˜[Û˜]ˆHXØÛİ[›˜]Š\]Z]WÛX\šÜÊBˆÛİ\˜ÙWÜ]ÈHÙZ[WØÜİ‹]šY[™ØÛÛ™šYË
-œİ]\×Ü]×Bˆ\œ›ÜœÈHÜ™XYÚœÛÛ›
-\œ›Ü—Ü]
-Bˆİ[[X\HHÂˆœØÚ[XHˆš™]œ]X[\‹[]™K\Ø[\KİŒH‹ˆœ[—Üİ]\Èˆ
-”‘U“ÔÔPÕU‘WÒ‘U—ÑPQÓ“ÔÕP×ÕÒUĞTWÑĞTÈˆYˆ\œ›ÜœÂˆ[ÙH”‘U“ÔÔPÕU‘WÒ‘U—ÑPQÓ“ÔÕP×Ó“ÕÑ“Ô•ĞT‘ÔÒSUSUSÓˆŠKˆœŞ[X›ÛˆÖSP“Óš[š]X[ØØ\ÚØÛHˆŒLŒ‹ˆœİ\Ù]Hˆ˜YWÙ^\ÖÌKš\ÛÙ›Ü›X]
+def _save_checkpoint(output: Path, *, fingerprint: str, day: date, account: Account,
+                     nav: Decimal, fill_count: int) -> None:
+    payload = {"schema": "jevquant-p6-checkpoint/v1", "run_fingerprint": fingerprint,
+        "last_completed_session": day.isoformat(), "cash_available_cny": str(account.cash_available),
+        "cash_reserved_cny": str(account.cash_reserved), "receivables_cny": str(account.receivables),
+        "shares": account.shares_total, "nav_cny": str(nav), "fill_count": fill_count,
+        "seen_event_ids": sorted(account.seen_event_ids)}
+    path = output / "checkpoint.json"
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True),
+                          encoding="utf-8", newline="\n")
+    temporary.replace(path)
 
-K™[™Ù]Hˆ˜YWÙ^\ÖËLWKš\ÛÙ›Ü›X]
 
-KˆœÙ\ÜÚ[ÛœÈˆ[Š˜YWÙ^\ÊK™XÚ\Ú[Û—ØÛİ[ˆXÚ\Ú[Ûœ×ØÛİ[ˆœ›İšY\—ØØ[ØÛİ[ˆ[Šš[Ü—İ\ØYÙJH
-È[Š˜Z[YÚ\Ú\ÊKˆœ›İšY\—ØØ[Ø][\ØÛİ[ˆ[Š][\YÚ\Ú\ÊKˆ™˜Z[YÜ›İšY\—Ü™\]Y\İØÛİ[ˆ[Š˜Z[YÚ\Ú\ÊKˆ™XÚ\Ú[Û—Ù\œ›Ü—ØÛİ[ˆ[Š\œ›ÜœÊKœ™\ÛÛ™YÛ[Ù[ˆš™]‹LKŒLËŒ‹ˆ\™Ù]Ù[WÙœ˜Xİ[ÛˆˆŒ‹™[™[™×ØØ\ÚØÛHˆİŠXØÛİ[˜Ø\Úİİ[
-Kˆ™[™[™×ÜÚ\™\ÈˆXØÛİ[œÚ\™\×İİ[™[™[™×Û˜]—ØÛHˆİŠš[˜[Û˜]ŠKˆİ[Ü™]\›ˆˆİŠš[˜[Û˜]ˆÈ
-ŒLŠHH
-ŒHŠJK™™Y\×ØÛHˆİŠ™YWİİ[
-Kˆ™š[ØÛİ[ˆ[Šš[ÊK˜XØÛİ[Ü™XÛÛ˜Ú[Yˆ›ÛÛ
-Ø\ÚÜ™XÛÛ˜Ú[X][Ûˆ[™Ø\ÚÜ™XÛÛ˜Ú[X][Û‹œ\ÜÙY
-Kˆœ™XÛÛ˜Ú[X][ÛˆˆÈ™^XİYØØ\ÚØÛHˆİŠØ\ÚÜ™XÛÛ˜Ú[X][Û‹™^XİYØØ\Ú
-HYˆØ\ÚÜ™XÛÛ˜Ú[X][Ûˆ[ÙH›Û™Kˆœ™XÛÜ™YØØ\ÚØÛHˆİŠØ\ÚÜ™XÛÛ˜Ú[X][Û‹œ™XÛÜ™YØØ\Ú
-HYˆØ\ÚÜ™XÛÛ˜Ú[X][Ûˆ[ÙH›Û™Kˆ™^XİYÜ™XÙZ]˜X›\×ØÛHˆİŠØ\ÚÜ™XÛÛ˜Ú[X][Û‹™^XİYÜ™XÙZ]˜X›\ÊHYˆØ\ÚÜ™XÛÛ˜Ú[X][Ûˆ[ÙH›Û™KˆœÚ\™WÙY™™\™[˜Ù\ÈˆXİ
-Ø\ÚÜ™XÛÛ˜Ú[X][Û‹œÚ\™WÙY™™\™[˜Ù\ÊHYˆØ\ÚÜ™XÛÛ˜Ú[X][Ûˆ[ÙH›Û™_Kˆ˜\Üİ[\[ÛœÈˆÈ™[™ÜˆX™[\Üİ[YYÈ™\™\Ù[ÓM[KH‹ˆ˜]˜Z[Xš[]H\È\Üİ[YY][\˜[[™ÈXİX[›İšY\ˆ[^H\È[šÛ›İÛˆ‹ˆœ™]›ÜÜXİ]™Hİ]\È™XÛÜ™È\™H›İÚ[Z[‹][YH]šY[˜ÙH‹ˆ›Û™H˜\‹[Ü[ˆš[›ŞHÚ]XœY™\œÙHÛ\YÙNÈ›È]Y]YH™XÛÛœİXİ[Ûˆ‹ˆ˜Ø\ÚY]šY[™ÛÛ™šYİ\˜][Ûˆ\È\X[[™ØÛÜYÈŒŒËLŒ‹ˆ\È\È\İÜšXØ[™\^H\Ú[™È]™H‘UˆØ[Ë›İ›ÜØ\™Ú[][][ÛˆÜˆİ˜]YŞHXØÙ\[˜ÙH—KˆœÛİ\˜ÙWÜÚLMˆˆÜİŠ]
-Nˆ\ÚX‹œÚLMŠ]œ™XYØ]\Ê
-JKš^YÙ\İ
+def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Path, Path],
+                  dividend_config: Path, output: Path, start: date, sessions: int,
+                  resume: bool = False,
+                  client: Any | None = None,
+                  progress: Callable[[str], None] | None = None) -> dict[str, Any]:
+    if sessions not in (1, 20):
+        raise ValueError("P6 phases are defined as exactly 1 or 20 trading sessions")
+    daily_rows = read_daily_vendor_csv(daily_csv, SYMBOL)
+    by_day = {row["trade_date"]: row for row in daily_rows}
+    trade_days = tuple(sorted(day for day in by_day if day >= start))[:sessions]
+    if len(trade_days) != sessions:
+        raise ValueError("daily file does not contain the requested number of sessions")
+    all_days = tuple(sorted(by_day))
+    session_rank = {day: index for index, day in enumerate(all_days, 1)}
+    first_idx = all_days.index(trade_days[0])
+    warm_days = all_days[max(0, first_idx - 21):first_idx]
+    if len(warm_days) != 21:
+        raise ValueError("P6 needs 21 preceding trading sessions for 20-slot references on the prior-session bars")
+    status = _read_status(status_paths, set(trade_days))
+    all_dividends = load_cash_dividends(dividend_config, SYMBOL)
+    warm_volumes: list[tuple[date, str, int]] = []
+    normalized_by_day: dict[date, list[Bar]] = {}
+    minute_paths = {day: minute_root / str(day.year) / f"{day:%Y%m%d}.parquet"
+                    for day in (*warm_days, *trade_days)}
+    input_hashes = {"daily_csv": _sha256_file(daily_csv),
+        "dividend_config": _sha256_file(dividend_config),
+        "status_files": {str(path): _sha256_file(path) for path in status_paths},
+        "minute_partitions": {day.isoformat(): _sha256_file(path) for day, path in minute_paths.items()}}
+    run_identity = {"start": start.isoformat(), "sessions": sessions, "symbol": SYMBOL,
+                    "target_weight": "0.80", "decision_times": [value.isoformat() for value in DECISION_ENDS],
+                    "input_hashes": input_hashes, "run_version": "p6-sample-v2"}
+    fingerprint = hashlib.sha256(json.dumps(run_identity, sort_keys=True, separators=(",", ":"))
+                                 .encode("utf-8")).hexdigest()
+    for day in warm_days:
+        normalized = normalize_end_labeled_diagnostic(day, _parquet_day(minute_root, day))
+        warm_volumes.extend((day, bar.interval_start.strftime("%H:%M"), bar.volume_shares)
+                            for bar in normalized if bar.interval_start is not None)
+    for day in trade_days:
+        normalized_by_day[day] = normalize_end_labeled_diagnostic(day, _parquet_day(minute_root, day))
+    historical_bars = normalize_end_labeled_diagnostic(warm_days[-1], _parquet_day(minute_root, warm_days[-1]))
+    checkpoint_path = output / "checkpoint.json"
+    checkpoint_day: date | None = None
+    if resume:
+        if not output.is_dir() or not checkpoint_path.is_file():
+            raise ValueError("resume requires an existing output directory with a completed-session checkpoint")
+        checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        if checkpoint.get("schema") != "jevquant-p6-checkpoint/v1" or checkpoint.get("run_fingerprint") != fingerprint:
+            raise ValueError("checkpoint schema or source/config fingerprint does not match this run")
+        checkpoint_day = date.fromisoformat(checkpoint["last_completed_session"])
+        if checkpoint_day not in trade_days:
+            raise ValueError("checkpoint session is outside the requested P6 window")
+        _truncate_run_logs(output, checkpoint_day)
+    else:
+        output.mkdir(parents=True, exist_ok=False)
+    cache = output / "jev-response-cache.json"
+    usage = UsageLedger(output / "jev-usage.jsonl")
+    decision_path, order_path, fill_path, nav_path = (output / name for name in
+        ("decisions.jsonl", "orders.jsonl", "fills.jsonl", "nav.jsonl"))
+    error_path = output / "errors.jsonl"
+    if checkpoint_day is None:
+        account = Account(D("1000000.00"))
+        fills = []
+        decisions_count = provider_calls = 0
+        fee_total = D("0.00")
+        cash_reconciliation = None
+        equity_marks: dict[str, Decimal] = {}
+        prior_usage: set[str] = set()
+    else:
+        account, fills = _rebuild_account_from_fills(initial_cash=D("1000000.00"),
+            trade_days=trade_days, all_calendar_days=all_days, fills_path=fill_path, dividends=all_dividends,
+            checkpoint_day=checkpoint_day)
+        checkpoint_row = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        checkpoint_nav = account.nav({SYMBOL: D(by_day[checkpoint_day]["close_raw"])})
+        if (account.cash_total != D(checkpoint_row["cash_available_cny"])
+                or account.cash_reserved != D(checkpoint_row["cash_reserved_cny"])
+                or account.receivables != D(checkpoint_row["receivables_cny"])
+                or account.shares_total != int(checkpoint_row["shares"])
+                or checkpoint_nav != D(checkpoint_row["nav_cny"])
+                or len(fills) != int(checkpoint_row["fill_count"])
+                or sorted(account.seen_event_ids) != checkpoint_row["seen_event_ids"]):
+            raise ValueError("event replay does not match the last durable account checkpoint")
+        cash_reconciliation = reconcile_account_events(D("1000000.00"), fills, all_dividends,
+            checkpoint_day, account.cash_total, account.receivables, {SYMBOL: account.shares_total})
+        if not cash_reconciliation.passed:
+            raise ValueError("restored event ledger failed independent cash/share reconciliation")
+        equity_marks = {SYMBOL: D(by_day[checkpoint_day]["close_raw"])}
+        decisions_count = len(_read_jsonl(decision_path)) + len(_read_jsonl(error_path))
+        fee_total = sum((fill.fee for fill in fills), D("0.00"))
+        for prior_day in trade_days:
+            if prior_day > checkpoint_day:
+                break
+            previous = normalized_by_day[prior_day]
+            historical_bars = (historical_bars + previous)[-48:]
+            warm_volumes.extend((prior_day, bar.interval_start.strftime("%H:%M"), bar.volume_shares)
+                                for bar in previous if bar.interval_start is not None)
+        prior_usage = {row["request_hash"] for row in _read_jsonl(output / "jev-usage.jsonl")
+                       if row.get("request_hash")}
+        provider_calls = len(prior_usage)
+    attempted_hashes = set(prior_usage)
+    failed_hashes = {row["request_hash"] for row in _read_jsonl(error_path)
+                     if row.get("api_request_attempted") and row.get("request_hash")}
+    attempted_hashes.update(failed_hashes)
+    for day_index, day in enumerate(trade_days, 1):
+        if checkpoint_day is not None and day <= checkpoint_day:
+            continue
+        bars = normalized_by_day[day]
+        day_row = by_day[day]
+        if not status[day][0] or status[day][1]:
+            raise ValueError(f"historical status excludes {day}; P6 sample requires an eligible session")
+        if day_row.get("limit_up_raw") is None or day_row.get("limit_down_raw") is None:
+            raise ValueError(f"missing daily limit bands on {day}")
+        active_order: OrderIntent | None = None
+        for decision_index, decision_clock in enumerate(DECISION_ENDS):
+            decision_bar = next((bar for bar in bars if bar.interval_end and bar.interval_end.time() == decision_clock), None)
+            if decision_bar is None:
+                raise ValueError(f"missing decision-time closed bar {day} {decision_clock}")
+            at = decision_bar.interval_end
+            assert at is not None
+            # A previous decision's order is valid only up to this decision point.
+            if active_order is not None:
+                _json_line(order_path, {"order_id": active_order.order_id, "side": active_order.side.value,
+                    "trade_date": day.isoformat(), "quantity": active_order.quantity, "status": "CANCELLED_AT_NEXT_DECISION",
+                    "decision_at": active_order.decision_at.isoformat(), "arrival_at": active_order.arrival_at.isoformat()})
+                if active_order.side is Side.BUY:
+                    account.cancel_buy(active_order.order_id)
+                else:
+                    account.cancel_sell(active_order.order_id)
+                active_order = None
+            sellable = account.shares_sellable(day, SYMBOL)
+            if account.shares_total and not sellable:
+                allowed = ["HOLD"]
+            elif account.shares_total:
+                allowed = ["HOLD", "SELL"]
+            else:
+                allowed = ["BUY", "WAIT"]
+            state = _state(day, day_index, at, historical_bars + bars, daily_rows, warm_volumes, session_rank,
+                           account, allowed, day_row)
+            decisions_count += 1
+            digest = request_hash(state, allowed, INSTRUCTIONS)
+            api_attempted = allowed in (["BUY", "WAIT"], ["HOLD", "SELL"])
+            if api_attempted and digest not in attempted_hashes:
+                provider_calls += 1
+                attempted_hashes.add(digest)
+            try:
+                decision = decide_cached(state, INSTRUCTIONS, cache, client=client)
+            except PROVIDER_ERRORS as exc:
+                if api_attempted:
+                    failed_hashes.add(digest)
+                _json_line(error_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                    "request_hash": digest, "api_request_attempted": api_attempted,
+                    "error_type": type(exc).__name__, "error": str(exc),
+                    "action": "SKIP_NO_ORDER", "account_mutated": False})
+                continue
+            if decision.source == "jev":
+                if decision.request_hash not in prior_usage:
+                    usage.record(decision)
+                    prior_usage.add(decision.request_hash)
+                failed_hashes.discard(decision.request_hash)
+            _json_line(decision_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                "state": state, "decision": {"action": decision.action_requested,
+                "probabilities": decision.option_probabilities, "confidence": decision.distribution_confidence,
+                "provider_choice": decision.provider_choice, "model_requested": decision.model_requested,
+                "model_resolved": decision.model_resolved, "request_hash": decision.request_hash,
+                "source": decision.source, "input_tokens": decision.input_tokens,
+                "output_tokens": decision.output_tokens, "estimated_cost_usd": decision.estimated_cost_usd}})
+            if decision.action_requested not in {"BUY", "SELL"}:
+                continue
+            side = Side(decision.action_requested)
+            slot = (at + timedelta(minutes=5)).strftime("%H:%M")
+            liquidity = build_liquidity_reference(warm_volumes, signal_date=day, slot=slot)
+            if liquidity.cap_shares <= 0:
+                _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                                        "side": side.value, "status": "REJECTED_ZERO_LIQUIDITY_CAP"})
+                continue
+            fee_schedule = FeeSchedule.for_trade_date(day)
+            if side is Side.BUY:
+                target = plan_entry_quantity(account.nav({SYMBOL: decision_bar.close}), D("0.80"),
+                    make_protection_price(side, decision_bar.close), account.cash_available,
+                    reserve=D("0.00"), lot_size=100, fee_schedule=fee_schedule)
+                quantity = min(target, liquidity.cap_shares)
+            else:
+                quantity = min(sellable, liquidity.cap_shares)
+            if quantity <= 0:
+                _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                                        "side": side.value, "status": "REJECTED_ZERO_QUANTITY"})
+                continue
+            order_id = f"p6-{day:%Y%m%d}-{at:%H%M}-{side.value.lower()}"
+            arrival = at + timedelta(minutes=5)
+            expire_at = _next_order_cutoff(day, decision_index)
+            order = OrderIntent(order_id, SYMBOL, side, quantity,
+                make_protection_price(side, decision_bar.close), at, expire_at,
+                liquidity_reference=liquidity, decision_at=at, arrival_at=arrival)
+            if side is Side.BUY:
+                reserve = D(quantity) * order.limit_price + fee_schedule.estimate(Side.BUY, D(quantity) * order.limit_price)
+                reserve = min(account.cash_available, reserve)
+                account.reserve_buy(order_id, reserve)
+            else:
+                account.reserve_sell(order_id, SYMBOL, quantity, day)
+            active_order = order
+            eligible = _eligible_execution_bars(bars, arrival, expire_at)
+            order_filled = False
+            for exec_bar in eligible:
+                matched = match_open_proxy(order, exec_bar, fee_schedule=fee_schedule,
+                    limit_up=day_row["limit_up_raw"], limit_down=day_row["limit_down_raw"])
+                if matched.fill is None:
+                    _json_line(order_path, {"order_id": order_id, "side": side.value,
+                        "trade_date": day.isoformat(), "quantity": quantity,
+                        "target_quantity_before_liquidity_cap": target if side is Side.BUY else sellable,
+                        "status": matched.reason,
+                        "decision_at": at.isoformat(), "arrival_at": arrival.isoformat(),
+                        "expires_at": expire_at.isoformat(), "attempt_interval_start": exec_bar.interval_start.isoformat(),
+                        "liquidity_reference": {"slot": liquidity.slot,
+                            "session_dates": [item.isoformat() for item in liquidity.session_dates],
+                            "session_volumes_shares": liquidity.session_volumes_shares,
+                            "median_volume_shares": str(liquidity.median_volume_shares),
+                            "fraction": str(liquidity.fraction), "cap_shares": liquidity.cap_shares}})
+                    continue
+                fill = matched.fill
+                if side is Side.BUY:
+                    following = next((candidate for candidate in all_days if candidate > day), None)
+                    if following is None:
+                        raise ValueError("daily data lacks next trade date for T+1 sellability")
+                    account.buy(fill, fee_schedule, following)
+                    # Release the price-protection reserve left after a cheaper fill.
+                    account.cancel_buy(order_id)
+                else:
+                    account.sell(fill, fee_schedule)
+                    account.cancel_sell(order_id)
+                fills.append(fill)
+                fee_total += fill.fee
+                _json_line(fill_path, {"fill_id": fill.fill_id, "order_id": order_id,
+                    "side": side.value, "quantity": fill.quantity, "price_cny": str(fill.price),
+                    "fee_cny": str(fill.fee), "trade_date": fill.trade_date.isoformat(),
+                    "filled_at": fill.filled_at.isoformat(),
+                    "source_bar": {"interval_start": exec_bar.interval_start.isoformat(),
+                                   "interval_end": exec_bar.interval_end.isoformat(),
+                                   "quality_flags": sorted(exec_bar.quality_flags)}})
+                _json_line(order_path, {"order_id": order_id, "side": side.value,
+                    "trade_date": day.isoformat(), "quantity": quantity,
+                    "target_quantity_before_liquidity_cap": target if side is Side.BUY else sellable,
+                    "status": matched.reason, "decision_at": at.isoformat(),
+                    "arrival_at": arrival.isoformat(), "expires_at": expire_at.isoformat(),
+                    "liquidity_cap_shares": liquidity.cap_shares})
+                order_filled = True
+                active_order = None
+                break
+            if not order_filled:
+                if side is Side.BUY:
+                    account.cancel_buy(order_id)
+                else:
+                    account.cancel_sell(order_id)
+                _json_line(order_path, {"order_id": order_id, "side": side.value,
+                    "trade_date": day.isoformat(), "quantity": quantity, "status": "NO_ELIGIBLE_FILL_OR_REJECTED",
+                    "decision_at": at.isoformat(), "arrival_at": arrival.isoformat(),
+                    "expires_at": expire_at.isoformat()})
+                active_order = None
 
-H›Üˆ][ˆÛİ\˜ÙWÜ]ßKˆ›Z[]WÜ\][Û—ÜÚLMˆˆÙ^Kš\ÛÙ›Ü›X]
+        # Apply effective-date actions before the close valuation and checkpoint.
+        for event in all_dividends:
+            account.apply_cash_dividend_event(event, day)
+        # Carry marks across dates. Daily close is a mark only and does not place orders.
+        close = _decimal(day_row.get("close_raw"))
+        if close is not None:
+            equity_marks[SYMBOL] = close
+        nav = account.nav(equity_marks)
+        _json_line(nav_path, {"trade_date": day.isoformat(), "valuation_at": datetime.combine(day, time(15, 0), TZ).isoformat(),
+                              "cash_cny": str(account.cash_total), "shares": account.shares_total,
+                              "mark_price_cny": str(equity_marks.get(SYMBOL)) if SYMBOL in equity_marks else None,
+                              "receivables_cny": str(account.receivables), "nav_cny": str(nav),
+                              "drawdown_from_initial": str((D("1000000") - nav) / D("1000000"))})
+        rec = reconcile_account_events(D("1000000.00"), fills, all_dividends, day,
+            account.cash_total, account.receivables, {SYMBOL: account.shares_total})
+        if not rec.passed:
+            failure = {"status": "P6_REPLAY_FAILED_INDEPENDENT_ACCOUNT_RECONCILIATION",
+                "trade_date": day.isoformat(), "recorded_cash_available_cny": str(account.cash_available),
+                "recorded_cash_reserved_cny": str(account.cash_reserved),
+                "expected_cash_cny": str(rec.expected_cash), "recorded_cash_total_cny": str(rec.recorded_cash),
+                "cash_difference_cny": str(rec.cash_difference),
+                "expected_shares": dict(rec.expected_shares),
+                "recorded_shares": dict(rec.recorded_shares), "share_differences": dict(rec.share_differences)}
+            (output / "failure.json").write_text(json.dumps(failure, ensure_ascii=False, indent=2), encoding="utf-8")
+            raise RuntimeError(f"independent reconciliation failed on {day}: {rec}")
+        cash_reconciliation = rec
+        _save_checkpoint(output, fingerprint=fingerprint, day=day, account=account,
+                         nav=nav, fill_count=len(fills))
+        if progress:
+            progress(f"P6 {day_index}/{len(trade_days)} sessions; decisions={decisions_count}; unique_api_requests={len(attempted_hashes)}; NAV={nav}")
+        historical_bars = (historical_bars + bars)[-48:]
+        warm_volumes.extend((day, bar.interval_start.strftime("%H:%M"), bar.volume_shares)
+                            for bar in bars if bar.interval_start is not None)
 
-Nˆ[œ]Ú\Ú\ÖÈ›Z[]WÜ\][ÛœÈ—VÙ^Kš\ÛÙ›Ü›X]
+    final_nav = account.nav(equity_marks)
+    source_paths = [daily_csv, dividend_config, *status_paths]
+    errors = _read_jsonl(error_path)
+    summary = {
+        "schema": "jevquant-p6-live-sample/v1",
+        "run_status": ("RETROSPECTIVE_JEV_DIAGNOSTIC_WITH_API_GAPS" if errors
+                       else "RETROSPECTIVE_JEV_DIAGNOSTIC_NOT_FORWARD_SIMULATION"),
+        "symbol": SYMBOL, "initial_cash_cny": "1000000.00",
+        "start_date": trade_days[0].isoformat(), "end_date": trade_days[-1].isoformat(),
+        "sessions": len(trade_days), "decision_count": decisions_count,
+        "provider_call_count": len(prior_usage) + len(failed_hashes),
+        "provider_call_attempt_count": len(attempted_hashes),
+        "failed_provider_request_count": len(failed_hashes),
+        "decision_error_count": len(errors), "resolved_model": "jev-1.13.0",
+        "target_entry_fraction": "0.80", "ending_cash_cny": str(account.cash_total),
+        "ending_shares": account.shares_total, "ending_nav_cny": str(final_nav),
+        "total_return": str(final_nav / D("1000000") - D("1")), "fees_cny": str(fee_total),
+        "fill_count": len(fills), "account_reconciled": bool(cash_reconciliation and cash_reconciliation.passed),
+        "reconciliation": {"expected_cash_cny": str(cash_reconciliation.expected_cash) if cash_reconciliation else None,
+                           "recorded_cash_cny": str(cash_reconciliation.recorded_cash) if cash_reconciliation else None,
+                           "expected_receivables_cny": str(cash_reconciliation.expected_receivables) if cash_reconciliation else None,
+                           "share_differences": dict(cash_reconciliation.share_differences) if cash_reconciliation else None},
+        "assumptions": ["vendor label L assumed to represent [L-5m,L]",
+            "availability is assumed at interval end; actual provider delay is unknown",
+            "retrospective status records are not point-in-time evidence",
+            "one bar-open fill proxy with 5bp adverse slippage; no queue reconstruction",
+            "cash-dividend configuration is partial and scoped to 2023-2024",
+            "this is historical replay using live JEV calls, not forward simulation or strategy acceptance"],
+        "source_sha256": {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths},
+        "minute_partition_sha256": {day.isoformat(): input_hashes["minute_partitions"][day.isoformat()]
+                                     for day in (*warm_days, *trade_days)},
+        "checkpoint": {"last_completed_session": trade_days[-1].isoformat(),
+                       "run_fingerprint": fingerprint, "event_replay_resume_supported": True,
+                       "resume_source_session": checkpoint_day.isoformat() if checkpoint_day else None,
+                       "event_replay_matched_checkpoint": True},
+        "artifacts": {"decisions": "decisions.jsonl", "orders": "orders.jsonl",
+                      "fills": "fills.jsonl", "nav": "nav.jsonl", "usage": "jev-usage.jsonl",
+                      "cache": "jev-response-cache.json", "errors": "errors.jsonl"},
+    }
+    (output / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True),
+                                          encoding="utf-8", newline="\n")
+    return summary
 
-WBˆ›Üˆ^H[ˆ
 
-Ø\›WÙ^\Ë
-˜YWÙ^\Ê_Kˆ˜ÚXÚÜÚ[ˆÈ›\İØÛÛ\]YÜÙ\ÜÚ[Ûˆˆ˜YWÙ^\ÖËLWKš\ÛÙ›Ü›X]
+def main() -> None:
+    parser = argparse.ArgumentParser(description="P6 live-JEV decision chain on retrospective Moutai data")
+    parser.add_argument("--minute-root", type=Path, required=True)
+    parser.add_argument("--daily-csv", type=Path, required=True)
+    parser.add_argument("--status-2022-2023", type=Path, required=True)
+    parser.add_argument("--status-2024-plus", type=Path, required=True)
+    parser.add_argument("--dividends", type=Path, default=Path("configs/moutai_2023_2024_cash_dividends.json"))
+    parser.add_argument("--start", type=date.fromisoformat, required=True)
+    parser.add_argument("--sessions", type=int, choices=(1, 20), required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--resume", action="store_true", help="restore from the last verified daily checkpoint")
+    parser.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
+                        help="acknowledge sending historical price/account snapshots to the configured JEV provider")
+    args = parser.parse_args()
+    if not args.acknowledge_historical_data_to_live_jev:
+        parser.error("must acknowledge historical price/account snapshots are sent to the configured JEV provider")
+    summary = run_p6_sample(minute_root=args.minute_root, daily_csv=args.daily_csv,
+        status_paths=(args.status_2022_2023, args.status_2024_plus), dividend_config=args.dividends,
+        output=args.output, start=args.start, sessions=args.sessions, resume=args.resume,
+        progress=lambda message: print(message, flush=True))
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
 
-Kˆœ[—Ùš[™Ù\œš[ˆš[™Ù\œš[™]™[Ü™\^WÜ™\İ[YWÜİ\ÜYˆYKˆœ™\İ[YWÜÛİ\˜ÙWÜÙ\ÜÚ[ÛˆˆÚXÚÜÚ[Ù^Kš\ÛÙ›Ü›X]
 
-HYˆÚXÚÜÚ[Ù^H[ÙH›Û™Kˆ™]™[Ü™\^WÛX]ÚYØÚXÚÜÚ[ˆY_Kˆ˜\Y˜XİÈˆÈ™XÚ\Ú[ÛœÈˆ™XÚ\Ú[ÛœËšœÛÛ›‹›Ü™\œÈˆ›Ü™\œËšœÛÛ›‹ˆ™š[Èˆ™š[ËšœÛÛ›‹›˜]ˆˆ›˜]‹šœÛÛ›‹\ØYÙHˆš™]‹]\ØYÙKšœÛÛ›‹ˆ˜ØXÚHˆš™]‹\™\ÜÛœÙKXØXÚKšœÛÛˆ‹™\œ›ÜœÈˆ™\œ›ÜœËšœÛÛ›ŸKˆBˆ
-İ]]Èœİ[[X\KšœÛÛˆŠKÜš]Wİ^
-œÛÛ‹™[\Êİ[[X\K[œİ\™WØ\ØÚZOQ˜[ÙK[™[L‹ÛÜÚÙ^\ÏUYJKˆ[˜ÛÙ[™ÏH]‹N‹™]Û[™OH—ˆŠBˆ™]\›ˆİ[[X\B‚‚™YˆXZ[Š
-HOˆ›Û™N‚ˆ\œÙ\ˆH\™Ü\œÙK\™İ[Y[\œÙ\Š\ØÜš\[ÛH”ˆ]™KR‘UˆXÚ\Ú[ÛˆÚZ[ˆÛˆ™]›ÜÜXİ]™H[İ]ZH]HŠBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K[Z[]K\›Ûİ‹\OT]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹KYZ[KXÜİˆ‹\OT]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K\İ]\ËLŒŒ‹LŒŒÈ‹\OT]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K\İ]\ËLŒ\\È‹\OT]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹KY]šY[™È‹\OT]Y˜][T]
-˜ÛÛ™šYÜËÛ[İ]ZWÌŒŒ×ÌŒØØ\ÚÙ]šY[™ËšœÛÛˆŠJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K\İ\‹\OY]K™œ›ÛZ\ÛÙ›Ü›X]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K\Ù\ÜÚ[ÛœÈ‹\OZ[ÚÚXÙ\ÏJKŒ
-K™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K[İ]]‹\OT]™\]Z\™YUYJBˆ\œÙ\‹˜YØ\™İ[Y[
-‹K\™\İ[YH‹Xİ[ÛHœİÜ™WİYH‹[Hœ™\İÜ™Hœ›ÛHH\İ™\šYšYYZ[HÚXÚÜÚ[ŠBˆ\œÙ\‹˜YØ\™İ[Y[
-‹KXXÚÛ›İÛYÙKZ\İÜšXØ[Y]K]Ë[]™KZ™]ˆ‹Xİ[ÛHœİÜ™WİYH‹ˆ[H˜XÚÛ›İÛYÙHÙ[™[™È\İÜšXØ[šXÙKØXØÛİ[Û˜\ÚİÈÈHÛÛ™šYİ\™Y‘Uˆ›İšY\ˆŠBˆ\™ÜÈH\œÙ\‹œ\œÙWØ\™ÜÊ
-BˆYˆ›İ\™ÜË˜XÚÛ›İÛYÙWÚ\İÜšXØ[Ù]Wİ×Û]™WÚ™]‚ˆ\œÙ\‹™\œ›ÜŠ›]\İXÚÛ›İÛYÙH\İÜšXØ[šXÙKØXØÛİ[Û˜\ÚİÈ\™HÙ[ÈHÛÛ™šYİ\™Y‘Uˆ›İšY\ˆŠBˆİ[[X\HH[—Ü—ÜØ[\JZ[]WÜ›ÛİX\™ÜË›Z[]WÜ›ÛİZ[WØÜİX\™ÜË™Z[WØÜİ‹ˆİ]\×Ü]ÏJ\™ÜËœİ]\×ÌŒŒ—ÌŒŒË\™ÜËœİ]\×ÌŒÜ\ÊK]šY[™ØÛÛ™šYÏX\™ÜË™]šY[™Ëˆİ]]X\™ÜË›İ]]İ\X\™ÜËœİ\Ù\ÜÚ[ÛœÏX\™ÜËœÙ\ÜÚ[ÛœË™\İ[YOX\™ÜËœ™\İ[YKˆ›ÙÜ™\ÜÏ[[X™HY\ÜØYÙNˆš[
-Y\ÜØYÙK›\ÚUYJJBˆš[
-œÛÛ‹™[\Êİ[[X\K[œİ\™WØ\ØÚZOQ˜[ÙK[™[LŠJB‚‚šYˆ×Û˜[YW×ÈOH—×ÛXZ[—×È‚ˆXZ[Š
-B
+if __name__ == "__main__":
+    main()

@@ -141,4 +141,387 @@ def run_baseline_replay(
         if len(starts) != len(set(starts)):
             raise ValueError(f"duplicate execution interval for {day}")
         allowed = set(bar_schedule[day])
-        if any(bar.interval_start not in allowed for cxïKh‘éì¶»§q«^w¢$D”täõ5D”5ôôäÅ•ôäõEôdõ$ÔÅô„•5Dõ$”4ÅôU„T5UD”ôåô44UDä4R"À¢'7–Ö&öÂ#¢5”Ô$ôÂÀ¢&–æ—F–Åö66…ö6ç’#¢#ã"À¢'7F'EöFFR#¢7F'Bæ—6öf÷&ÖB‚’Â&VæEöFFR#¢VæBæ—6öf÷&ÖB‚’À¢'6W76–öç2#¢ÆVâ‡6W76–öç2’Â'v&×W÷föÇVÖU÷6W76–öç2#¢¶Bæ—6öf÷&ÖB‚’f÷"B–âv&×W÷6W76–öç5ÒÀ¢&FF÷&ö÷E÷6÷W&6U÷F‡2#¢²&Ö–çWFU÷&ö÷B#¢7G"†Ö–çWFU÷&ö÷B’Â&F–Ç•ö77b#¢7G"†F–Ç•ö77b—ÒÀ¢'F–ÖW7F×ö‡—÷F†W6—2#¢°¢&ÖöFR#¢'7FæF&EöÆ&VÇ5ö&Uö–çFW'fÅöVæB"À¢&Ö–ær#¢'G&FU÷F–ÖRÆ&VÂÂÖ2Fò´ÂÓRÖ–çWFW2ÂÅÒ"À¢'7V6–Åó“3÷&V6÷&B#¢&W†6ÇVFVBg&öÒæ÷&ÖÆ—¦VBFV6—6–öâöW†V7WF–öâ&'2"À¢&f–Æ&–Æ—G’#¢&77VÖVB–ÖÖVF–FVÇ’B–çFW'fÅöVæC²7GVÂ&÷f–FW"&VÆV6RFVÆ’—2Væ¶æ÷vâ"À¢'7FGW5öFF#¢'&WG&÷7V7F—fR6GW&VBfÇVW3²æ÷Bö–çBÖ–â×F–ÖR"À¢&f–ÆÇ2#¢&&"Ö÷Vâ&÷‡’öæÇ“²æòVWVR÷"&VÂW†V7WF–öâ6Æ–Ò"À¢ÒÀ¢&VÆ–v–&ÆUöW†V7WF–öå÷7F'E÷v–æF÷w2#¢²#“£3RÓ£#R"Â#3£RÓC£S%ÒÀ¢&fVUöÆ&VÂ#¢&ÖöFVÆVBfVW2W"6öæf–wW&VB66†VGVÆS²æ÷BF‚Ö6W'F–f–VB"À¢&66÷VçE÷&V6öæ6–ÆVB#¢ÆÂ‡&÷u²'&V6öæ6–Æ–F–öå÷76VB%Òf÷"&÷r–â7VÖÖ'•÷&÷w2’À¢&ÆÅ÷fÇVF–öç5ö6ö×ÆWFR#¢ÆÂ†æ÷B&÷u²'fÇVF–öåö–æ6ö×ÆWFR%Òf÷"&÷r–â7VÖÖ'•÷&÷w2’À¢&66÷VçEö6÷VçB#¢ÆVâ‡7VÖÖ'•÷&÷w2’Â'7VÖÖ&–W2#¢7VÖÖ'•÷&÷w2À¢'6÷W&6Uöf–ÆW5÷6†#Sb#¢°¢&F–Ç•ö77b#¢†6†Æ–"ç6†#Sb†F–Ç•ö77bç&VEö'—FW2‚’’æ†W†F–vW7B‚’À¢&F—f–FVæEö6öæf–r#¢†6†Æ–"ç6†#Sb†F—f–FVæEö6öæf–rç&VEö'—FW2‚’’æ†W†F–vW7B‚’À¢'7FGW5öf–ÆW2#¢·7G"‡F‚“¢†6†Æ–"ç6†#Sb‡F‚ç&VEö'—FW2‚’’æ†W†F–vW7B‚’f÷"F‚–â7FGW5÷F‡7ÒÀ¢ÒÀ¢Ð¢†÷WGWBò'7VÖÖ'’æ§6öâ"’çw&—FU÷FW‡B†§6öâæGV×2‡–ÆöBÂVç7W&Uö66–“ÔfÇ6RÂ–æFVçCÓ"Â6÷'Eö¶W—3ÕG'VR’À¢Væ6öF–æsÒ'WFbÓ‚"ÂæWvÆ–æSÒ%Æâ"¢&WGW&â–Æö@  ¦FVbÖ–â‚’ÓâæöæS ¢'6W"Ò&w'6Rä&wVÖVçE'6W"†FW67&—F–öãÒ%B&WG&÷7V7F—fRÖöæÇ’Ö÷WF’&6VÆ–æRF–væ÷7F–72"¢'6W"æFEö&wVÖVçB‚"ÒÖÖ–çWFR×&ö÷B"ÂG—SÕF‚Â&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"ÒÖF–Ç’Ö77b"ÂG—SÕF‚Â&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"Ò×7FGW2Ó##"Ó##2"ÂG—SÕF‚Â&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"Ò×7FGW2Ó##B×ÇW2"ÂG—SÕF‚Â&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"ÒÖF—f–FVæG2"ÂG—SÕF‚ÂFVfVÇCÕF‚‚&6öæf–w2öÖ÷WF•ó##5ó##Eö66…öF—f–FVæG2æ§6öâ"’¢'6W"æFEö&wVÖVçB‚"Ò×7F'B"ÂG—SÖFFRæg&öÖ—6öf÷&ÖBÂ&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"ÒÖVæB"ÂG—SÖFFRæg&öÖ—6öf÷&ÖBÂ&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"ÒÖ÷WGWB"ÂG—SÕF‚Â&WV—&VCÕG'VR¢'6W"æFEö&wVÖVçB‚"ÒÖ6öæf—&ÒÖF–væ÷7F–2ÖVæBÖÆ&VÂÖ‡—÷F†W6—2"Â7F–öãÒ'7F÷&U÷G'VR"À¢†VÇÒ&W‡Æ–6—FÇ’66WBâVçfW&–f–VBVæBÖÆ&VÂ66Væ&–òf÷"F–væ÷7F–2÷WGWBöæÇ’"¢&w2Ò'6W"ç'6Uö&w2‚¢–bæ÷B&w2æ6öæf—&ÕöF–væ÷7F–5öVæEöÆ&VÅö‡—÷F†W6—3 ¢'6W"æW'&÷"‚&×W7B72ÒÖ6öæf—&ÒÖF–væ÷7F–2ÖVæBÖÆ&VÂÖ‡—÷F†W6—3²&W7VÇB—2æWfW"f÷&ÖÂ66WFæ6R"¢–ÆöBÒ'Vå÷&WG&÷7V7F—fUö&6VÆ–æW2€¢Ö–çWFU÷&ö÷CÖ&w2æÖ–çWFU÷&ö÷BÂF–Ç•ö77cÖ&w2æF–Ç•ö77bÀ¢7FGW5÷F‡3Ò†&w2ç7FGW5ó##%ó##2Â&w2ç7FGW5ó##E÷ÇW2’À¢F—f–FVæEö6öæf–sÖ&w2æF—f–FVæG2Â÷WGWCÖ&w2æ÷WGWBÂ7F'CÖ&w2ç7F'BÂVæCÖ&w2æVæBÀ¢&öw&W75ö6ÆÆ&6³ÖÆÖ&FÖW76vS¢&–çB†ÖW76vRÂfÇW6ƒÕG'VR’À¢¢&–çB†§6öâæGV×2‡°¢&÷WGWB#¢7G"†&w2æ÷WGWBç&W6öÇfR‚’’Â''Vå÷7FGW2#¢–ÆöE²''Vå÷7FGW2%ÒÀ¢'6W76–öç2#¢–ÆöE²'6W76–öç2%ÒÂ&66÷VçEö6÷VçB#¢–ÆöE²&66÷VçEö6÷VçB%ÒÀ¢&66÷VçE÷&V6öæ6–ÆVB#¢–ÆöE²&66÷VçE÷&V6öæ6–ÆVB%ÒÀ¢&ÆÅ÷fÇVF–öç5ö6ö×ÆWFR#¢–ÆöE²&ÆÅ÷fÇVF–öç5ö6ö×ÆWFR%ÒÀ¢'7VÖÖ&–W2#¢–ÆöE²'7VÖÖ&–W2%ÒÀ¢ÒÂVç7W&Uö66–“ÔfÇ6RÂ–æFVçCÓ"’  ¦–bõöæÖUõòÓÒ%õöÖ–åõò# ¢Ö–â‚
+        if any(bar.interval_start not in allowed for bar in day_bars):
+            raise ValueError(f"bar interval is absent from the declared execution schedule on {day}")
+        if any(left.interval_end > right.interval_start for left, right in zip(day_bars, day_bars[1:])):
+            raise ValueError(f"overlapping execution intervals for {day}")
+        if any(bar.interval_end > session_close_by_date[day] for bar in day_bars):
+            raise ValueError(f"bar extends beyond the declared session close for {day}")
+    closes = tuple(sorted((day, D(close)) for day, close in daily_closes))
+    close_dates = tuple(day for day, _ in closes)
+    if len(set(close_dates)) != len(closes):
+        raise ValueError("daily closes contain duplicate dates")
+    if any(close <= 0 for _, close in closes):
+        raise ValueError("daily closes must be positive")
+    # Every supported baseline needs at most the previous 20 closes. Cache this
+    # once per session instead of sorting years of history on every five-minute bar.
+    prior_close_history: dict[date, tuple[tuple[date, Decimal], ...]] = {}
+    prior_close_counts: dict[date, int] = {}
+    for day in sessions:
+        cutoff = bisect_left(close_dates, day)
+        prior_close_counts[day] = cutoff
+        prior_close_history[day] = closes[max(0, cutoff - 20):cutoff]
+    action_events = tuple(event for event in dividends
+                          if sessions[0] <= event.record_date <= sessions[-1])
+    if any(event.record_date not in required for event in action_events):
+        raise ValueError("corporate-action record date is absent from the replay calendar")
+    pre_start_actions = sum(event.record_date < sessions[0] for event in dividends)
+
+    account = Account(config.initial_cash)
+    decisions: list[dict[str, object]] = []
+    orders: list[dict[str, object]] = []
+    marks: dict[str, Decimal] = {}
+    nav_curve: list[dict[str, object]] = []
+    volume_history = [(day, slot, int(volume)) for day, slot, volume in prior_volume_history]
+    if any(day >= sessions[0] for day, _, _ in volume_history):
+        raise ValueError("prior volume history must precede the first replay session")
+    prior_keys = [(day, slot) for day, slot, _ in volume_history]
+    if len(prior_keys) != len(set(prior_keys)):
+        raise ValueError("prior volume history contains duplicate date/slot rows")
+    if any(not slot or volume < 0 for _, slot, volume in volume_history):
+        raise ValueError("prior volume history contains an invalid slot or volume")
+    rng = Random(config.random_seed) if config.baseline == "RANDOM" else None
+    order_counter = 0
+    valuation_incomplete = False
+
+    for day in sessions:
+        day_bars = by_day[day]
+        close_at = session_close_by_date[day]
+        pending: tuple[OrderIntent, datetime, FeeSchedule, Decimal] | None = None
+        for bar in day_bars:
+            interval_start = bar.interval_start
+            interval_end = bar.interval_end
+            assert interval_start is not None and interval_end is not None and bar.available_at is not None
+            if pending is not None:
+                order, expected_slot, fee_schedule, reserved_amount = pending
+                if interval_start == expected_slot:
+                    result = match_open_proxy(
+                        order, bar, min_slippage_bps=config.min_slippage_bps,
+                        limit_up=execution_rules_by_date[day].limit_up,
+                        limit_down=execution_rules_by_date[day].limit_down,
+                        suspended=execution_rules_by_date[day].suspended,
+                        tick=config.tick, prior_filled_gross=account.order_gross.get(order.order_id, D("0.00")),
+                        fee_schedule=fee_schedule)
+                    item: dict[str, object] = {
+                        "order_id": order.order_id, "side": order.side.value,
+                        "decision_at": order.decision_at.isoformat() if order.decision_at else None,
+                        "arrival_at": order.arrival_at.isoformat() if order.arrival_at else None,
+                        "expected_execution_start": expected_slot.isoformat(),
+                        "execution_bar": bar.source_row_id or bar.source_time.isoformat(),
+                        "requested_quantity": order.quantity, "limit_price": str(order.limit_price),
+                        "status": result.reason,
+                        "liquidity_reference": _liquidity_json(order.liquidity_reference),
+                    }
+                    if result.fill is not None:
+                        fill = result.fill
+                        if fill.side is Side.BUY:
+                            account.buy(fill, fee_schedule, next_trade_date_by_date[day])
+                            account.cancel_buy(order.order_id)
+                        else:
+                            account.sell(fill, fee_schedule)
+                            account.cancel_sell(order.order_id)
+                        item["fill_id"] = fill.fill_id
+                        item["fill_price"] = str(fill.price)
+                        item["fill_fee"] = str(fill.fee)
+                        item["filled_at"] = fill.filled_at.isoformat()
+                    else:
+                        if order.side is Side.BUY:
+                            account.cancel_buy(order.order_id)
+                        else:
+                            account.cancel_sell(order.order_id)
+                    orders.append(item)
+                    pending = None
+                elif interval_start > expected_slot:
+                    # The scheduled interval was absent; never fill later using
+                    # a different slot's liquidity reference.
+                    if order.side is Side.BUY:
+                        account.cancel_buy(order.order_id)
+                    else:
+                        account.cancel_sell(order.order_id)
+                    orders.append({
+                        "order_id": order.order_id, "side": order.side.value,
+                        "decision_at": order.decision_at.isoformat() if order.decision_at else None,
+                        "arrival_at": order.arrival_at.isoformat() if order.arrival_at else None,
+                        "expected_execution_start": expected_slot.isoformat(),
+                        "status": "SCHEDULED_EXECUTION_BAR_MISSING",
+                        "released_reserve": str(reserved_amount),
+                    })
+                    pending = None
+
+            # The completed bar close is available to this decision only after
+            # its recorded availability time. The policy receives prior daily
+            # closes, the current bar close, and account state, never future OHLC.
+            marks[SYMBOL] = bar.close
+            nav_curve.append({
+                "trade_date": day.isoformat(), "available_at": bar.available_at.isoformat(),
+                "cash": str(account.cash_total), "shares": account.shares_total,
+                "mark": str(bar.close), "receivables": str(account.receivables),
+                "nav": str(account.nav(marks)), "stale_mark": False,
+            })
+            volume_history.append((day, interval_start.strftime("%H:%M"), bar.volume_shares))
+
+            if pending is not None:
+                continue
+            decision_time = bar.available_at
+            has_position = account.shares_total > 0
+            decision = decide_baseline(
+                config.baseline, asof=day, daily_closes=prior_close_history[day],
+                has_position=has_position,
+                eligible_to_buy=bool(buy_eligible_by_date.get(day, False)),
+                rng=rng, random_entry_probability=config.random_entry_probability,
+                random_exit_probability=config.random_exit_probability)
+            record = {
+                "trade_date": day.isoformat(), "decision_at": decision_time.isoformat(),
+                "action": decision.action, "reason": decision.reason,
+                "has_position": has_position,
+                "buy_eligible": bool(buy_eligible_by_date.get(day, False)),
+                "prior_daily_close_count": prior_close_counts[day],
+            }
+            if decision.action not in {"BUY", "SELL"}:
+                record["status"] = "NO_ORDER"
+                decisions.append(record)
+                continue
+
+            arrival = decision_time + config.order_delay
+            schedule = sorted(execution_schedule[day])
+            expected_slot = next((slot for slot in schedule if slot >= arrival), None)
+            if expected_slot is None or expected_slot >= close_at:
+                record["status"] = "NO_EXECUTION_SLOT_AFTER_DELAY"
+                decisions.append(record)
+                continue
+            slot_name = expected_slot.strftime("%H:%M")
+            try:
+                liquidity = build_liquidity_reference(
+                    volume_history, signal_date=day, slot=slot_name,
+                    max_fraction=config.liquidity_fraction, lot_size=config.lot_size)
+            except ValueError as exc:
+                record["status"] = "LIQUIDITY_REFERENCE_UNAVAILABLE"
+                record["detail"] = str(exc)
+                decisions.append(record)
+                continue
+
+            if decision.action == "BUY":
+                price_cap = make_protection_price(Side.BUY, bar.close, config.protection_bps)
+                weight = D("1") if decision.target_weight is None else decision.target_weight
+                fee_schedule = FeeSchedule.for_trade_date(day)
+                quantity = plan_entry_quantity(
+                    account.nav(marks), weight, price_cap, account.cash_available,
+                    reserve=config.cash_reserve, lot_size=config.lot_size,
+                    fee_schedule=fee_schedule)
+                quantity = min(quantity, liquidity.cap_shares)
+                if quantity <= 0:
+                    record["status"] = "MIN_LOT_CASH_OR_LIQUIDITY_REJECTED"
+                    decisions.append(record)
+                    continue
+                order_counter += 1
+                order_id = f"{config.baseline.lower()}-{config.random_seed}-{order_counter:08d}"
+                reserve_amount = money(D(quantity) * price_cap
+                                       + fee_schedule.estimate(Side.BUY, D(quantity) * price_cap))
+                account.reserve_buy(order_id, reserve_amount)
+                order = OrderIntent(
+                    order_id, SYMBOL, Side.BUY, quantity, price_cap, decision_time, close_at,
+                    liquidity_reference=liquidity, decision_at=decision_time,
+                    arrival_at=arrival)
+                status = "ORDER_SUBMITTED"
+            else:
+                fee_schedule = FeeSchedule.for_trade_date(day)
+                sellable_quantity = account.shares_sellable(day, SYMBOL)
+                quantity = min(sellable_quantity, liquidity.cap_shares)
+                if sellable_quantity <= 0:
+                    record["status"] = "T1_NO_SELLABLE_SHARES"
+                    decisions.append(record)
+                    continue
+                if quantity <= 0:
+                    record["status"] = "LIQUIDITY_CAP_BELOW_ONE_LOT"
+                    decisions.append(record)
+                    continue
+                price_cap = make_protection_price(Side.SELL, bar.close, config.protection_bps)
+                order_counter += 1
+                order_id = f"{config.baseline.lower()}-{config.random_seed}-{order_counter:08d}"
+                account.reserve_sell(order_id, SYMBOL, quantity, day)
+                order = OrderIntent(
+                    order_id, SYMBOL, Side.SELL, quantity, price_cap, decision_time, close_at,
+                    liquidity_reference=liquidity, decision_at=decision_time,
+                    arrival_at=arrival)
+                reserve_amount = D(quantity)
+                status = "ORDER_SUBMITTED"
+            record.update({"status": status, "order_id": order_id,
+                           "quantity": quantity, "limit_price": str(price_cap),
+                           "arrival_at": arrival.isoformat(),
+                           "execution_slot": expected_slot.isoformat()})
+            if decision.action == "SELL":
+                record["sellable_before_order"] = sellable_quantity
+                record["remaining_after_full_fill"] = sellable_quantity - quantity
+            decisions.append(record)
+            pending = (order, expected_slot, fee_schedule, reserve_amount)
+
+        if pending is not None:
+            order, expected_slot, _, reserved_amount = pending
+            if order.side is Side.BUY:
+                account.cancel_buy(order.order_id)
+            else:
+                account.cancel_sell(order.order_id)
+            orders.append({
+                "order_id": order.order_id, "side": order.side.value,
+                "decision_at": order.decision_at.isoformat() if order.decision_at else None,
+                "arrival_at": order.arrival_at.isoformat() if order.arrival_at else None,
+                "expected_execution_start": expected_slot.isoformat(),
+                "status": ("SCHEDULED_EXECUTION_BAR_MISSING"
+                           if expected_slot not in {bar.interval_start for bar in day_bars}
+                           else "UNFILLED_SESSION_END"),
+                "released_reserve": str(reserved_amount),
+            })
+
+        # Effective-date action events are applied once at each session close.
+        for event in action_events:
+            account.apply_cash_dividend_event(event, day)
+        if day_bars:
+            last_bar = day_bars[-1]
+            marks[SYMBOL] = last_bar.close
+            covers_close = last_bar.interval_end == close_at
+            if account.shares_total and not covers_close:
+                valuation_incomplete = True
+            nav_curve.append({
+                "trade_date": day.isoformat(),
+                "available_at": max(close_at, last_bar.available_at).isoformat(),
+                "cash": str(account.cash_total), "shares": account.shares_total,
+                "mark": str(last_bar.close), "receivables": str(account.receivables),
+                "nav": str(account.nav(marks)), "stale_mark": not covers_close,
+                "daily_close": covers_close,
+            })
+        elif account.shares_total:
+            valuation_incomplete = True
+            nav_curve.append({
+                "trade_date": day.isoformat(), "available_at": close_at.isoformat(),
+                "cash": str(account.cash_total), "shares": account.shares_total,
+                "mark": str(marks[SYMBOL]), "receivables": str(account.receivables),
+                "nav": str(account.nav(marks)), "stale_mark": True, "daily_close": True,
+            })
+
+    asof = sessions[-1]
+    reconciliation = reconcile_account_events(
+        config.initial_cash, account.fills, action_events, asof,
+        account.cash_available, account.receivables,
+        {SYMBOL: account.shares_total})
+    final_nav = account.nav(marks) if marks or not account.shares_total else money(account.cash_total)
+    return BaselineReplayResult(
+        baseline=config.baseline, random_seed=config.random_seed,
+        start_date=sessions[0].isoformat(), end_date=sessions[-1].isoformat(),
+        decisions=tuple(decisions), orders=tuple(orders), fills=tuple(account.fills),
+        nav_curve=tuple(nav_curve), ending_cash=account.cash_available,
+        ending_receivables=account.receivables, ending_shares=account.shares_total,
+        ending_nav=final_nav, corporate_action_events_used=len(action_events),
+        corporate_action_events_pre_start=pre_start_actions,
+        valuation_incomplete=valuation_incomplete, reconciliation=reconciliation,
+        status=("ACCOUNT_RECONCILIATION_FAILED" if not reconciliation.passed else
+                "ACCOUNT_REPLAY_INCOMPLETE_VALUATION" if valuation_incomplete else
+                "ACCOUNT_REPLAY_PASS"))
+
+
+def replay_to_jsonable(result: BaselineReplayResult) -> dict[str, object]:
+    return {
+        "schema": "jevquant-baseline-replay/v1",
+        "baseline": result.baseline,
+        "random_seed": result.random_seed,
+        "start_date": result.start_date,
+        "end_date": result.end_date,
+        "decisions": list(result.decisions),
+        "orders": list(result.orders),
+        "fills": [{
+            "fill_id": fill.fill_id, "order_id": fill.order_id,
+            "symbol": fill.symbol, "side": fill.side.value,
+            "quantity": fill.quantity, "price": str(fill.price),
+            "fee": str(fill.fee), "trade_date": fill.trade_date.isoformat(),
+            "filled_at": fill.filled_at.isoformat(),
+        } for fill in result.fills],
+        "nav_curve": list(result.nav_curve),
+        "ending_cash_cny": str(result.ending_cash),
+        "ending_receivables_cny": str(result.ending_receivables),
+        "ending_shares": result.ending_shares,
+        "ending_nav_cny": str(result.ending_nav),
+        "corporate_action_events_used": result.corporate_action_events_used,
+        "corporate_action_events_pre_start": result.corporate_action_events_pre_start,
+        "valuation_incomplete": result.valuation_incomplete,
+        "reconciliation": {
+            "passed": result.reconciliation.passed,
+            "expected_cash_cny": str(result.reconciliation.expected_cash),
+            "cash_difference_cny": str(result.reconciliation.cash_difference),
+            "expected_receivables_cny": str(result.reconciliation.expected_receivables),
+            "receivables_difference_cny": str(result.reconciliation.receivables_difference),
+            "expected_shares": dict(result.reconciliation.expected_shares),
+            "share_differences": dict(result.reconciliation.share_differences),
+        },
+        "status": result.status,
+    }
+
+
+def summarize_baseline_result(result: BaselineReplayResult, initial_cash: Decimal) -> dict[str, object]:
+    daily = [row for row in result.nav_curve if row.get("daily_close")]
+    navs = [D(str(row["nav"])) for row in daily]
+    high_water = D(initial_cash)
+    max_drawdown = D("0")
+    for nav in navs:
+        high_water = max(high_water, nav)
+        if high_water > 0:
+            max_drawdown = max(max_drawdown, (high_water - nav) / high_water)
+    exposure_sessions = sum(int(row["shares"]) > 0 for row in daily)
+    fees = sum((fill.fee for fill in result.fills), D("0"))
+    return {
+        "baseline": result.baseline,
+        "random_seed": result.random_seed,
+        "start_date": result.start_date,
+        "end_date": result.end_date,
+        "initial_cash_cny": str(D(initial_cash)),
+        "ending_nav_cny": str(result.ending_nav),
+        "total_return": str((result.ending_nav - D(initial_cash)) / D(initial_cash)),
+        "daily_close_marks": len(daily),
+        "max_daily_drawdown": str(max_drawdown),
+        "filled_trades": len(result.fills),
+        "filled_buy_orders": sum(fill.side is Side.BUY for fill in result.fills),
+        "filled_sell_orders": sum(fill.side is Side.SELL for fill in result.fills),
+        "fees_cny": str(money(fees)),
+        "exposure_sessions": exposure_sessions,
+        "exposure_fraction": str(D(exposure_sessions) / D(len(daily))) if daily else "0",
+        "ending_cash_cny": str(result.ending_cash),
+        "ending_shares": result.ending_shares,
+        "reconciliation_passed": result.reconciliation.passed,
+        "valuation_incomplete": result.valuation_incomplete,
+        "status": result.status,
+    }
+
+
+def iter_baseline_suite(
+    *,
+    bars: Iterable[Bar],
+    trade_dates: Sequence[date],
+    daily_closes: Iterable[tuple[date, Decimal]],
+    buy_eligible_by_date: Mapping[date, bool],
+    execution_schedule: Mapping[date, Sequence[datetime]],
+    bar_schedule_by_date: Mapping[date, Sequence[datetime]] | None = None,
+    prior_volume_history: Iterable[tuple[date, str, int]] = (),
+    session_close_by_date: Mapping[date, datetime],
+    next_trade_date_by_date: Mapping[date, date],
+    execution_rules_by_date: Mapping[date, SessionExecutionRules],
+    dividends: Sequence[CashDividend] = (),
+    random_seeds: Iterable[int] = range(100),
+    initial_cash: Decimal = D("1000000.00"),
+) -> Iterator[tuple[str, BaselineReplayResult]]:
+    """Yield independent account replays under one frozen execution setup."""
+    common = {
+        "bars": tuple(bars), "trade_dates": tuple(trade_dates),
+        "daily_closes": tuple(daily_closes),
+        "buy_eligible_by_date": buy_eligible_by_date,
+        "execution_schedule": execution_schedule,
+        "bar_schedule_by_date": bar_schedule_by_date,
+        "prior_volume_history": tuple(prior_volume_history),
+        "session_close_by_date": session_close_by_date,
+        "next_trade_date_by_date": next_trade_date_by_date,
+        "execution_rules_by_date": execution_rules_by_date,
+        "dividends": tuple(dividends),
+    }
+    for name in ("CASH", "BH80", "BH50", "BH_MAX", "MA5_20"):
+        config = BaselineReplayConfig(name, initial_cash=initial_cash)  # type: ignore[arg-type]
+        yield name, run_baseline_replay(config, **common)
+    for seed in random_seeds:
+        config = BaselineReplayConfig("RANDOM", initial_cash=initial_cash, random_seed=int(seed))
+        yield f"RANDOM-seed-{seed}", run_baseline_replay(config, **common)
