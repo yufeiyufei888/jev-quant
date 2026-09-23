@@ -5,6 +5,7 @@ from datetime import date
 from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_UP
 from typing import Iterable
 
+from .actions import CashDividend
 from .models import Fill, OrderIntent, PositionLot, Side
 
 D = Decimal
@@ -70,6 +71,8 @@ class Account:
     buy_reservations: dict[str, Decimal] = field(default_factory=dict)
     sell_reservations: dict[str, tuple[str, int]] = field(default_factory=dict)
     order_gross: dict[str, Decimal] = field(default_factory=dict)
+    dividend_entitlements: dict[str, Decimal] = field(default_factory=dict)
+    dividend_receivables: dict[str, Decimal] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.initial_cash = money(self.initial_cash)
@@ -199,6 +202,37 @@ class Account:
             self.receivables = money(self.receivables - amount)
             self.cash_available = money(self.cash_available + amount)
         self.seen_event_ids.add(event_id)
+
+    def apply_cash_dividend_event(self, event: CashDividend, on: date) -> None:
+        """Replay one sourced dividend event on a single effective date.
+
+        Holdings are snapshotted on the record date, the receivable is booked
+        on the ex-date, and cash is received on the payment date. The caller
+        must replay every intervening session in order.
+        """
+        record_key = f"{event.event_id}:record"
+        ex_key = f"{event.event_id}:ex"
+        payment_key = f"{event.event_id}:payment"
+        if on == event.record_date and record_key not in self.seen_event_ids:
+            quantity = sum(lot.quantity for lot in self.lots if lot.symbol == event.symbol)
+            self.dividend_entitlements[event.event_id] = money(D(quantity) * event.cash_per_share)
+            self.seen_event_ids.add(record_key)
+        if on == event.ex_date and ex_key not in self.seen_event_ids:
+            if record_key not in self.seen_event_ids:
+                raise ValueError(f"missing record-date holdings snapshot for dividend {event.event_id}")
+            amount = self.dividend_entitlements.get(event.event_id, D("0.00"))
+            self.dividend_receivables[event.event_id] = amount
+            self.receivables = money(self.receivables + amount)
+            self.seen_event_ids.add(ex_key)
+        if on == event.payment_date and payment_key not in self.seen_event_ids:
+            if ex_key not in self.seen_event_ids:
+                raise ValueError(f"missing ex-date receivable for dividend {event.event_id}")
+            amount = self.dividend_receivables.pop(event.event_id, D("0.00"))
+            if amount > self.receivables:
+                raise ValueError("dividend payment exceeds total receivables")
+            self.receivables = money(self.receivables - amount)
+            self.cash_available = money(self.cash_available + amount)
+            self.seen_event_ids.add(payment_key)
 
     def apply_share_change(self, event_id: str, symbol: str, ratio: Decimal) -> None:
         if event_id in self.seen_event_ids:

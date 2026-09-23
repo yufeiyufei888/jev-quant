@@ -6,9 +6,9 @@ Updated: 2026-09-23
 
 - P0: read-only Moutai inventory plus a full five-minute audit of 1,032 date partitions. Every date has 49 rows on the same clock-label grid, with no missing Moutai date rows, duplicate timestamps, or structural invalids. Seven mixed-unit volume dates are normalized by source-hash-bound rules, yielding exact volume reconciliation on all 1,032 dates. For the planned 2023–2024 development window, 484 daily rows and 484 minute partitions are present and daily fields are complete. The 74 blank daily rows all predate 2013. Amounts exactly reconcile on only 22/1,032 days; max delta is CNY 191. Timestamp interval meaning, endpoint execution semantics, point-in-time status/rules and official action accounting remain open.
 - P1/P2: Python 3.11 environment, locked dependencies, CLI, basic account, dated fee schedule, T+1 lots, order reservations, execution proxy, SQLite event log, synthetic examples.
-- P3: official 2023–2024 Moutai cash-dividend events are in a sourced event table. A causal total-return feature builder and `features-sample` CLI have generated a 20-session sample for 2023-07-03 through 2023-07-28. It uses raw closes plus known realized cash actions; close availability at 15:05 is explicitly a simulation assumption. The sample is a pipeline check, not a strategy result.
+- P3: official 2023–2024 Moutai cash-dividend events are in a sourced event table. A causal total-return feature builder and `features-sample` CLI have generated a 20-session sample for 2023-07-03 through 2023-07-28. The ledger now snapshots entitlement on the record date, books a receivable on the ex-date and transfers it to cash on the payment date, with idempotent replay. Close availability at 15:05 is explicitly a simulation assumption. The sample is a pipeline check, not a strategy result.
 - P5: pinned SDK adapter contract, strict response validation, identical-request cache and usage receipts. One real connectivity/schema request using only synthetic state resolved to `jev-1.13.0` and passed validation.
-- Synthetic integration: two-session Mock decision → order → fill → T+1 → cash/NAV; 39 tests pass.
+- Synthetic integration: two-session Mock decision → order → fill → T+1 → cash/NAV; 40 tests pass.
 
 ## Not accepted yet
 

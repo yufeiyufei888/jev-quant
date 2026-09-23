@@ -1,11 +1,13 @@
 from datetime import date, datetime
 from decimal import Decimal as D
+from zoneinfo import ZoneInfo
 
 import pytest
 
 from jevquant.execution import make_protection_price
 from jevquant.ledger import Account, FeeSchedule, plan_entry_quantity
-from jevquant.models import Fill, Side
+from jevquant.models import Fill, PositionLot, Side
+from jevquant.actions import CashDividend
 
 
 def _fill(fill_id: str, side: Side, qty: int, price: str, fee: str, day: date) -> Fill:
@@ -48,6 +50,28 @@ def test_cash_dividend_receivable_and_payment_are_separate_and_idempotent():
     account.apply_cash_dividend("div-pay", D("10000"), ex_date=False)
     assert account.cash_available == D("1010000.00")
     assert account.receivables == D("0.00")
+
+
+def test_sourced_dividend_uses_record_date_holdings_and_books_payment_once():
+    account = Account(D("1000000"))
+    account.lots.append(PositionLot("lot1", "600519.SH", date(2024, 1, 2),
+                                    date(2024, 1, 3), 100, D("100"), D("0")))
+    event = CashDividend("div-1", "600519.SH", D("2"), date(2024, 1, 2),
+                         datetime(2024, 1, 2, 23, 59, 59, tzinfo=ZoneInfo("Asia/Shanghai")), date(2024, 1, 4),
+                         date(2024, 1, 5), date(2024, 1, 8), "OFFICIAL_IMPLEMENTATION_NOTICE",
+                         "https://example.test/dividend.pdf")
+    account.apply_cash_dividend_event(event, date(2024, 1, 4))
+    account.apply_cash_dividend_event(event, date(2024, 1, 4))
+    account.lots[0].quantity = 60  # disposal after the record-date snapshot
+    account.apply_cash_dividend_event(event, date(2024, 1, 5))
+    account.apply_cash_dividend_event(event, date(2024, 1, 5))
+    assert account.dividend_receivables[event.event_id] == D("200.00")
+    assert account.receivables == D("200.00")
+    assert account.cash_available == D("1000000.00")
+    account.apply_cash_dividend_event(event, date(2024, 1, 8))
+    account.apply_cash_dividend_event(event, date(2024, 1, 8))
+    assert account.receivables == D("0.00")
+    assert account.cash_available == D("1000200.00")
 
 
 def test_buy_reservation_is_an_asset_and_partial_fills_share_order_minimum_fee():
