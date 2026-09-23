@@ -10,6 +10,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.dataset as ds
 import pyarrow.parquet as pq
@@ -64,6 +65,27 @@ def _optional_decimal(value: object, field: str) -> Decimal | None:
     return _decimal(value, field)
 
 
+def _raw_market_price(value: object, field: str, *, float32_source: bool) -> tuple[Decimal, bool]:
+    """Normalize legal-cent OHLC only within the source Float32 error bound."""
+    raw = _decimal(value, field)
+    if not float32_source:
+        return raw, False
+    tick = D("0.01")
+    nearest_tick = (raw / tick).to_integral_value(rounding=ROUND_HALF_UP) * tick
+    tolerance = min(D("0.005"), abs(raw) / D(2**22) + D("1e-12"))
+    if abs(raw - nearest_tick) > tolerance:
+        raise ValueError(f"{field} is outside Float32 legal-tick tolerance")
+    return nearest_tick, raw != nearest_tick
+
+
+def _arrow_type_label(value: pa.DataType) -> str:
+    if pa.types.is_float32(value):
+        return "float32"
+    if pa.types.is_float64(value):
+        return "float64"
+    return str(value)
+
+
 def read_vendor_minute_day(path: Path, symbol: str, *,
                            volume_unit_overrides: dict[tuple[str, str], dict[str, str]] | None = None) -> list[Bar]:
     """Read one raw 5-minute vendor partition while preserving its timestamp label.
@@ -83,6 +105,10 @@ def read_vendor_minute_day(path: Path, symbol: str, *,
         raise ValueError(f"missing columns in {path.name}: {sorted(missing)}")
     selected = table.filter(pc.equal(table["code"], symbol))
     rows = selected.to_pylist()
+    float32_prices = {
+        name: pa.types.is_float32(table.schema.field(name).type)
+        for name in ("open", "high", "low", "close")
+    }
     bars: list[Bar] = []
     for index, row in enumerate(rows):
         label = datetime.fromisoformat(str(row["trade_time"])).replace(tzinfo=CN_TZ)
@@ -97,13 +123,21 @@ def read_vendor_minute_day(path: Path, symbol: str, *,
         if volume != volume.to_integral_value():
             raise ValueError(f"minute volume is fractional shares at {label.isoformat()}")
         amount = row.get("amount")
+        price_results = {
+            name: _raw_market_price(row[name], name, float32_source=float32_prices[name])
+            for name in ("open", "high", "low", "close")
+        }
+        if any(float32_prices.values()):
+            flags.add("source_ohlc_float32_tick_checked")
+        if any(changed for _, changed in price_results.values()):
+            flags.add("source_ohlc_float32_tick_normalized")
         bars.append(Bar(
             symbol=symbol,
             source_time=label,
-            open=_decimal(row["open"], "open"),
-            high=_decimal(row["high"], "high"),
-            low=_decimal(row["low"], "low"),
-            close=_decimal(row["close"], "close"),
+            open=price_results["open"][0],
+            high=price_results["high"][0],
+            low=price_results["low"][0],
+            close=price_results["close"][0],
             volume_shares=int(volume),
             amount_cny=None if amount is None else _decimal(amount, "amount"),
             trade_date=date.fromisoformat(str(row["date"])[:4] + "-" + str(row["date"])[4:6] + "-" + str(row["date"])[6:8]),
@@ -244,6 +278,7 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
     daily_limit_audit = audit_daily_limit_fields(list(daily_map.values()))
     row_counts: Counter[int] = Counter()
     parquet_writer_counts: Counter[str] = Counter()
+    ohlc_storage_type_counts: Counter[str] = Counter()
     parquet_metadata_key_counts: Counter[str] = Counter()
     files_with_provider_metadata: list[str] = []
     files_with_interval_metadata: list[str] = []
@@ -291,6 +326,10 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
         if any(token in metadata_text for token in ("interval_start", "interval_end", "bar_type", "timestamp_semantics")):
             files_with_interval_metadata.append(path.name)
         schema = pq.read_schema(path)
+        ohlc_storage_type_counts[
+            ",".join(f"{name}={_arrow_type_label(schema.field(name).type)}" for name in ("open", "high", "low", "close")
+                     if name in schema.names)
+        ] += 1
         missing = required - set(schema.names)
         if missing:
             invalid_rows.append({"file": path.name, "reason": "missing_columns:" + ",".join(sorted(missing))})
@@ -395,6 +434,7 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
             "files_examined": len(files),
             "writer_counts": dict(parquet_writer_counts),
             "metadata_key_counts": dict(parquet_metadata_key_counts),
+            "ohlc_storage_type_counts": dict(ohlc_storage_type_counts),
             "files_declaring_market_provider": len(files_with_provider_metadata),
             "files_declaring_bar_interval_semantics": len(files_with_interval_metadata),
             "interpretation": "Parquet writer identity describes serialization only; zero provider/interval declarations here does not imply the source data itself is absent",
