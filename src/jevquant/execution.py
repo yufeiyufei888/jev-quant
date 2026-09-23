@@ -26,7 +26,6 @@ def make_protection_price(side: Side, signal_price: Decimal, bps: int = 50) -> D
 def match_open_proxy(order: OrderIntent, bar: Bar, *, min_slippage_bps: int = 5,
                      tick: Decimal = D("0.01"), limit_up: Decimal | None = None,
                      limit_down: Decimal | None = None, suspended: bool = False,
-                     max_bar_participation: Decimal = D("0.01"), lot_size: int = 100,
                      prior_filled_gross: Decimal = D("0.00"),
                      fee_schedule: FeeSchedule | None = None) -> ExecutionResult:
     if suspended:
@@ -37,17 +36,15 @@ def match_open_proxy(order: OrderIntent, bar: Bar, *, min_slippage_bps: int = 5,
         return ExecutionResult(None, "OUTSIDE_ORDER_WINDOW")
     if bar.quality_flags.intersection({"opening_record", "closing_record", "auction_or_close_unverified"}):
         return ExecutionResult(None, "UNVERIFIED_BAR_ROLE")
+    if order.liquidity_reference is None:
+        return ExecutionResult(None, "MISSING_LIQUIDITY_REFERENCE")
+    if order.quantity > order.liquidity_reference.cap_shares:
+        return ExecutionResult(None, "LIQUIDITY_REFERENCE_CAP")
     if bar.volume_shares <= 0:
         return ExecutionResult(None, "NO_EXECUTABLE_VOLUME")
-    if order.quantity > int(Decimal(bar.volume_shares) * max_bar_participation):
-        permitted = int(Decimal(bar.volume_shares) * max_bar_participation)
-        if permitted <= 0:
-            return ExecutionResult(None, "LIQUIDITY_REFERENCE_CAP")
-        quantity = (permitted // lot_size) * lot_size
-        if quantity <= 0:
-            return ExecutionResult(None, "LIQUIDITY_REFERENCE_CAP")
-    else:
-        quantity = order.quantity
+    # Open-proxy mode sizes orders only from the signal-time historical reference.
+    # Execution-bar final volume is not used to retroactively resize the order.
+    quantity = order.quantity
     slip = max(tick, bar.open * D(min_slippage_bps) / D(10000))
     price = bar.open + slip if order.side is Side.BUY else bar.open - slip
     price = (price / tick).to_integral_value(rounding=(ROUND_CEILING if order.side is Side.BUY else ROUND_FLOOR)) * tick

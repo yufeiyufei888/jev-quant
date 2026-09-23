@@ -13,6 +13,11 @@ def test_synthetic_decision_order_fill_t1_nav_flow(tmp_path):
     assert result["ending_shares"] == 0
     assert result["account_ending_cash_cny"] == "1003401.14"
     assert result["ending_nav_cny"] == "1003401.14"
+    reference = result["orders"][0]["liquidity_reference"]
+    assert reference["source"] == "synthetic_fixture"
+    assert reference["median_volume_shares"] == "100000"
+    assert reference["cap_shares"] == 1000
+    assert len(reference["session_dates"]) == len(reference["session_volumes_shares"]) == 20
     usage = (tmp_path / "jev-usage.jsonl").read_text(encoding="utf-8").splitlines()
     assert len(usage) == 2
     assert all(json.loads(line)["source"] == "mock" for line in usage)

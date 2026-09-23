@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from pathlib import Path
 from types import SimpleNamespace
@@ -8,11 +8,31 @@ from typing import Any
 
 from .execution import make_protection_price, match_open_proxy
 from .ledger import Account, FeeSchedule
+from .liquidity import LiquidityReference
 from .models import Bar, OrderIntent, Side
 from .provider import DecisionResult, SystemOneClient, decide_cached
 from .usage import UsageLedger
 
 D = Decimal
+
+
+def _mock_liquidity_reference(signal_date: date, slot: str) -> LiquidityReference:
+    dates = tuple(signal_date - timedelta(days=20 - index) for index in range(20))
+    volumes = tuple(100_000 for _ in dates)
+    return LiquidityReference(signal_date, slot, dates, volumes, D("100000"), D("0.01"), 1000)
+
+
+def _liquidity_receipt(reference: LiquidityReference) -> dict[str, Any]:
+    return {
+        "source": "synthetic_fixture",
+        "signal_date": reference.signal_date.isoformat(),
+        "slot": reference.slot,
+        "session_dates": [day.isoformat() for day in reference.session_dates],
+        "session_volumes_shares": list(reference.session_volumes_shares),
+        "median_volume_shares": str(reference.median_volume_shares),
+        "max_fraction": str(reference.fraction),
+        "cap_shares": reference.cap_shares,
+    }
 
 
 class _MockJevClient:
@@ -60,7 +80,8 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
     buy_at = datetime.combine(date(2024, 1, 2), time(10, 0))
     buy_order = OrderIntent("mock-buy", "600519.SH", Side.BUY, 500,
                             make_protection_price(Side.BUY, D("1500.00")), buy_at,
-                            datetime.combine(date(2024, 1, 2), time(15, 0)))
+                            datetime.combine(date(2024, 1, 2), time(15, 0)),
+                            liquidity_reference=_mock_liquidity_reference(date(2024, 1, 2), "10:05"))
     account.reserve_buy(buy_order.order_id, D("800000.00"))
     buy_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 2), time(10, 5)),
                   D("1500.00"), D("1510.00"), D("1490.00"), D("1505.00"), 100000,
@@ -74,7 +95,8 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
     # any unused protection reserve must return to available cash.
     account.cancel_buy(buy_order.order_id)
     orders.append({"order_id": buy_order.order_id, "side": "BUY", "quantity": 500,
-                   "limit_price": str(buy_order.limit_price), "status": matched_buy.reason})
+                   "limit_price": str(buy_order.limit_price), "status": matched_buy.reason,
+                   "liquidity_reference": _liquidity_receipt(buy_order.liquidity_reference)})
     fills.append({"fill_id": matched_buy.fill.fill_id, "side": "BUY", "quantity": 500,
                   "price": str(matched_buy.fill.price), "fee": str(matched_buy.fill.fee)})
 
@@ -88,7 +110,8 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
     sell_order = OrderIntent("mock-sell", "600519.SH", Side.SELL,
                              account.shares_sellable(date(2024, 1, 3), "600519.SH"),
                              make_protection_price(Side.SELL, D("1510.00")), sell_at,
-                             datetime.combine(date(2024, 1, 3), time(15, 0)))
+                             datetime.combine(date(2024, 1, 3), time(15, 0)),
+                             liquidity_reference=_mock_liquidity_reference(date(2024, 1, 3), "10:05"))
     sell_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 3), time(10, 5)),
                    D("1510.00"), D("1520.00"), D("1500.00"), D("1515.00"), 100000,
                    trade_date=date(2024, 1, 3), source_id="synthetic-fixture")
@@ -97,7 +120,8 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
         raise RuntimeError(f"mock SELL failed: {matched_sell.reason}")
     account.sell(matched_sell.fill, fee_schedule)
     orders.append({"order_id": sell_order.order_id, "side": "SELL", "quantity": 500,
-                   "limit_price": str(sell_order.limit_price), "status": matched_sell.reason})
+                   "limit_price": str(sell_order.limit_price), "status": matched_sell.reason,
+                   "liquidity_reference": _liquidity_receipt(sell_order.liquidity_reference)})
     fills.append({"fill_id": matched_sell.fill.fill_id, "side": "SELL", "quantity": 500,
                   "price": str(matched_sell.fill.price), "fee": str(matched_sell.fill.fee)})
 

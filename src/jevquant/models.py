@@ -5,6 +5,8 @@ from datetime import date, datetime
 from decimal import Decimal
 from enum import StrEnum
 
+from .liquidity import LiquidityReference
+
 
 class Side(StrEnum):
     BUY = "BUY"
@@ -49,10 +51,14 @@ class OrderIntent:
     limit_price: Decimal
     created_at: datetime
     expires_at: datetime
+    liquidity_reference: LiquidityReference | None = None
 
     def __post_init__(self) -> None:
         if self.quantity <= 0 or self.limit_price <= 0:
             raise ValueError("quantity and limit price must be positive")
+        if (self.liquidity_reference is not None
+                and self.liquidity_reference.signal_date != self.created_at.date()):
+            raise ValueError("liquidity reference signal date must match order creation date")
         if self.expires_at <= self.created_at:
             raise ValueError("order must expire after creation")
 

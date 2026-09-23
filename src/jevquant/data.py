@@ -260,7 +260,7 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
                 date_text = str(row["date"])
                 row_date = (date(int(date_text[:4]), int(date_text[4:6]), int(date_text[6:8]))
                             if len(date_text) == 8 else date.fromisoformat(date_text[:10]))
-                if row_date.isoformat() != path.stem:
+                if row_date.isoformat() != date_iso:
                     date_mismatch_rows += 1
                 try:
                     low, high = _decimal(row["low"], "low"), _decimal(row["high"], "high")

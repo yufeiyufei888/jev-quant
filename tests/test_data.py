@@ -112,6 +112,7 @@ def test_full_partition_audit_counts_symbol_bars_and_reconciles_daily_values(tmp
     assert report["daily_crosscheck"]["volume_exact_match_days"] == 2
     assert report["daily_crosscheck"]["amount_exact_match_days"] == 2
     assert report["files_without_symbol_rows"] == []
+    assert report["row_trade_date_mismatches"] == 0
     assert len(report["expected_raw_time_labels"]) == 49
     assert [row["date"] for row in report["nonstandard_time_grid_dates"]] == ["20240102", "20240103"]
     assert "interval role" in report["semantics"] and "unverified" in report["semantics"]
