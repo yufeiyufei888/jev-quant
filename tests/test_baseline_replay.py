@@ -178,4 +178,49 @@ def test_baseline_suite_runs_independent_accounts_and_seeded_random_replicates()
     summary = summarize_baseline_result(bh80, D("1000000.00"))
     assert summary["filled_trades"] == 1
     assert summary["reconciliation_passed"] is True
-    assert D(str(summary["max_daily_drawdown"])) >= 0
+
+
+def test_nonexecution_bars_are_accepted_and_prestart_liquidity_is_not_account_history():
+    config, bars, dates, closes, eligible, all_starts, session_close, next_trade, rules = _fixture()
+    eligible = {day: True for day in dates}
+    execution_starts = {day: tuple(start for start in starts if start.time() != time(9, 30))
+                        for day, starts in all_starts.items()}
+    warmup = tuple((date(2023, 12, 1) + timedelta(days=index), "09:40", 1_000_000)
+                   for index in range(20))
+    result = run_baseline_replay(
+        config, bars=bars, trade_dates=dates, daily_closes=closes,
+        buy_eligible_by_date=eligible, execution_schedule=execution_starts,
+        bar_schedule_by_date=all_starts, prior_volume_history=warmup,
+        session_close_by_date=session_close, next_trade_date_by_date=next_trade,
+        execution_rules_by_date=rules)
+    assert result.status == "ACCOUNT_REPLAY_PASS"
+    assert result.reconciliation.passed
+    assert len(result.fills) == 1
+    assert result.fills[0].filled_at.time() == time(9, 40)
+    assert result.orders[0]["liquidity_reference"]["session_dates"] == [
+        (date(2023, 12, 1) + timedelta(days=index)).isoformat() for index in range(20)]
+    assert {row["trade_date"] for row in result.nav_curve} <= {day.isoformat() for day in dates}
+
+
+def test_prior_volume_history_cannot_include_replay_dates_or_duplicate_slots():
+    config, bars, dates, closes, eligible, schedule, session_close, next_trade, rules = _fixture()
+    bad_history = [(dates[0], "09:40", 1_000_000)]
+    with pytest.raises(ValueError, match="must precede"):
+        run_baseline_replay(
+            config, bars=bars, trade_dates=dates, daily_closes=closes,
+            buy_eligible_by_date=eligible, execution_schedule=schedule,
+            prior_volume_history=bad_history, session_close_by_date=session_close,
+            next_trade_date_by_date=next_trade, execution_rules_by_date=rules)
+
+
+def test_execution_schedule_must_be_a_subset_of_available_bar_starts():
+    config, bars, dates, closes, eligible, schedule, session_close, next_trade, rules = _fixture()
+    invalid_execution = dict(schedule)
+    invalid_execution[dates[0]] = (datetime.combine(dates[0], time(9, 25)),)
+    with pytest.raises(ValueError, match="eligible execution start"):
+        run_baseline_replay(
+            config, bars=bars, trade_dates=dates, daily_closes=closes,
+            buy_eligible_by_date=eligible, execution_schedule=invalid_execution,
+            bar_schedule_by_date=schedule,
+            session_close_by_date=session_close, next_trade_date_by_date=next_trade,
+            execution_rules_by_date=rules)

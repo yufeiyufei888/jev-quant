@@ -55,6 +55,18 @@ def main() -> None:
     sub.add_parser("offline-demo", help="run the synthetic ledger golden example")
     workflow = sub.add_parser("mock-round-trip", help="run synthetic decision-to-NAV flow; no live API")
     workflow.add_argument("--output", type=Path, default=Path("artifacts/mock-round-trip"))
+    p6 = sub.add_parser("p6-sample", help="run a 1- or 20-session JEV paper-account chain on retrospective data")
+    p6.add_argument("--minute-root", type=Path, required=True)
+    p6.add_argument("--daily-csv", type=Path, required=True)
+    p6.add_argument("--status-2022-2023", type=Path, required=True)
+    p6.add_argument("--status-2024-plus", type=Path, required=True)
+    p6.add_argument("--dividends", type=Path, default=Path("configs/moutai_2023_2024_cash_dividends.json"))
+    p6.add_argument("--start", type=lambda value: __import__("datetime").date.fromisoformat(value), required=True)
+    p6.add_argument("--sessions", type=int, choices=(1, 20), required=True)
+    p6.add_argument("--output", type=Path, required=True)
+    p6.add_argument("--resume", action="store_true", help="restore from the last verified daily checkpoint")
+    p6.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
+                     help="acknowledge historical price/account snapshots are sent to the configured JEV provider")
     args = parser.parse_args()
 
     if args.command == "doctor":
@@ -68,6 +80,16 @@ def main() -> None:
     if args.command == "mock-round-trip":
         from .workflow import run_mock_round_trip
         result = run_mock_round_trip(args.output)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    if args.command == "p6-sample":
+        if not args.acknowledge_historical_data_to_live_jev:
+            parser.error("must acknowledge historical price/account snapshots are sent to the configured JEV provider")
+        from .p6_sample import run_p6_sample
+        result = run_p6_sample(minute_root=args.minute_root, daily_csv=args.daily_csv,
+            status_paths=(args.status_2022_2023, args.status_2024_plus), dividend_config=args.dividends,
+            output=args.output, start=args.start, sessions=args.sessions, resume=args.resume,
+            progress=lambda message: print(message, flush=True))
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     if args.command == "inventory":
