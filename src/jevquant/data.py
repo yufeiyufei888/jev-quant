@@ -243,6 +243,10 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
         row.setdefault("daily_source", "user_daily_csv")
     daily_limit_audit = audit_daily_limit_fields(list(daily_map.values()))
     row_counts: Counter[int] = Counter()
+    parquet_writer_counts: Counter[str] = Counter()
+    parquet_metadata_key_counts: Counter[str] = Counter()
+    files_with_provider_metadata: list[str] = []
+    files_with_interval_metadata: list[str] = []
     missing_symbol_dates: list[str] = []
     duplicate_label_dates: list[str] = []
     nonstandard_time_grid_dates: list[dict[str, object]] = []
@@ -272,6 +276,19 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
                        + ["15:00:00"])
 
     for index, path in enumerate(files, start=1):
+        parquet_metadata = pq.read_metadata(path)
+        parquet_writer_counts[parquet_metadata.created_by or "<none>"] += 1
+        metadata = parquet_metadata.metadata or {}
+        metadata_text = " ".join(
+            f"{key.decode('utf-8', 'replace')} {value.decode('utf-8', 'replace')}"
+            for key, value in metadata.items()
+        ).lower()
+        metadata_keys = {key.decode("utf-8", "replace") for key in metadata}
+        parquet_metadata_key_counts.update(metadata_keys)
+        if any(token in metadata_text for token in ("provider", "vendor", "source_url", "data_source")):
+            files_with_provider_metadata.append(path.name)
+        if any(token in metadata_text for token in ("interval_start", "interval_end", "bar_type", "timestamp_semantics")):
+            files_with_interval_metadata.append(path.name)
         schema = pq.read_schema(path)
         missing = required - set(schema.names)
         if missing:
@@ -369,6 +386,14 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
         "symbol": symbol,
         "partition_root": str(root),
         "partition_files": len(files),
+        "parquet_metadata_provenance": {
+            "files_examined": len(files),
+            "writer_counts": dict(parquet_writer_counts),
+            "metadata_key_counts": dict(parquet_metadata_key_counts),
+            "files_declaring_market_provider": len(files_with_provider_metadata),
+            "files_declaring_bar_interval_semantics": len(files_with_interval_metadata),
+            "interpretation": "Parquet writer identity describes serialization only; zero provider/interval declarations here does not imply the source data itself is absent",
+        },
         "symbol_rows_per_file_distribution": {str(k): v for k, v in sorted(row_counts.items())},
         "files_without_symbol_rows": missing_symbol_dates,
         "volume_unit_override_dates_applied": sorted(volume_override_dates_applied),
