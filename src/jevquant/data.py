@@ -300,6 +300,8 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
     amount_deltas: list[tuple[str, Decimal, Decimal]] = []
     open_exact_matches = 0
     open_within_tick_matches = 0
+    high_within_tick_matches = 0
+    low_within_tick_matches = 0
     close_within_tick = 0
     first_label: str | None = None
     last_label: str | None = None
@@ -420,6 +422,12 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
                     open_exact_matches += 1
                 if open_delta <= D("0.01"):
                     open_within_tick_matches += 1
+            minute_high = max(_decimal(row["high"], "high") for row in rows)
+            minute_low = min(_decimal(row["low"], "low") for row in rows)
+            if daily["high_raw"] is not None and abs(daily["high_raw"] - minute_high) <= D("0.01"):
+                high_within_tick_matches += 1
+            if daily["low_raw"] is not None and abs(daily["low_raw"] - minute_low) <= D("0.01"):
+                low_within_tick_matches += 1
             if daily["close_raw"] is not None and abs(daily["close_raw"] - _decimal(rows[-1]["close"], "close")) <= D("0.01"):
                 close_within_tick += 1
         if progress_callback is not None and (index % 100 == 0 or index == len(files)):
@@ -466,6 +474,8 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
             "amount_delta_max_relative_bps": str(max((x[1] / x[2] * D("10000") for x in amount_deltas if x[2]), default=0)) if amount_deltas else None,
             "first_row_open_exactly_equals_daily_open_days": open_exact_matches,
             "first_row_open_within_one_tick_of_daily_open_days": open_within_tick_matches,
+            "intraday_high_within_one_tick_of_daily_high_days": high_within_tick_matches,
+            "intraday_low_within_one_tick_of_daily_low_days": low_within_tick_matches,
             "last_row_close_within_one_tick_days": close_within_tick,
             "opening_and_closing_comparisons_are_descriptive_only": True,
             "daily_limit_fields": daily_limit_audit,
