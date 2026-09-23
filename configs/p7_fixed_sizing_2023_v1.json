@@ -1,0 +1,47 @@
+{
+  "schema": "jevquant-p7-fixed-sizing-protocol/v1",
+  "experiment_id": "p7-fixed-sizing-2023-v1",
+  "purpose": "Retrospective attribution of JEV entry and exit judgments under a fixed target weight, using the exact completed-bar snapshot price.",
+  "symbol": "600519.SH",
+  "initial_cash_cny": "1000000.00",
+  "window": {
+    "start": "2023-01-03",
+    "trading_sessions": 242,
+    "role": "development",
+    "note": "2022 minute history is used for warm-up; 2023 is the available full development year."
+  },
+  "model": {
+    "provider_model_id": "jev-1.13.0",
+    "prompt_variant": "baseline",
+    "input_schema": "state_v1",
+    "prompt_changes_during_run": false
+  },
+  "execution": {
+    "mode": "instant_snapshot_close",
+    "fill_price": "exact close of the completed five-minute bar shown in the same JEV snapshot",
+    "delay_minutes": 0,
+    "slippage_bps": 0,
+    "liquidity_cap": false,
+    "dated_fees": true,
+    "board_lot_sizing": true,
+    "t_plus_one": true,
+    "purpose_note": "Idealized decision-attribution diagnostic; not executable return evidence."
+  },
+  "accounts": [
+    {"account_id": "fixed-entry-80", "target_entry_fraction": "0.80"},
+    {"account_id": "fixed-entry-50", "target_entry_fraction": "0.50"}
+  ],
+  "controls": {
+    "accounts_are_independent": true,
+    "no_prompt_or_parameter_selection_using_2024_or_later_results": true,
+    "failed_api_requests_are_not_converted_to_wait": true,
+    "historical_run_is_not_blind_or_forward_evidence": true
+  },
+  "known_data_limitations": [
+    "Five-minute labels are assumed to mark interval ends; provider semantics are unverified.",
+    "Availability is assumed at interval end; actual historical publication delay is unknown.",
+    "Security status is retrospective, not point-in-time proven.",
+    "Cash dividend event coverage in the current table is scoped to 2023-2024.",
+    "The 2023-01-01 through 2023-04-09 trading-rule interval remains uncovered by the current effective-date registry."
+  ]
+}

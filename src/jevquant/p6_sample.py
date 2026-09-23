@@ -59,15 +59,19 @@ INSTANT_SNAPSHOT_ACTION_MEANINGS = {
 PROMPT_VARIANTS = {"baseline", "no_evidence_wait_cue"}
 
 
-def _p6_instructions(execution_mode: str, prompt_variant: str) -> str:
+def _p6_instructions(execution_mode: str, prompt_variant: str,
+                     target_weight: Decimal = D("0.80")) -> str:
     if execution_mode not in {"delayed_bar_open", "instant_snapshot_close"}:
         raise ValueError("unsupported P6 execution mode")
     if prompt_variant not in PROMPT_VARIANTS:
         raise ValueError("unsupported P6 prompt variant")
     if prompt_variant == "no_evidence_wait_cue" and execution_mode != "instant_snapshot_close":
         raise ValueError("no_evidence_wait_cue is only defined for instant snapshot experiments")
+    if target_weight not in {D("0.50"), D("0.80")}:
+        raise ValueError("P6/P7 target weight must be 0.50 or 0.80")
     instructions = (INSTANT_SNAPSHOT_INSTRUCTIONS if execution_mode == "instant_snapshot_close"
                     else INSTRUCTIONS)
+    instructions = instructions.replace("80%", f"{int(target_weight * 100)}%")
     if prompt_variant == "no_evidence_wait_cue":
         instructions = instructions.replace("证据不足时选择WAIT或HOLD。", "")
     return instructions
@@ -80,7 +84,8 @@ def _decimal(value: Any) -> Decimal | None:
 def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
            daily_rows: list[dict[str, Any]], warm_volume_history: list[tuple[date, str, int]],
            session_rank: dict[date, int], account: Account, allowed: list[str],
-           limit_row: dict[str, Any], *, execution_mode: str = "delayed_bar_open") -> dict[str, Any]:
+           limit_row: dict[str, Any], *, execution_mode: str = "delayed_bar_open",
+           target_weight: Decimal = D("0.80")) -> dict[str, Any]:
     visible = [bar for bar in bars if bar.interval_end is not None and bar.interval_end <= at]
     if not visible or visible[-1].interval_end != at:
         raise ValueError("decision snapshot must end on a completed visible bar")
@@ -193,11 +198,11 @@ def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
                     "holding_sessions": holding_sessions,
                     "unrealized_return_before_costs": str(unrealized) if unrealized is not None else None,
                     "receivables_ratio_to_initial": str(account.receivables / account.initial_cash)},
-        "policy_context": {"long_only": True, "entry_target_weight": "0.80",
+        "policy_context": {"long_only": True, "entry_target_weight": str(target_weight),
                             "review_horizon_sessions": 5, "new_purchases_sellable_next_session": True,
                             "execution_delay_minutes": 0 if execution_mode == "instant_snapshot_close" else 5,
                             "slippage_bps_per_side_assumption": 0 if execution_mode == "instant_snapshot_close" else 5,
-                            "can_open_min_lot": current_price * 100 / nav <= D("0.80"),
+                            "can_open_min_lot": current_price * 100 / nav <= target_weight,
                             "allowed_actions": allowed, "leverage_allowed": False,
                             "broker_orders_enabled": False},
         "data_quality": {"raw_price_returns_unadjusted_for_unmapped_actions": True,
@@ -350,13 +355,14 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                   resume: bool = False,
                   execution_mode: str = "delayed_bar_open",
                   prompt_variant: str = "baseline",
+                  target_weight: Decimal = D("0.80"),
                   client: Any | None = None,
                   progress: Callable[[str], None] | None = None) -> dict[str, Any]:
-    if sessions not in (1, 20):
-        raise ValueError("P6 phases are defined as exactly 1 or 20 trading sessions")
+    if sessions < 1:
+        raise ValueError("sessions must be a positive number of trading sessions")
     if execution_mode not in {"delayed_bar_open", "instant_snapshot_close"}:
         raise ValueError("unsupported P6 execution mode")
-    instructions = _p6_instructions(execution_mode, prompt_variant)
+    instructions = _p6_instructions(execution_mode, prompt_variant, target_weight)
     action_meanings = (INSTANT_SNAPSHOT_ACTION_MEANINGS
                        if execution_mode == "instant_snapshot_close" else None)
     daily_rows = read_daily_vendor_csv(daily_csv, SYMBOL)
@@ -381,10 +387,10 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "status_files": {str(path): _sha256_file(path) for path in status_paths},
         "minute_partitions": {day.isoformat(): _sha256_file(path) for day, path in minute_paths.items()}}
     run_identity = {"start": start.isoformat(), "sessions": sessions, "symbol": SYMBOL,
-                    "target_weight": "0.80", "decision_interval_minutes": 5,
+                    "target_weight": str(target_weight), "decision_interval_minutes": 5,
                     "execution_mode": execution_mode,
                     "input_hashes": input_hashes,
-                    "run_version": "p6-sample-v5", "action_semantics_version": execution_mode,
+                    "run_version": "p6-sample-v6", "action_semantics_version": execution_mode,
                     "prompt_variant": prompt_variant}
     fingerprint = hashlib.sha256(json.dumps(run_identity, sort_keys=True, separators=(",", ":"))
                                  .encode("utf-8")).hexdigest()
@@ -548,7 +554,8 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                 allowed = ["BUY", "WAIT"]
             visible_bars = historical_bars + bars[:bar_index + 1]
             state = _state(day, day_index, at, visible_bars, daily_rows, warm_volumes, session_rank,
-                           account, allowed, day_row, execution_mode=execution_mode)
+                           account, allowed, day_row, execution_mode=execution_mode,
+                           target_weight=target_weight)
             digest = request_hash(state, allowed, instructions,
                                   action_meanings=action_meanings)
             api_attempted = allowed in (["BUY", "WAIT"], ["HOLD", "SELL"])
@@ -589,7 +596,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                     raise ValueError("daily data lacks next trade date for T+1 accounting")
                 fill, target = _instant_snapshot_fill(account, order_id=order_id, side=side,
                     day=day, next_trade_day=next_trade_day, at=at, price=decision_bar.close,
-                    fee_schedule=fee_schedule)
+                    fee_schedule=fee_schedule, target_weight=target_weight)
                 if fill is None:
                     _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
                         "side": side.value, "status": "REJECTED_ZERO_QUANTITY",
@@ -628,7 +635,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                 continue
             fee_schedule = FeeSchedule.for_trade_date(day)
             if side is Side.BUY:
-                target = plan_entry_quantity(account.nav({SYMBOL: decision_bar.close}), D("0.80"),
+                target = plan_entry_quantity(account.nav({SYMBOL: decision_bar.close}), target_weight,
                     make_protection_price(side, decision_bar.close), account.cash_available,
                     reserve=D("0.00"), lot_size=100, fee_schedule=fee_schedule)
                 quantity = min(target, liquidity.cap_shares)
@@ -708,7 +715,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "symbol": SYMBOL, "initial_cash_cny": "1000000.00",
         "execution_mode": execution_mode,
         "prompt_variant": prompt_variant,
-        "decision_protocol": {"version": "p6-sample-v5",
+        "decision_protocol": {"version": "p6-sample-v6",
             "instructions_sha256": hashlib.sha256(instructions.encode("utf-8")).hexdigest(),
             "action_meanings_sha256": hashlib.sha256(json.dumps(action_meanings, ensure_ascii=False,
                 sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
@@ -725,7 +732,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "resolved_provider_error_count": len({row.get("request_hash") for row in errors
             if row.get("api_request_attempted") and row.get("request_hash") not in failed_hashes}),
         "decision_error_count": len(errors), "resolved_model": "jev-1.13.0",
-        "target_entry_fraction": "0.80", "ending_cash_cny": str(account.cash_total),
+        "target_entry_fraction": str(target_weight), "ending_cash_cny": str(account.cash_total),
         "ending_shares": account.shares_total, "ending_nav_cny": str(final_nav),
         "total_return": str(final_nav / D("1000000") - D("1")), "fees_cny": str(fee_total),
         "fill_count": len(fills), "account_reconciled": bool(cash_reconciliation and cash_reconciliation.passed),
@@ -765,13 +772,16 @@ def main() -> None:
     parser.add_argument("--status-2024-plus", type=Path, required=True)
     parser.add_argument("--dividends", type=Path, default=Path("configs/moutai_2023_2024_cash_dividends.json"))
     parser.add_argument("--start", type=date.fromisoformat, required=True)
-    parser.add_argument("--sessions", type=int, choices=(1, 20), required=True)
+    parser.add_argument("--sessions", type=int, required=True,
+                        help="number of continuous trading sessions; supports checkpointed long runs")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--execution-mode", choices=("delayed_bar_open", "instant_snapshot_close"),
                         default="delayed_bar_open",
                         help="instant_snapshot_close is an idealized zero-delay attribution diagnostic")
     parser.add_argument("--prompt-variant", choices=sorted(PROMPT_VARIANTS), default="baseline",
                         help="versioned prompt experiment; no_evidence_wait_cue only applies to instant mode")
+    parser.add_argument("--target-weight", type=Decimal, choices=(D("0.50"), D("0.80")),
+                        default=D("0.80"), help="fixed entry target; use an independent output/account per value")
     parser.add_argument("--resume", action="store_true",
                         help="restore from the last verified session, or replay from initial cash in a cache-only retry directory")
     parser.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
@@ -783,6 +793,7 @@ def main() -> None:
         status_paths=(args.status_2022_2023, args.status_2024_plus), dividend_config=args.dividends,
         output=args.output, start=args.start, sessions=args.sessions, resume=args.resume,
         execution_mode=args.execution_mode, prompt_variant=args.prompt_variant,
+        target_weight=args.target_weight,
         progress=lambda message: print(message, flush=True))
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

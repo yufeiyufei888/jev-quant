@@ -31,6 +31,14 @@ def test_no_evidence_wait_cue_variant_rejects_delayed_execution_context():
         _p6_instructions("delayed_bar_open", "no_evidence_wait_cue")
 
 
+def test_fixed_weight_prompt_is_explicit_and_limited_to_preregistered_values():
+    prompt = _p6_instructions("instant_snapshot_close", "baseline", D("0.50"))
+    assert "目标仓位固定为下次开仓时净资产的50%" in prompt
+    import pytest
+    with pytest.raises(ValueError, match="must be 0.50 or 0.80"):
+        _p6_instructions("instant_snapshot_close", "baseline", D("0.60"))
+
+
 def test_p6_retry_success_resolves_old_api_error_on_later_checkpoint_resume():
     errors = [
         {"request_hash": "retried", "api_request_attempted": True},
@@ -61,6 +69,17 @@ def test_instant_snapshot_fill_uses_seen_close_and_preserves_cash_and_t1():
     assert sell is not None and sell.price == D("101.00") and sell.filled_at == sell_at
     assert sell.quantity == sell_target == buy.quantity
     assert account.shares_total == 0
+
+
+def test_instant_snapshot_fill_supports_separate_fixed_50_percent_account():
+    day, next_day = date(2023, 1, 3), date(2023, 1, 4)
+    at = datetime.combine(day, time(10, 0), TZ)
+    account = Account(D("1000000.00"))
+    fill, target = _instant_snapshot_fill(account, order_id="fixed-50", side=Side.BUY,
+        day=day, next_trade_day=next_day, at=at, price=D("100.00"),
+        fee_schedule=FeeSchedule.for_trade_date(day), target_weight=D("0.50"))
+    assert fill is not None
+    assert fill.quantity == target == 5000
 
 
 def _bar(start: time, end: time) -> Bar:
