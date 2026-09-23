@@ -148,11 +148,36 @@ def test_full_partition_audit_counts_symbol_bars_and_reconciles_daily_values(tmp
     }
     assert report["daily_crosscheck"]["volume_exact_match_days"] == 2
     assert report["daily_crosscheck"]["amount_exact_match_days"] == 2
+    assert report["daily_crosscheck"]["first_row_open_exactly_equals_daily_open_days"] == 2
+    assert report["daily_crosscheck"]["first_row_open_within_one_tick_of_daily_open_days"] == 2
     assert report["files_without_symbol_rows"] == []
     assert report["row_trade_date_mismatches"] == 0
     assert len(report["expected_raw_time_labels"]) == 49
     assert [row["date"] for row in report["nonstandard_time_grid_dates"]] == ["20240102", "20240103"]
     assert "interval role" in report["semantics"] and "unverified" in report["semantics"]
+
+
+def test_minute_open_audit_distinguishes_float_representation_from_tick_difference(tmp_path: Path):
+    minute = tmp_path / "2024" / "20240102.parquet"
+    minute.parent.mkdir()
+    pq.write_table(pa.table({
+        "code": ["600519.SH", "600519.SH"],
+        "trade_time": ["2024-01-02 09:30:00", "2024-01-02 09:35:00"],
+        "open": [10.000001, 10.01], "high": [10.000001, 10.01],
+        "low": [10.000001, 10.00], "close": [10.000001, 10.01],
+        "vol": [100, 100], "amount": [1000, 1000],
+        "date": ["20240102", "20240102"],
+    }), minute)
+    daily = tmp_path / "daily.csv"
+    daily.write_text(
+        "股票代码,交易日,开盘价,最高价,最低价,收盘价,前收盘价,成交量（手）,成交额（千元）,当日涨停价,当日跌停价\n"
+        "600519.SH,20240102,10,10.01,10,10.01,10,2,2,11,9\n",
+        encoding="utf-8",
+    )
+    report = audit_minute_partitions(minute.parent.parent, "600519.SH", daily)
+    crosscheck = report["daily_crosscheck"]
+    assert crosscheck["first_row_open_exactly_equals_daily_open_days"] == 0
+    assert crosscheck["first_row_open_within_one_tick_of_daily_open_days"] == 1
 
 
 def test_moutai_volume_unit_override_is_date_and_source_hash_bound(tmp_path: Path):
