@@ -12,6 +12,7 @@ from . import __version__
 
 
 def doctor() -> dict[str, object]:
+    from .provider import has_api_key_configured, has_api_key_source_configured
     return {
         "jevquant_version": __version__,
         "python_version": platform.python_version(),
@@ -19,7 +20,8 @@ def doctor() -> dict[str, object]:
         "pyarrow_available": importlib.util.find_spec("pyarrow") is not None,
         "data_root_configured": bool(os.environ.get("JEVQUANT_DATA_ROOT")),
         "data_root_exists": Path(os.environ["JEVQUANT_DATA_ROOT"]).exists() if os.environ.get("JEVQUANT_DATA_ROOT") else False,
-        "typesafe_api_key_configured": bool(os.environ.get("TYPESAFE_API_KEY")),
+        "typesafe_api_key_configured": has_api_key_configured(),
+        "typesafe_key_source_configured": has_api_key_source_configured(),
         "live_broker_enabled": False,
     }
 

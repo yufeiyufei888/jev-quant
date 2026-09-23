@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from jevquant.provider import JevResponseError, decide, decide_cached
+from jevquant.provider import JevResponseError, decide, decide_cached, has_api_key_configured, resolve_api_key
 
 
 def _state(actions):
@@ -98,3 +98,33 @@ def test_cache_separates_request_options(tmp_path):
     changed["account"] = {"cash": "99"}
     decide_cached(changed, "enter?", cache, client=client)
     assert client.calls == 2
+
+
+def test_key_can_be_read_from_explicit_external_env_file_without_copying(tmp_path, monkeypatch):
+    env_file = tmp_path / "private.env"
+    env_file.write_text("UNRELATED=value\nTYPESAFE_API_KEY=masked-test-value\n", encoding="utf-8")
+    monkeypatch.delenv("TYPESAFE_API_KEY", raising=False)
+    monkeypatch.setenv("JEVQUANT_TYPESAFE_ENV_FILE", str(env_file))
+    assert resolve_api_key() == "masked-test-value"
+    assert has_api_key_configured()
+
+
+def test_process_key_takes_precedence_over_external_file(tmp_path, monkeypatch):
+    env_file = tmp_path / "private.env"
+    env_file.write_text("TYPESAFE_API_KEY=file-value\n", encoding="utf-8")
+    monkeypatch.setenv("JEVQUANT_TYPESAFE_ENV_FILE", str(env_file))
+    monkeypatch.setenv("TYPESAFE_API_KEY", "process-value")
+    assert resolve_api_key() == "process-value"
+
+
+def test_project_local_env_can_reference_private_external_key_file(tmp_path, monkeypatch):
+    from jevquant import provider
+
+    package_dir = tmp_path / "src" / "jevquant"
+    package_dir.mkdir(parents=True)
+    (tmp_path / "private.env").write_text("TYPESAFE_API_KEY=local-reference-test\n", encoding="utf-8")
+    (tmp_path / ".env").write_text("JEVQUANT_TYPESAFE_ENV_FILE=private.env\n", encoding="utf-8")
+    monkeypatch.setattr(provider, "__file__", str(package_dir / "provider.py"))
+    monkeypatch.delenv("TYPESAFE_API_KEY", raising=False)
+    monkeypatch.delenv("JEVQUANT_TYPESAFE_ENV_FILE", raising=False)
+    assert provider.resolve_api_key() == "local-reference-test"

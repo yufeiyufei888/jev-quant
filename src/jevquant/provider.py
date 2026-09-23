@@ -25,6 +25,49 @@ class JevResponseError(ValueError):
     pass
 
 
+def resolve_api_key() -> str:
+    """Load a key from the process environment or an explicitly referenced private env file."""
+    key = os.environ.get("TYPESAFE_API_KEY", "").strip()
+    if key:
+        return key
+    env_file = os.environ.get("JEVQUANT_TYPESAFE_ENV_FILE", "").strip()
+    project_root = Path(__file__).resolve().parents[2]
+    if not env_file:
+        local_settings = project_root / ".env"
+        if local_settings.is_file():
+            for raw in local_settings.read_text(encoding="utf-8").splitlines():
+                line = raw.strip()
+                if line.startswith("JEVQUANT_TYPESAFE_ENV_FILE="):
+                    env_file = line.split("=", 1)[1].strip().strip("\"'")
+                    break
+    if env_file:
+        path = Path(env_file).expanduser()
+        if not path.is_absolute():
+            path = project_root / path
+        if not path.is_file():
+            raise JevConfigurationError("JEVQUANT_TYPESAFE_ENV_FILE does not point to a readable file")
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if line.startswith("TYPESAFE_API_KEY="):
+                key = line.split("=", 1)[1].strip().strip("\"'")
+                if key:
+                    return key
+    raise JevConfigurationError("TYPESAFE_API_KEY is not configured")
+
+
+def has_api_key_configured() -> bool:
+    try:
+        return bool(resolve_api_key())
+    except (JevConfigurationError, OSError, UnicodeError):
+        return False
+
+
+def has_api_key_source_configured() -> bool:
+    return bool(os.environ.get("TYPESAFE_API_KEY", "").strip()
+                or os.environ.get("JEVQUANT_TYPESAFE_ENV_FILE", "").strip()
+                or (Path(__file__).resolve().parents[2] / ".env").is_file())
+
+
 @dataclass(frozen=True, slots=True)
 class DecisionResult:
     action_requested: str
@@ -42,13 +85,13 @@ class DecisionResult:
 
 
 def create_client() -> Any:
-    if not os.environ.get("TYPESAFE_API_KEY", "").strip():
-        raise JevConfigurationError("TYPESAFE_API_KEY is not configured")
+    api_key = resolve_api_key()
     try:
         from typesafe_sdk import RetryPolicy, TypeSafeClient
     except ImportError as exc:
         raise JevConfigurationError("Install the pinned typesafe-sdk dependency") from exc
-    return TypeSafeClient(model=MODEL_ID, timeout=15.0, retry=RetryPolicy(max_retries=0))
+    return TypeSafeClient(api_key=api_key, model=MODEL_ID, timeout=15.0,
+                          retry=RetryPolicy(max_retries=0))
 
 
 def request_hash(state: Any, actions: list[str], instructions: str, model: str = MODEL_ID) -> str:
