@@ -22,7 +22,7 @@ from .data import read_daily_vendor_csv
 from .execution import make_protection_price, match_open_proxy
 from .ledger import Account, FeeSchedule, plan_entry_quantity
 from .liquidity import build_liquidity_reference
-from .models import Bar, OrderIntent, Side
+from .models import Bar, Fill, OrderIntent, Side
 from .provider import (JevConfigurationError, JevResponseError, decide_cached,
                        request_hash)
 from .reconciliation import reconcile_account_events
@@ -44,6 +44,12 @@ INSTRUCTIONS = (
     "这不是第5日强制卖出。不加仓、不杠杆、不当日卖出。"
     "动作概率不是盈利概率，证据不足时选择WAIT或HOLD。"
 )
+INSTANT_SNAPSHOT_INSTRUCTIONS = (
+    "你是研究模拟中的受限动作判断器。只依据输入快照判断现在是否立即建立多头仓位：选择BUY立即按本快照当前收盘价记账，"
+    "或选择WAIT保持现金；已有可卖持仓时选择HOLD或SELL，SELL按本快照当前收盘价记账。"
+    "不要计算股数或改写规则。目标仓位固定为下次开仓时净资产的80%，以未来约5个交易日的持有价值为判断背景，"
+    "这不是第5日强制卖出。不加仓、不杠杆、不当日卖出。动作概率不是盈利概率，证据不足时选择WAIT或HOLD。"
+)
 
 
 def _decimal(value: Any) -> Decimal | None:
@@ -53,7 +59,7 @@ def _decimal(value: Any) -> Decimal | None:
 def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
            daily_rows: list[dict[str, Any]], warm_volume_history: list[tuple[date, str, int]],
            session_rank: dict[date, int], account: Account, allowed: list[str],
-           limit_row: dict[str, Any]) -> dict[str, Any]:
+           limit_row: dict[str, Any], *, execution_mode: str = "delayed_bar_open") -> dict[str, Any]:
     visible = [bar for bar in bars if bar.interval_end is not None and bar.interval_end <= at]
     if not visible or visible[-1].interval_end != at:
         raise ValueError("decision snapshot must end on a completed visible bar")
@@ -120,7 +126,8 @@ def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
         "snapshot": {"session_index": session_index, "bar_slot_index": len(current_session_bars),
                      "decision_clock": at.strftime("%H:%M"), "visible_bar_count": len(visible),
                      "crossed_session_in_recent_window": len(distinct_sessions) > 1,
-                     "snapshot_mode": "retrospective_end_label_diagnostic"},
+                     "snapshot_mode": ("retrospective_instant_snapshot_fill_diagnostic"
+                         if execution_mode == "instant_snapshot_close" else "retrospective_end_label_diagnostic")},
         "market": {
             "current_close_index_100": normalized(current_price),
             "current_bar": {"slot": slot, "open_index_100": normalized(visible[-1].open),
@@ -167,7 +174,8 @@ def _state(day: date, session_index: int, at: datetime, bars: list[Bar],
                     "receivables_ratio_to_initial": str(account.receivables / account.initial_cash)},
         "policy_context": {"long_only": True, "entry_target_weight": "0.80",
                             "review_horizon_sessions": 5, "new_purchases_sellable_next_session": True,
-                            "execution_delay_minutes": 5, "slippage_bps_per_side_assumption": 5,
+                            "execution_delay_minutes": 0 if execution_mode == "instant_snapshot_close" else 5,
+                            "slippage_bps_per_side_assumption": 0 if execution_mode == "instant_snapshot_close" else 5,
                             "can_open_min_lot": current_price * 100 / nav <= D("0.80"),
                             "allowed_actions": allowed, "leverage_allowed": False,
                             "broker_orders_enabled": False},
@@ -223,6 +231,36 @@ def _unresolved_provider_hashes(errors: list[dict[str, Any]], successful_hashes:
     failed = {row["request_hash"] for row in errors
               if row.get("api_request_attempted") and row.get("request_hash")}
     return failed - successful_hashes
+
+
+def _instant_snapshot_fill(account: Account, *, order_id: str, side: Side, day: date,
+                           next_trade_day: date, at: datetime, price: Decimal,
+                           fee_schedule: FeeSchedule, target_weight: Decimal = D("0.80"),
+                           lot_size: int = 100) -> tuple[Fill | None, int]:
+    """Idealized attribution fill at the exact close supplied to JEV.
+
+    This deliberately skips delay, slippage, OHLC range matching and the
+    historical liquidity cap. Cash sufficiency, dated fees, board-lot sizing,
+    the target weight and T+1 sellability remain enforced by the account.
+    """
+    if side is Side.BUY:
+        target = plan_entry_quantity(account.nav({SYMBOL: price}), target_weight,
+            price, account.cash_available, reserve=D("0.00"), lot_size=lot_size,
+            fee_schedule=fee_schedule)
+        quantity = target
+    else:
+        target = account.shares_sellable(day, SYMBOL)
+        quantity = target
+    if quantity <= 0:
+        return None, target
+    gross = D(quantity) * price
+    fill = Fill(f"{order_id}:snapshot-close", order_id, SYMBOL, side, quantity,
+        price, fee_schedule.incremental_fee(side, D("0.00"), gross), day, at)
+    if side is Side.BUY:
+        account.buy(fill, fee_schedule, next_trade_day)
+    else:
+        account.sell(fill, fee_schedule)
+    return fill, target
 
 
 def _truncate_run_logs(output: Path, checkpoint_day: date | None) -> None:
@@ -289,10 +327,15 @@ def _save_checkpoint(output: Path, *, fingerprint: str, day: date, account: Acco
 def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Path, Path],
                   dividend_config: Path, output: Path, start: date, sessions: int,
                   resume: bool = False,
+                  execution_mode: str = "delayed_bar_open",
                   client: Any | None = None,
                   progress: Callable[[str], None] | None = None) -> dict[str, Any]:
     if sessions not in (1, 20):
         raise ValueError("P6 phases are defined as exactly 1 or 20 trading sessions")
+    if execution_mode not in {"delayed_bar_open", "instant_snapshot_close"}:
+        raise ValueError("unsupported P6 execution mode")
+    instructions = (INSTANT_SNAPSHOT_INSTRUCTIONS if execution_mode == "instant_snapshot_close"
+                    else INSTRUCTIONS)
     daily_rows = read_daily_vendor_csv(daily_csv, SYMBOL)
     by_day = {row["trade_date"]: row for row in daily_rows}
     trade_days = tuple(sorted(day for day in by_day if day >= start))[:sessions]
@@ -316,6 +359,7 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "minute_partitions": {day.isoformat(): _sha256_file(path) for day, path in minute_paths.items()}}
     run_identity = {"start": start.isoformat(), "sessions": sessions, "symbol": SYMBOL,
                     "target_weight": "0.80", "decision_interval_minutes": 5,
+                    "execution_mode": execution_mode,
                     "input_hashes": input_hashes, "run_version": "p6-sample-v3"}
     fingerprint = hashlib.sha256(json.dumps(run_identity, sort_keys=True, separators=(",", ":"))
                                  .encode("utf-8")).hexdigest()
@@ -479,14 +523,14 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                 allowed = ["BUY", "WAIT"]
             visible_bars = historical_bars + bars[:bar_index + 1]
             state = _state(day, day_index, at, visible_bars, daily_rows, warm_volumes, session_rank,
-                           account, allowed, day_row)
-            digest = request_hash(state, allowed, INSTRUCTIONS)
+                           account, allowed, day_row, execution_mode=execution_mode)
+            digest = request_hash(state, allowed, instructions)
             api_attempted = allowed in (["BUY", "WAIT"], ["HOLD", "SELL"])
             if api_attempted and digest not in attempted_hashes:
                 provider_calls += 1
                 attempted_hashes.add(digest)
             try:
-                decision = decide_cached(state, INSTRUCTIONS, cache, client=client)
+                decision = decide_cached(state, instructions, cache, client=client)
             except PROVIDER_ERRORS as exc:
                 if api_attempted:
                     failed_hashes.add(digest)
@@ -510,6 +554,38 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
             if decision.action_requested not in {"BUY", "SELL"}:
                 continue
             side = Side(decision.action_requested)
+            if execution_mode == "instant_snapshot_close":
+                fee_schedule = FeeSchedule.for_trade_date(day)
+                order_id = f"p6-instant-{day:%Y%m%d}-{at:%H%M}-{side.value.lower()}"
+                next_trade_day = next((candidate for candidate in all_days if candidate > day), None)
+                if next_trade_day is None:
+                    raise ValueError("daily data lacks next trade date for T+1 accounting")
+                fill, target = _instant_snapshot_fill(account, order_id=order_id, side=side,
+                    day=day, next_trade_day=next_trade_day, at=at, price=decision_bar.close,
+                    fee_schedule=fee_schedule)
+                if fill is None:
+                    _json_line(order_path, {"trade_date": day.isoformat(), "decision_at": at.isoformat(),
+                        "side": side.value, "status": "REJECTED_ZERO_QUANTITY",
+                        "execution_mode": execution_mode})
+                    continue
+                quantity = fill.quantity
+                fills.append(fill)
+                fee_total += fill.fee
+                _json_line(fill_path, {"fill_id": fill.fill_id, "order_id": order_id,
+                    "side": side.value, "quantity": quantity, "price_cny": str(fill.price),
+                    "fee_cny": str(fill.fee), "trade_date": fill.trade_date.isoformat(),
+                    "filled_at": fill.filled_at.isoformat(), "execution_mode": execution_mode,
+                    "source_bar": {"interval_start": decision_bar.interval_start.isoformat(),
+                        "interval_end": decision_bar.interval_end.isoformat(),
+                        "quality_flags": sorted(decision_bar.quality_flags)}})
+                _json_line(order_path, {"order_id": order_id, "side": side.value,
+                    "trade_date": day.isoformat(), "quantity": quantity,
+                    "target_quantity_before_liquidity_cap": target,
+                    "status": "FILLED_INSTANT_SNAPSHOT_CLOSE", "execution_mode": execution_mode,
+                    "decision_at": at.isoformat(), "arrival_at": at.isoformat(),
+                    "price_cny": str(decision_bar.close), "liquidity_cap_applied": False,
+                    "slippage_bps": 0})
+                continue
             arrival = at + DECISION_INTERVAL
             execution_bar = _execution_bar_at_arrival(bars_by_start, at)
             if execution_bar is None:
@@ -603,6 +679,10 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                        else "RETROSPECTIVE_JEV_DIAGNOSTIC_AFTER_RECOVERED_API_RETRY" if errors
                        else "RETROSPECTIVE_JEV_DIAGNOSTIC_NOT_FORWARD_SIMULATION"),
         "symbol": SYMBOL, "initial_cash_cny": "1000000.00",
+        "execution_mode": execution_mode,
+        "fill_policy": ("instant snapshot-bar close, zero delay/slippage/liquidity cap; dated fees and T+1 retained"
+                        if execution_mode == "instant_snapshot_close" else
+                        "five-minute delayed next-bar open proxy with adverse slippage and historical liquidity cap"),
         "start_date": trade_days[0].isoformat(), "end_date": trade_days[-1].isoformat(),
         "sessions": len(trade_days), "decision_count": decisions_count,
         "provider_call_count": len(prior_usage) + len(failed_hashes),
@@ -623,7 +703,9 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
         "assumptions": ["vendor label L assumed to represent [L-5m,L]",
             "availability is assumed at interval end; actual provider delay is unknown",
             "retrospective status records are not point-in-time evidence",
-            "one bar-open fill proxy with 5bp adverse slippage; no queue reconstruction",
+            ("instant fill at the same decision snapshot close is an idealized attribution diagnostic, not executable timing"
+             if execution_mode == "instant_snapshot_close" else
+             "one bar-open fill proxy with 5bp adverse slippage; no queue reconstruction"),
             "cash-dividend configuration is partial and scoped to 2023-2024",
             "this is historical replay using live JEV calls, not forward simulation or strategy acceptance"],
         "source_sha256": {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths},
@@ -652,6 +734,9 @@ def main() -> None:
     parser.add_argument("--start", type=date.fromisoformat, required=True)
     parser.add_argument("--sessions", type=int, choices=(1, 20), required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--execution-mode", choices=("delayed_bar_open", "instant_snapshot_close"),
+                        default="delayed_bar_open",
+                        help="instant_snapshot_close is an idealized zero-delay attribution diagnostic")
     parser.add_argument("--resume", action="store_true",
                         help="restore from the last verified session, or replay from initial cash in a cache-only retry directory")
     parser.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
@@ -662,6 +747,7 @@ def main() -> None:
     summary = run_p6_sample(minute_root=args.minute_root, daily_csv=args.daily_csv,
         status_paths=(args.status_2022_2023, args.status_2024_plus), dividend_config=args.dividends,
         output=args.output, start=args.start, sessions=args.sessions, resume=args.resume,
+        execution_mode=args.execution_mode,
         progress=lambda message: print(message, flush=True))
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

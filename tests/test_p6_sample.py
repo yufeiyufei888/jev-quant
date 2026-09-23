@@ -6,6 +6,7 @@ from jevquant.models import Bar
 from jevquant.ledger import Account, FeeSchedule
 from jevquant.models import Fill, Side
 from jevquant.p6_sample import (_eligible_execution_bars, _execution_bar_at_arrival, _read_jsonl,
+                               _instant_snapshot_fill,
                                _rebuild_account_from_fills, _save_checkpoint,
                                _unresolved_provider_hashes,
                                _state, _truncate_run_logs)
@@ -21,6 +22,29 @@ def test_p6_retry_success_resolves_old_api_error_on_later_checkpoint_resume():
         {"request_hash": "local-validation", "api_request_attempted": False},
     ]
     assert _unresolved_provider_hashes(errors, {"retried"}) == {"still-failed"}
+
+
+def test_instant_snapshot_fill_uses_seen_close_and_preserves_cash_and_t1():
+    day, next_day = date(2023, 1, 3), date(2023, 1, 4)
+    at = datetime.combine(day, time(10, 0), TZ)
+    fees = FeeSchedule.for_trade_date(day)
+    account = Account(D("1000000.00"))
+    buy, target = _instant_snapshot_fill(account, order_id="instant-buy", side=Side.BUY,
+        day=day, next_trade_day=next_day, at=at, price=D("100.00"), fee_schedule=fees)
+    assert buy is not None
+    assert buy.price == D("100.00") and buy.filled_at == at
+    assert buy.quantity == target == 8000
+    assert account.shares_sellable(day, "600519.SH") == 0
+    blocked_sell, _ = _instant_snapshot_fill(account, order_id="same-day-sell", side=Side.SELL,
+        day=day, next_trade_day=next_day, at=at, price=D("101.00"), fee_schedule=fees)
+    assert blocked_sell is None
+    sell_at = datetime.combine(next_day, time(10, 0), TZ)
+    sell, sell_target = _instant_snapshot_fill(account, order_id="instant-sell", side=Side.SELL,
+        day=next_day, next_trade_day=date(2023, 1, 5), at=sell_at,
+        price=D("101.00"), fee_schedule=FeeSchedule.for_trade_date(next_day))
+    assert sell is not None and sell.price == D("101.00") and sell.filled_at == sell_at
+    assert sell.quantity == sell_target == buy.quantity
+    assert account.shares_total == 0
 
 
 def _bar(start: time, end: time) -> Bar:
