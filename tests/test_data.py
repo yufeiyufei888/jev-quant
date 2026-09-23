@@ -183,6 +183,8 @@ def test_full_partition_audit_counts_symbol_bars_and_reconciles_daily_values(tmp
     assert report["daily_crosscheck"]["amount_exact_match_days"] == 2
     assert report["daily_crosscheck"]["first_row_open_exactly_equals_daily_open_days"] == 2
     assert report["daily_crosscheck"]["first_row_open_within_one_tick_of_daily_open_days"] == 2
+    assert report["daily_crosscheck"]["intraday_high_within_one_tick_of_daily_high_days"] == 2
+    assert report["daily_crosscheck"]["intraday_low_within_one_tick_of_daily_low_days"] == 2
     assert report["files_without_symbol_rows"] == []
     assert report["row_trade_date_mismatches"] == 0
     assert len(report["expected_raw_time_labels"]) == 49
