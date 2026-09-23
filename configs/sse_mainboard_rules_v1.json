@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "instrument_scope": {
+    "symbol": "600519.SH",
+    "exchange": "SSE",
+    "board": "MAIN",
+    "security_type": "ordinary_a_share"
+  },
+  "epochs": [
+    {
+      "valid_from": "2023-04-10",
+      "valid_through": "2026-07-05",
+      "source_rule": "SSE Trading Rules (2023 edition)",
+      "source_url": "https://www.sse.com.cn/lawandrules/sselawsrules2025/repeal/rules/c/c_20250612_10824490.shtml",
+      "effective_basis": "The 2023 rules took effect with the first registration-based main-board listing; the first such SSE listings began trading on 2023-04-10.",
+      "ordinary_daily_price_limit_pct": "10",
+      "risk_warning_daily_price_limit_pct": "5",
+      "minimum_price_tick_cny": "0.01",
+      "buy_quantity_step_shares": 100,
+      "evidence_status": "OFFICIAL_RULE_AND_EFFECTIVE_DATE_MAPPED"
+    },
+    {
+      "valid_from": "2026-07-06",
+      "valid_through": null,
+      "source_rule": "SSE Trading Rules (2026 edition)",
+      "source_url": "https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml",
+      "effective_notice_url": "https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20260424_10816474.shtml",
+      "effective_basis": "The exchange states that the revised rules take effect on 2026-07-06.",
+      "ordinary_daily_price_limit_pct": "10",
+      "risk_warning_daily_price_limit_pct": "10",
+      "minimum_price_tick_cny": "0.01",
+      "buy_quantity_step_shares": 100,
+      "evidence_status": "OFFICIAL_RULE_AND_EFFECTIVE_DATE_MAPPED"
+    }
+  ],
+  "uncovered_intervals": [
+    {
+      "from": "2023-01-01",
+      "through": "2023-04-09",
+      "reason": "The prior SSE main-board rule version and transition mapping for this interval have not yet been added to this registry."
+    }
+  ],
+  "application_limits": [
+    "This registry records rule text and effective dates; it does not prove that a historical security-status field was available to a strategy at the time.",
+    "Daily limit prices still require the correct exchange reference price, corporate-action treatment, and effective security status for the date.",
+    "This scope is only SSE main-board ordinary A-shares; it is not a cross-board or cross-exchange rule table.",
+    "The 2026 risk-warning band transition applies from the stated effective date; status eligibility remains a separate point-in-time data gate."
+  ]
+}

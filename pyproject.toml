@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jevquant"
+version = "0.1.0"
+description = "Auditable A-share research and paper-trading simulator"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = ["numpy==2.4.6", "pyarrow==21.0.0", "typesafe-sdk==0.7.1", "tzdata==2026.3"]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "setuptools==84.0.0"]
+
+[project.scripts]
+jevquant = "jevquant.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
