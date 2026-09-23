@@ -40,6 +40,13 @@ def main() -> None:
     minute_audit.add_argument("--supplemental-daily-parquet-root", type=Path, default=None)
     minute_audit.add_argument("--output", type=Path, default=Path("artifacts/preflight/moutai_minute_audit.json"))
     minute_audit.add_argument("--symbol", default="600519.SH")
+    feature_sample = sub.add_parser("features-sample", help="write a local daily causal-feature sample")
+    feature_sample.add_argument("--daily-csv", type=Path, required=True)
+    feature_sample.add_argument("--actions", type=Path, required=True)
+    feature_sample.add_argument("--symbol", default="600519.SH")
+    feature_sample.add_argument("--start", type=lambda value: __import__("datetime").date.fromisoformat(value), required=True)
+    feature_sample.add_argument("--sessions", type=int, default=20)
+    feature_sample.add_argument("--output", type=Path, default=Path("artifacts/preflight/features_sample.json"))
     sub.add_parser("offline-demo", help="run the synthetic ledger golden example")
     workflow = sub.add_parser("mock-round-trip", help="run synthetic decision-to-NAV flow; no live API")
     workflow.add_argument("--output", type=Path, default=Path("artifacts/mock-round-trip"))
@@ -87,6 +94,47 @@ def main() -> None:
             "daily_crosscheck": report["daily_crosscheck"],
             "semantics": report["semantics"],
         }, ensure_ascii=False, indent=2))
+        return
+    if args.command == "features-sample":
+        from datetime import datetime, time
+        from zoneinfo import ZoneInfo
+        from .actions import load_cash_dividends
+        from .data import read_daily_vendor_csv
+        from .features import daily_total_return_features_asof
+        if args.sessions <= 0:
+            parser.error("--sessions must be positive")
+        rows = read_daily_vendor_csv(args.daily_csv, args.symbol)
+        clean = [(row["trade_date"], row["close_raw"]) for row in rows
+                 if row["trade_date"] >= args.start and row["close_raw"] is not None]
+        selected = sorted(clean, key=lambda row: row[0])[:args.sessions]
+        if len(selected) != args.sessions:
+            parser.error(f"only {len(selected)} complete sessions found from --start")
+        history = [(row["trade_date"], row["close_raw"]) for row in rows if row["close_raw"] is not None]
+        actions = load_cash_dividends(args.actions, args.symbol)
+        tz = ZoneInfo("Asia/Shanghai")
+        samples = []
+        for day, _ in selected:
+            asof_at = datetime.combine(day, time(16, 0), tz)
+            features = daily_total_return_features_asof(history, actions, asof_at)
+            samples.append({key: (str(value) if hasattr(value, "as_tuple") else
+                                  value.isoformat() if hasattr(value, "isoformat") else value)
+                            for key, value in features.items()})
+        result = {
+            "schema": "jevquant-feature-sample/v1",
+            "symbol": args.symbol,
+            "start": selected[0][0].isoformat(),
+            "end": selected[-1][0].isoformat(),
+            "sessions": len(samples),
+            "price_basis": "raw_close_plus_known_official_cash_dividends",
+            "decision_policy": "daily close available at 15:05 Asia/Shanghai (simulation assumption); sample as-of 16:00",
+            "scope": "feature pipeline smoke sample only; not strategy performance evidence",
+            "samples": samples,
+        }
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({"output": str(args.output.resolve()), "sessions": len(samples),
+                          "start": result["start"], "end": result["end"],
+                          "scope": result["scope"]}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

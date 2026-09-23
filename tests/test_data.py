@@ -8,7 +8,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from jevquant.data import audit_minute_partitions, read_daily_vendor_csv, read_vendor_minute_day
-from jevquant.features import daily_features_asof
+from jevquant.actions import load_cash_dividends
+from jevquant.features import daily_features_asof, daily_total_return_features_asof
 from jevquant.models import Bar
 
 
@@ -134,3 +135,47 @@ def test_moutai_volume_unit_override_is_date_and_source_hash_bound(tmp_path: Pat
     path.write_bytes(path.read_bytes() + b"tamper")
     with pytest.raises(ValueError, match="source hash mismatch"):
         read_vendor_minute_day(path, "600519.SH", volume_unit_overrides=overrides)
+
+
+def test_official_moutai_dividends_load_with_conservative_announcement_times():
+    config = Path(__file__).parents[1] / "configs" / "moutai_2023_2024_cash_dividends.json"
+    events = load_cash_dividends(config, "600519.SH")
+    assert len(events) == 4
+    assert [str(event.cash_per_share) for event in events] == ["25.911", "19.106", "30.876", "23.882"]
+    assert all(event.known_at.hour == 23 and event.evidence_level == "OFFICIAL_IMPLEMENTATION_NOTICE"
+               for event in events)
+
+
+def test_total_return_feature_uses_known_dividend_and_only_visible_daily_closes():
+    from datetime import time
+    from zoneinfo import ZoneInfo
+    from jevquant.actions import CashDividend
+
+    tz = ZoneInfo("Asia/Shanghai")
+    event = CashDividend("div-1", "600519.SH", D("2"), date(2024, 1, 2),
+                         datetime(2024, 1, 2, 23, 59, 59, tzinfo=tz), date(2024, 1, 4),
+                         date(2024, 1, 5), date(2024, 1, 5), "OFFICIAL_IMPLEMENTATION_NOTICE",
+                         "https://example.test/dividend.pdf")
+    history = [(date(2024, 1, 3), D("100")), (date(2024, 1, 4), D("100")),
+               (date(2024, 1, 5), D("99")), (date(2024, 1, 8), D("500"))]
+    before_ex = daily_total_return_features_asof(history, [event],
+                                                  datetime.combine(date(2024, 1, 4), time(16), tz), windows=(2,))
+    after_ex = daily_total_return_features_asof(history, [event],
+                                                 datetime.combine(date(2024, 1, 5), time(16), tz), windows=(2,))
+    assert before_ex["visible_bars"] == 2
+    assert before_ex["cash_action_count_used"] == 0
+    assert after_ex["visible_bars"] == 3
+    assert after_ex["cash_action_count_used"] == 1
+    assert after_ex["total_return_1d"] == D("0.01")
+
+
+def test_total_return_feature_rejects_duplicate_daily_dates():
+    from datetime import time
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo("Asia/Shanghai")
+    history = [(date(2024, 1, 2), D("100")), (date(2024, 1, 2), D("101"))]
+    with pytest.raises(ValueError, match="duplicate dates"):
+        daily_total_return_features_asof(
+            history, [], datetime.combine(date(2024, 1, 2), time(16), tz), windows=(1,)
+        )
