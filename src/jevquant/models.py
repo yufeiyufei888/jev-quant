@@ -28,6 +28,8 @@ class Bar:
     source_id: str = ""
     source_row_id: str = ""
     quality_flags: frozenset[str] = field(default_factory=frozenset)
+    interval_start: datetime | None = None
+    interval_end: datetime | None = None
 
     def __post_init__(self) -> None:
         if not self.symbol:
@@ -38,6 +40,13 @@ class Bar:
             raise ValueError("OHLC range is inconsistent")
         if self.low > self.high or self.volume_shares < 0:
             raise ValueError("invalid low/high or volume")
+        if (self.interval_start is None) != (self.interval_end is None):
+            raise ValueError("bar interval requires both start and end")
+        if (self.interval_start is not None and self.interval_end is not None
+                and self.interval_start >= self.interval_end):
+            raise ValueError("bar interval start must precede end")
+        if self.interval_end is not None and self.available_at is not None and self.available_at < self.interval_end:
+            raise ValueError("available_at precedes bar interval end")
         if self.available_at is not None and self.available_at < self.source_time:
             raise ValueError("available_at precedes source_time")
 
@@ -52,6 +61,8 @@ class OrderIntent:
     created_at: datetime
     expires_at: datetime
     liquidity_reference: LiquidityReference | None = None
+    decision_at: datetime | None = None
+    arrival_at: datetime | None = None
 
     def __post_init__(self) -> None:
         if self.quantity <= 0 or self.limit_price <= 0:
@@ -61,6 +72,12 @@ class OrderIntent:
             raise ValueError("liquidity reference signal date must match order creation date")
         if self.expires_at <= self.created_at:
             raise ValueError("order must expire after creation")
+        if self.decision_at is not None and self.decision_at > self.created_at:
+            raise ValueError("decision_at cannot follow order creation")
+        if self.arrival_at is not None and self.arrival_at < self.created_at:
+            raise ValueError("arrival_at cannot precede order creation")
+        if self.arrival_at is not None and self.arrival_at >= self.expires_at:
+            raise ValueError("order arrival must precede expiration")
 
 
 @dataclass(frozen=True, slots=True)

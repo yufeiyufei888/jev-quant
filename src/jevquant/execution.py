@@ -32,8 +32,18 @@ def match_open_proxy(order: OrderIntent, bar: Bar, *, min_slippage_bps: int = 5,
         return ExecutionResult(None, "SUSPENDED")
     if bar.symbol != order.symbol:
         return ExecutionResult(None, "SYMBOL_MISMATCH")
-    if bar.source_time <= order.created_at or bar.source_time >= order.expires_at:
+    if order.arrival_at is None:
+        return ExecutionResult(None, "MISSING_ORDER_ARRIVAL_TIME")
+    if bar.interval_start is None or bar.interval_end is None:
+        return ExecutionResult(None, "UNVERIFIED_BAR_INTERVAL")
+    if bar.interval_start < order.arrival_at:
+        return ExecutionResult(None, "BAR_STARTED_BEFORE_ORDER_ARRIVAL")
+    if bar.interval_end > order.expires_at:
         return ExecutionResult(None, "OUTSIDE_ORDER_WINDOW")
+    if bar.available_at is None:
+        return ExecutionResult(None, "UNKNOWN_BAR_AVAILABILITY")
+    if bar.available_at < bar.interval_end:
+        return ExecutionResult(None, "BAR_NOT_COMPLETE_AT_AVAILABILITY")
     if bar.quality_flags.intersection({"opening_record", "closing_record", "auction_or_close_unverified"}):
         return ExecutionResult(None, "UNVERIFIED_BAR_ROLE")
     if order.liquidity_reference is None:
@@ -64,5 +74,6 @@ def match_open_proxy(order: OrderIntent, bar: Bar, *, min_slippage_bps: int = 5,
     fees = fee_schedule or FeeSchedule()
     fee = fees.incremental_fee(order.side, prior_filled_gross, gross)
     fill = Fill(f"{order.order_id}:{bar.source_time.isoformat()}", order.order_id, order.symbol,
-                order.side, quantity, price, fee, bar.trade_date or bar.source_time.date(), bar.source_time)
+                order.side, quantity, price, fee, bar.trade_date or bar.source_time.date(),
+                bar.interval_start)
     return ExecutionResult(fill, "PARTIAL_FILL" if quantity < order.quantity else "FILLED")

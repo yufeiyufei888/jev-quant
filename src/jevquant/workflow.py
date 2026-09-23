@@ -77,15 +77,18 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
     if buy_decision.action_requested != "BUY":
         raise RuntimeError("mock fixture expected a BUY decision")
 
-    buy_at = datetime.combine(date(2024, 1, 2), time(10, 0))
+    buy_at = datetime.combine(date(2024, 1, 2), time(10, 5))
     buy_order = OrderIntent("mock-buy", "600519.SH", Side.BUY, 500,
                             make_protection_price(Side.BUY, D("1500.00")), buy_at,
                             datetime.combine(date(2024, 1, 2), time(15, 0)),
-                            liquidity_reference=_mock_liquidity_reference(date(2024, 1, 2), "10:05"))
+                            liquidity_reference=_mock_liquidity_reference(date(2024, 1, 2), "10:10"),
+                            decision_at=buy_at, arrival_at=buy_at + timedelta(minutes=5))
     account.reserve_buy(buy_order.order_id, D("800000.00"))
-    buy_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 2), time(10, 5)),
+    buy_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 2), time(10, 15)),
                   D("1500.00"), D("1510.00"), D("1490.00"), D("1505.00"), 100000,
-                  trade_date=date(2024, 1, 2), source_id="synthetic-fixture")
+                  trade_date=date(2024, 1, 2), available_at=datetime.combine(date(2024, 1, 2), time(10, 15)),
+                  source_id="synthetic-fixture", interval_start=datetime.combine(date(2024, 1, 2), time(10, 10)),
+                  interval_end=datetime.combine(date(2024, 1, 2), time(10, 15)))
     matched_buy = match_open_proxy(buy_order, buy_bar, fee_schedule=fee_schedule)
     if matched_buy.fill is None:
         account.cancel_buy(buy_order.order_id)
@@ -96,9 +99,12 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
     account.cancel_buy(buy_order.order_id)
     orders.append({"order_id": buy_order.order_id, "side": "BUY", "quantity": 500,
                    "limit_price": str(buy_order.limit_price), "status": matched_buy.reason,
+                   "decision_at": buy_order.decision_at.isoformat(),
+                   "order_arrival_at": buy_order.arrival_at.isoformat(),
                    "liquidity_reference": _liquidity_receipt(buy_order.liquidity_reference)})
     fills.append({"fill_id": matched_buy.fill.fill_id, "side": "BUY", "quantity": 500,
-                  "price": str(matched_buy.fill.price), "fee": str(matched_buy.fill.fee)})
+                  "price": str(matched_buy.fill.price), "fee": str(matched_buy.fill.fee),
+                  "filled_at": matched_buy.fill.filled_at.isoformat()})
 
     second_state = _decision_state(["HOLD", "SELL"], account.cash_available,
                                    account.shares_total)
@@ -106,24 +112,30 @@ def run_mock_round_trip(output_dir: Path) -> dict[str, Any]:
                                   client=client, source_override="mock")
     decisions.append(sell_decision)
     usage.record(sell_decision)
-    sell_at = datetime.combine(date(2024, 1, 3), time(10, 0))
+    sell_at = datetime.combine(date(2024, 1, 3), time(10, 5))
     sell_order = OrderIntent("mock-sell", "600519.SH", Side.SELL,
                              account.shares_sellable(date(2024, 1, 3), "600519.SH"),
                              make_protection_price(Side.SELL, D("1510.00")), sell_at,
                              datetime.combine(date(2024, 1, 3), time(15, 0)),
-                             liquidity_reference=_mock_liquidity_reference(date(2024, 1, 3), "10:05"))
-    sell_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 3), time(10, 5)),
+                             liquidity_reference=_mock_liquidity_reference(date(2024, 1, 3), "10:10"),
+                             decision_at=sell_at, arrival_at=sell_at + timedelta(minutes=5))
+    sell_bar = Bar("600519.SH", datetime.combine(date(2024, 1, 3), time(10, 15)),
                    D("1510.00"), D("1520.00"), D("1500.00"), D("1515.00"), 100000,
-                   trade_date=date(2024, 1, 3), source_id="synthetic-fixture")
+                   trade_date=date(2024, 1, 3), available_at=datetime.combine(date(2024, 1, 3), time(10, 15)),
+                   source_id="synthetic-fixture", interval_start=datetime.combine(date(2024, 1, 3), time(10, 10)),
+                   interval_end=datetime.combine(date(2024, 1, 3), time(10, 15)))
     matched_sell = match_open_proxy(sell_order, sell_bar, fee_schedule=fee_schedule)
     if matched_sell.fill is None:
         raise RuntimeError(f"mock SELL failed: {matched_sell.reason}")
     account.sell(matched_sell.fill, fee_schedule)
     orders.append({"order_id": sell_order.order_id, "side": "SELL", "quantity": 500,
                    "limit_price": str(sell_order.limit_price), "status": matched_sell.reason,
+                   "decision_at": sell_order.decision_at.isoformat(),
+                   "order_arrival_at": sell_order.arrival_at.isoformat(),
                    "liquidity_reference": _liquidity_receipt(sell_order.liquidity_reference)})
     fills.append({"fill_id": matched_sell.fill.fill_id, "side": "SELL", "quantity": 500,
-                  "price": str(matched_sell.fill.price), "fee": str(matched_sell.fill.fee)})
+                  "price": str(matched_sell.fill.price), "fee": str(matched_sell.fill.fee),
+                  "filled_at": matched_sell.fill.filled_at.isoformat()})
 
     summary = {
         "mode": "synthetic_mock_only",
