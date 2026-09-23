@@ -9,10 +9,26 @@ from jevquant.p6_sample import (_eligible_execution_bars, _execution_bar_at_arri
                                _instant_snapshot_fill,
                                _rebuild_account_from_fills, _save_checkpoint,
                                _unresolved_provider_hashes,
-                               _state, _truncate_run_logs)
+                               _p6_instructions, _state, _truncate_run_logs,
+                               INSTANT_SNAPSHOT_INSTRUCTIONS)
 from jevquant.reconciliation import reconcile_account_events
 
 TZ = ZoneInfo("Asia/Shanghai")
+
+
+def test_no_evidence_wait_cue_prompt_variant_changes_only_that_clause():
+    baseline = _p6_instructions("instant_snapshot_close", "baseline")
+    ablated = _p6_instructions("instant_snapshot_close", "no_evidence_wait_cue")
+    assert baseline == INSTANT_SNAPSHOT_INSTRUCTIONS
+    assert "证据不足时选择WAIT或HOLD。" in baseline
+    assert ablated == baseline.replace("证据不足时选择WAIT或HOLD。", "")
+
+
+def test_no_evidence_wait_cue_variant_rejects_delayed_execution_context():
+    import pytest
+
+    with pytest.raises(ValueError, match="only defined for instant snapshot"):
+        _p6_instructions("delayed_bar_open", "no_evidence_wait_cue")
 
 
 def test_p6_retry_success_resolves_old_api_error_on_later_checkpoint_resume():

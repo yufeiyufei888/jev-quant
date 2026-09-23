@@ -45,6 +45,27 @@ def test_choice_probabilities_use_fixed_comparison_and_record_usage():
     assert client.kwargs["model"] == "jev-1.13.0"
 
 
+def test_custom_action_meanings_reach_provider_and_change_request_hash():
+    state = _state(["BUY", "WAIT"])
+    client = FakeClient(_response())
+    meanings = {"BUY": "Fill immediately at the current snapshot close.",
+                "WAIT": "Keep cash until the next review."}
+    result = decide(state, "choose", client=client, action_meanings=meanings)
+    assert client.kwargs["questions"]["action"].criteria == meanings
+    assert result.request_hash != decide(state, "choose", client=FakeClient(_response())).request_hash
+
+
+def test_custom_action_meanings_separate_cached_provider_requests(tmp_path):
+    state = _state(["BUY", "WAIT"])
+    cache = tmp_path / "cache.json"
+    client = FakeClient(_response())
+    delayed = {"BUY": "Open later.", "WAIT": "Wait."}
+    immediate = {"BUY": "Open now at snapshot price.", "WAIT": "Wait."}
+    decide_cached(state, "same wording", cache, client=client, action_meanings=delayed)
+    decide_cached(state, "same wording", cache, client=client, action_meanings=immediate)
+    assert client.calls == 2
+
+
 def test_tie_defaults_to_wait():
     client = FakeClient(_response(choice="BUY", probabilities={"BUY": 0.5, "WAIT": 0.5}))
     result = decide(_state(["BUY", "WAIT"]), "enter or wait", client=client)

@@ -50,6 +50,27 @@ INSTANT_SNAPSHOT_INSTRUCTIONS = (
     "不要计算股数或改写规则。目标仓位固定为下次开仓时净资产的80%，以未来约5个交易日的持有价值为判断背景，"
     "这不是第5日强制卖出。不加仓、不杠杆、不当日卖出。动作概率不是盈利概率，证据不足时选择WAIT或HOLD。"
 )
+INSTANT_SNAPSHOT_ACTION_MEANINGS = {
+    "BUY": "Open the configured long position immediately at the current completed-bar close; the diagnostic account fills at that exact snapshot price.",
+    "WAIT": "Keep the account in cash and review again at the next completed-bar snapshot.",
+    "HOLD": "Keep the existing share quantity unchanged; do not add shares.",
+    "SELL": "Exit all legally sellable shares immediately at the current completed-bar close; the diagnostic account fills at that exact snapshot price.",
+}
+PROMPT_VARIANTS = {"baseline", "no_evidence_wait_cue"}
+
+
+def _p6_instructions(execution_mode: str, prompt_variant: str) -> str:
+    if execution_mode not in {"delayed_bar_open", "instant_snapshot_close"}:
+        raise ValueError("unsupported P6 execution mode")
+    if prompt_variant not in PROMPT_VARIANTS:
+        raise ValueError("unsupported P6 prompt variant")
+    if prompt_variant == "no_evidence_wait_cue" and execution_mode != "instant_snapshot_close":
+        raise ValueError("no_evidence_wait_cue is only defined for instant snapshot experiments")
+    instructions = (INSTANT_SNAPSHOT_INSTRUCTIONS if execution_mode == "instant_snapshot_close"
+                    else INSTRUCTIONS)
+    if prompt_variant == "no_evidence_wait_cue":
+        instructions = instructions.replace("证据不足时选择WAIT或HOLD。", "")
+    return instructions
 
 
 def _decimal(value: Any) -> Decimal | None:
@@ -328,14 +349,16 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                   dividend_config: Path, output: Path, start: date, sessions: int,
                   resume: bool = False,
                   execution_mode: str = "delayed_bar_open",
+                  prompt_variant: str = "baseline",
                   client: Any | None = None,
                   progress: Callable[[str], None] | None = None) -> dict[str, Any]:
     if sessions not in (1, 20):
         raise ValueError("P6 phases are defined as exactly 1 or 20 trading sessions")
     if execution_mode not in {"delayed_bar_open", "instant_snapshot_close"}:
         raise ValueError("unsupported P6 execution mode")
-    instructions = (INSTANT_SNAPSHOT_INSTRUCTIONS if execution_mode == "instant_snapshot_close"
-                    else INSTRUCTIONS)
+    instructions = _p6_instructions(execution_mode, prompt_variant)
+    action_meanings = (INSTANT_SNAPSHOT_ACTION_MEANINGS
+                       if execution_mode == "instant_snapshot_close" else None)
     daily_rows = read_daily_vendor_csv(daily_csv, SYMBOL)
     by_day = {row["trade_date"]: row for row in daily_rows}
     trade_days = tuple(sorted(day for day in by_day if day >= start))[:sessions]
@@ -360,7 +383,9 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
     run_identity = {"start": start.isoformat(), "sessions": sessions, "symbol": SYMBOL,
                     "target_weight": "0.80", "decision_interval_minutes": 5,
                     "execution_mode": execution_mode,
-                    "input_hashes": input_hashes, "run_version": "p6-sample-v3"}
+                    "input_hashes": input_hashes,
+                    "run_version": "p6-sample-v5", "action_semantics_version": execution_mode,
+                    "prompt_variant": prompt_variant}
     fingerprint = hashlib.sha256(json.dumps(run_identity, sort_keys=True, separators=(",", ":"))
                                  .encode("utf-8")).hexdigest()
     for day in warm_days:
@@ -524,13 +549,15 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
             visible_bars = historical_bars + bars[:bar_index + 1]
             state = _state(day, day_index, at, visible_bars, daily_rows, warm_volumes, session_rank,
                            account, allowed, day_row, execution_mode=execution_mode)
-            digest = request_hash(state, allowed, instructions)
+            digest = request_hash(state, allowed, instructions,
+                                  action_meanings=action_meanings)
             api_attempted = allowed in (["BUY", "WAIT"], ["HOLD", "SELL"])
             if api_attempted and digest not in attempted_hashes:
                 provider_calls += 1
                 attempted_hashes.add(digest)
             try:
-                decision = decide_cached(state, instructions, cache, client=client)
+                decision = decide_cached(state, instructions, cache, client=client,
+                                         action_meanings=action_meanings)
             except PROVIDER_ERRORS as exc:
                 if api_attempted:
                     failed_hashes.add(digest)
@@ -680,6 +707,12 @@ def run_p6_sample(*, minute_root: Path, daily_csv: Path, status_paths: tuple[Pat
                        else "RETROSPECTIVE_JEV_DIAGNOSTIC_NOT_FORWARD_SIMULATION"),
         "symbol": SYMBOL, "initial_cash_cny": "1000000.00",
         "execution_mode": execution_mode,
+        "prompt_variant": prompt_variant,
+        "decision_protocol": {"version": "p6-sample-v5",
+            "instructions_sha256": hashlib.sha256(instructions.encode("utf-8")).hexdigest(),
+            "action_meanings_sha256": hashlib.sha256(json.dumps(action_meanings, ensure_ascii=False,
+                sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+                if action_meanings is not None else "provider-default-v1"},
         "fill_policy": ("instant snapshot-bar close, zero delay/slippage/liquidity cap; dated fees and T+1 retained"
                         if execution_mode == "instant_snapshot_close" else
                         "five-minute delayed next-bar open proxy with adverse slippage and historical liquidity cap"),
@@ -737,6 +770,8 @@ def main() -> None:
     parser.add_argument("--execution-mode", choices=("delayed_bar_open", "instant_snapshot_close"),
                         default="delayed_bar_open",
                         help="instant_snapshot_close is an idealized zero-delay attribution diagnostic")
+    parser.add_argument("--prompt-variant", choices=sorted(PROMPT_VARIANTS), default="baseline",
+                        help="versioned prompt experiment; no_evidence_wait_cue only applies to instant mode")
     parser.add_argument("--resume", action="store_true",
                         help="restore from the last verified session, or replay from initial cash in a cache-only retry directory")
     parser.add_argument("--acknowledge-historical-data-to-live-jev", action="store_true",
@@ -747,7 +782,7 @@ def main() -> None:
     summary = run_p6_sample(minute_root=args.minute_root, daily_csv=args.daily_csv,
         status_paths=(args.status_2022_2023, args.status_2024_plus), dividend_config=args.dividends,
         output=args.output, start=args.start, sessions=args.sessions, resume=args.resume,
-        execution_mode=args.execution_mode,
+        execution_mode=args.execution_mode, prompt_variant=args.prompt_variant,
         progress=lambda message: print(message, flush=True))
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

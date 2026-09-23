@@ -11,6 +11,12 @@ from typing import Any, Mapping, Protocol
 MODEL_ID = "jev-1.13.0"
 SCHEMA_VERSION = "state_v1"
 PRICE_USD_PER_MILLION_INPUT_TOKENS = 0.042
+DEFAULT_ACTION_MEANINGS = {
+    "BUY": "Request opening the preconfigured long position later.",
+    "WAIT": "Keep the account in cash until a later review.",
+    "HOLD": "Keep the existing share quantity unchanged.",
+    "SELL": "Request a later exit of legally sellable shares.",
+}
 
 
 class SystemOneClient(Protocol):
@@ -94,13 +100,19 @@ def create_client() -> Any:
                           retry=RetryPolicy(max_retries=0))
 
 
-def request_hash(state: Any, actions: list[str], instructions: str, model: str = MODEL_ID) -> str:
+def request_hash(state: Any, actions: list[str], instructions: str, model: str = MODEL_ID,
+                 action_meanings: Mapping[str, str] | None = None) -> str:
     body = {
         "provider": "typesafe",
         "model": model,
         "schema_version": SCHEMA_VERSION,
         "state": state,
-        "question": {"name": "action", "instructions": instructions, "criteria": actions},
+        "question": {"name": "action", "instructions": instructions,
+                     # Preserve historical default cache keys; non-default option
+                     # meanings are explicit in the hash so contradictory Choice
+                     # descriptions can never collide with another protocol.
+                     "criteria": (actions if action_meanings is None else
+                                  {action: action_meanings[action] for action in actions})},
         "request_options": {"timeout_seconds": 15, "sdk_retries": 0},
     }
     encoded = json.dumps(body, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
@@ -143,12 +155,17 @@ def _result_from_response(response: Any, actions: list[str], digest: str,
 
 
 def decide(state: dict[str, Any], instructions: str, *, client: SystemOneClient | None = None,
-           model_id: str = MODEL_ID) -> DecisionResult:
+           model_id: str = MODEL_ID,
+           action_meanings: Mapping[str, str] | None = None) -> DecisionResult:
     policy = state.get("policy_context") or {}
     actions = policy.get("allowed_actions")
     if actions not in (["WAIT"], ["HOLD"], ["BUY", "WAIT"], ["HOLD", "SELL"]):
         raise JevResponseError("illegal action set or action ordering")
-    digest = request_hash(state, actions, instructions, model_id)
+    meanings = DEFAULT_ACTION_MEANINGS if action_meanings is None else dict(action_meanings)
+    if not set(actions).issubset(meanings) or any(not isinstance(value, str) or not value.strip()
+                                                   for value in meanings.values()):
+        raise JevResponseError("action meanings must cover every allowed action")
+    digest = request_hash(state, actions, instructions, model_id, action_meanings)
     if actions in (["WAIT"], ["HOLD"]):
         return DecisionResult(actions[0], None, None, None, model_id, None, digest, None, "rule")
     if client is None:
@@ -157,12 +174,6 @@ def decide(state: dict[str, Any], instructions: str, *, client: SystemOneClient 
         from typesafe_sdk import Choice
     except ImportError as exc:
         raise JevConfigurationError("Install the pinned typesafe-sdk dependency") from exc
-    meanings = {
-        "BUY": "Request opening the preconfigured long position later.",
-        "WAIT": "Keep the account in cash until a later review.",
-        "HOLD": "Keep the existing share quantity unchanged.",
-        "SELL": "Request a later exit of legally sellable shares.",
-    }
     response = client.system_one(
         model=model_id,
         state=state,
@@ -173,12 +184,17 @@ def decide(state: dict[str, Any], instructions: str, *, client: SystemOneClient 
 
 def decide_cached(state: dict[str, Any], instructions: str, cache_path: Path, *,
                   client: SystemOneClient | None = None, model_id: str = MODEL_ID,
-                  source_override: str | None = None) -> DecisionResult:
+                  source_override: str | None = None,
+                  action_meanings: Mapping[str, str] | None = None) -> DecisionResult:
     """Reuse an identical validated response so restarts do not repeat a paid call."""
     actions = (state.get("policy_context") or {}).get("allowed_actions")
     if actions not in (["WAIT"], ["HOLD"], ["BUY", "WAIT"], ["HOLD", "SELL"]):
         raise JevResponseError("illegal action set or action ordering")
-    digest = request_hash(state, actions, instructions, model_id)
+    meanings = DEFAULT_ACTION_MEANINGS if action_meanings is None else dict(action_meanings)
+    if not set(actions).issubset(meanings) or any(not isinstance(value, str) or not value.strip()
+                                                   for value in meanings.values()):
+        raise JevResponseError("action meanings must cover every allowed action")
+    digest = request_hash(state, actions, instructions, model_id, action_meanings)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     if cache_path.exists():
         with cache_path.open("r", encoding="utf-8") as stream:
@@ -188,7 +204,8 @@ def decide_cached(state: dict[str, Any], instructions: str, cache_path: Path, *,
     saved = cache.get(digest)
     if saved is not None:
         return DecisionResult(**saved)
-    result = decide(state, instructions, client=client, model_id=model_id)
+    result = decide(state, instructions, client=client, model_id=model_id,
+                    action_meanings=action_meanings)
     if source_override is not None:
         if source_override not in {"mock", "jev"}:
             raise ValueError("source_override must be 'mock' or 'jev'")

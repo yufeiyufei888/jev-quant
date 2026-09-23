@@ -1,27 +1,22 @@
-# P6 buy-signal frequency diagnosis
+# P6 JEV 买入频率诊断
 
-## Finding
+## 结论
 
-The 20-session retrospective Moutai sample contains 957 completed JEV choices: 954 `WAIT` and 3 `BUY`. Three additional bar snapshots skipped a call while an order was pending. The account remained flat, so every model call had `BUY` and `WAIT` available; the account rules did not disable buying. `can_open_min_lot` was true for the tested account and price range.
+为分析 JEV 判断本身，使用 `instant_snapshot_close`：每个动作按 JEV 当次输入所见的已完成 5 分钟 Bar 收盘价成交。该模式故意移除成交延迟、滑点和成交量限制；买入与卖出均用同一口径，保留账户现金、整手、分红费用规则和 T+1。它回答“如果信号价可成交，JEV 的判断会怎样”，不代表实盘可实现收益。
 
-The response probabilities show a mostly cautious distribution. Across `WAIT` responses, mean P(BUY) was 0.301; 28 were at least 0.45 and the maximum was 0.49. The three `BUY` responses had P(BUY) of 0.51, 0.51 and 0.53, with reported confidence of 0.01, 0.02 and 0.06. The parser selects `BUY` only when P(BUY) is strictly greater than P(WAIT); a tie selects `WAIT`. Confidence is recorded but is not itself a buy gate.
+## 买入偏少的证据
 
-The separate `instant_snapshot_close` run completed the same 20 dates with 960 JEV calls, all `WAIT`; mean P(BUY) was 0.236, median 0.23 and maximum 0.48. There were no fills because JEV did not recommend a buy, not because the fill engine rejected one. On the first 192 matched snapshots, market and account states were identical between runs: mean P(BUY) was 0.274 with the original instruction/context and 0.217 with the immediate-fill instruction/context. Because both the wording and execution fields changed together and the model may be stochastic, this comparison does not isolate a single cause.
+- 原 `delayed_bar_open` 基准回放有 957 次有效回答：3 次 BUY、954 次 WAIT。3 个 BUY 均生成订单，但被独立的延迟成交代理拒绝。
+- 修正 BUY/SELL 选项含义后，20 日 `instant_snapshot_close` 基准版共 960 个决策，全部 WAIT；平均 P(BUY)=0.2506，最高 0.47。说明本轮没有买入不是成交撮合器造成的。
+- 曾有一个较早的即时版试验，其主提示词写“立即成交”，但 BUY 选项仍写“稍后开仓”。该试验语义自相矛盾，已由修正后的版本取代，不用于结论。
+- 在同一批20个快照上做单变量对照，并额外重复一次原提示词以观察随机波动：原提示词两次均20/20 WAIT；只删去“证据不足时选择WAIT或HOLD”后，6/20变为BUY，且20/20快照的P(BUY)都高于两次基准结果。该结果支持这句话会压低 BUY 倾向，但样本仅20个。
 
-## Likely contributors
+## 扩展账户回放
 
-- The instruction explicitly says to choose `WAIT` when evidence is insufficient, but defines no measurable entry conditions that would establish sufficient evidence.
-- The original choice description says `BUY` requests opening the position “later,” while the user expectation is immediate order submission. The original five-minute delay/slippage context may affect choices. However, simply changing to immediate-fill wording/context did not increase BUY frequency in this sample; it fell to zero.
-- The decision is based on one anonymized security and a numerical snapshot, without ticker-specific context, news or a rule-based entry signal. This sample cannot establish how JEV behaves across a broad stock universe.
+对同一20个交易日完整重放去除该句的独立提示词版本（2023-01-03至2023-02-06）：960个决策快照，JEV调用935次，最终1次 BUY、937次 HOLD、22次 WAIT。一次 BUY 在2023-01-03 11:25按快照价 CNY 1,724.35 成交400股。账户保留这笔仓位至区间结束，期末权益 CNY 1,028,046.18，区间收益 +2.8046%，费用 CNY 213.82，最大回撤约4.39%，独立账本对账通过。
 
-These are prompt and task-design explanations, not proof of the model's private reasoning. The response contract saves probabilities and confidence, not a rationale, so the logs cannot explain each individual `WAIT`.
+基准提示词账户20日全程空仓，收益为0。两份完整账户在首次买入后状态已不同，因此不能把账户终值差异全归因于提示词，也不能据此判定改提示词后更赚钱。20日、单标的、一个模型版本和理想化信号价成交都不足以证明策略盈利。
 
-## Ruled out by this sample
+## 解释边界与后续
 
-- No position or sellability rule blocked these buys: the account was flat and `BUY` was an allowed action.
-- No confidence cutoff suppressed a buy: the parser does not threshold confidence.
-- The three BUY recommendations were not suppressed at decision time. They became orders and were later rejected by the separate fill proxy because its adverse-slippage estimate fell outside the execution bar's OHLC.
-
-## Next diagnostic
-
-Use the same saved snapshots in a small, preregistered prompt comparison. Keep data, model, execution context and probability parser fixed; change only one wording/entry-criterion variable at a time. Compare BUY frequency, output confidence and recommendation stability. Do not select a prompt because it merely produces more buys; assess later-period performance and execution separately. This P6 sample is retrospective and too short to evaluate profitability.
+JEV 输出的是动作概率和置信度，没有逐笔文字理由；我们不能从日志推断它每次观望的内部理由。单变量结果表明提示词中的保守措辞影响很大，但该措辞仍属于策略定义。去掉它只能作为独立实验版本，不能悄悄替换基准规则。后续应在多个标的和更长时期预先固定提示词，再比较基准与压力成交模式、基准组合及成本；本次历史回放不属于盲测或前向验证。
