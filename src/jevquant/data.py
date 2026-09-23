@@ -6,7 +6,7 @@ import json
 from dataclasses import asdict
 from collections import Counter
 from datetime import date, datetime, timedelta
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -138,6 +138,9 @@ def read_daily_vendor_csv(path: Path, symbol: str) -> list[dict[str, object]]:
                 "high_raw": _optional_decimal(row["最高价"], "最高价"),
                 "low_raw": _optional_decimal(row["最低价"], "最低价"),
                 "close_raw": _optional_decimal(row["收盘价"], "收盘价"),
+                "previous_close_raw": _optional_decimal(row.get("前收盘价"), "前收盘价"),
+                "limit_up_raw": _optional_decimal(row.get("当日涨停价"), "当日涨停价"),
+                "limit_down_raw": _optional_decimal(row.get("当日跌停价"), "当日跌停价"),
                 "volume_shares": int(volume_hands * 100) if volume_hands is not None else None,
                 "amount_cny": amount_thousand * 1000 if amount_thousand is not None else None,
                 "adjustment_factor": _optional_decimal(row.get("复权因子"), "复权因子"),
@@ -145,6 +148,60 @@ def read_daily_vendor_csv(path: Path, symbol: str) -> list[dict[str, object]]:
                 "price_basis": "raw-price-inferred-from-sample-cross-check",
             })
     return rows
+
+
+def audit_daily_limit_fields(rows: list[dict[str, object]], start: date = date(2023, 1, 1),
+                             end: date = date(2024, 12, 31)) -> dict[str, object]:
+    """Describe supplied daily limit-band fields; do not certify their PIT availability."""
+    selected = [row for row in rows if start <= row["trade_date"] <= end]
+    complete = [row for row in selected if row.get("limit_up_raw") is not None
+                and row.get("limit_down_raw") is not None]
+    within_band = 0
+    formula_matches = 0
+    formula_comparable = 0
+    formula_mismatches: list[dict[str, str]] = []
+    invalid_bands: list[str] = []
+    missing: list[str] = []
+    for row in selected:
+        day = row["trade_date"].isoformat()
+        up, down = row.get("limit_up_raw"), row.get("limit_down_raw")
+        if up is None or down is None:
+            missing.append(day)
+            continue
+        if up < down or up <= 0 or down <= 0:
+            invalid_bands.append(day)
+            continue
+        low, high = row.get("low_raw"), row.get("high_raw")
+        if low is not None and high is not None and down <= low <= high <= up:
+            within_band += 1
+        previous_close = row.get("previous_close_raw")
+        if previous_close is not None and previous_close > 0:
+            formula_comparable += 1
+            expected_up = (previous_close * D("1.10")).quantize(D("0.01"), rounding=ROUND_HALF_UP)
+            expected_down = (previous_close * D("0.90")).quantize(D("0.01"), rounding=ROUND_HALF_UP)
+            if (up, down) == (expected_up, expected_down):
+                formula_matches += 1
+            else:
+                formula_mismatches.append({
+                    "date": day,
+                    "previous_close": str(previous_close),
+                    "observed_up": str(up), "observed_down": str(down),
+                    "formula_up": str(expected_up), "formula_down": str(expected_down),
+                })
+    return {
+        "window_start": start.isoformat(),
+        "window_end": end.isoformat(),
+        "daily_rows": len(selected),
+        "complete_up_down_band_rows": len(complete),
+        "missing_band_dates": missing,
+        "invalid_band_dates": invalid_bands,
+        "ohlc_within_band_rows": within_band,
+        "previous_close_10pct_formula_comparable_rows": formula_comparable,
+        "previous_close_10pct_formula_match_rows": formula_matches,
+        "previous_close_10pct_formula_mismatches": formula_mismatches,
+        "formula_rounding": "nearest CNY 0.01 using ROUND_HALF_UP",
+        "interpretation": "source-field and arithmetic cross-check only; historical rule provenance and source availability are not certified",
+    }
 
 
 def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = None,
@@ -184,6 +241,7 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
                 supplemental_rows += 1
     for row in daily_map.values():
         row.setdefault("daily_source", "user_daily_csv")
+    daily_limit_audit = audit_daily_limit_fields(list(daily_map.values()))
     row_counts: Counter[int] = Counter()
     missing_symbol_dates: list[str] = []
     duplicate_label_dates: list[str] = []
@@ -339,6 +397,7 @@ def audit_minute_partitions(root: Path, symbol: str, daily_csv: Path | None = No
             "first_row_open_equals_daily_open_days": open_matches,
             "last_row_close_within_one_tick_days": close_within_tick,
             "opening_and_closing_comparisons_are_descriptive_only": True,
+            "daily_limit_fields": daily_limit_audit,
         },
         "semantics": "validated clock-label sequence only; timestamp interval role and endpoint execution semantics remain unverified",
     }
@@ -351,6 +410,7 @@ def inspect_dataset(root: Path, symbol: str = "600519.SH") -> dict[str, object]:
     if not daily_path.exists():
         raise FileNotFoundError(daily_path)
     daily = read_daily_vendor_csv(daily_path, symbol)
+    daily_limit_audit = audit_daily_limit_fields(daily)
     day_values = [row["trade_date"] for row in daily]
     duplicate_days = len(day_values) - len(set(day_values))
     latest_daily = max(daily, key=lambda row: row["trade_date"]) if daily else None
@@ -439,6 +499,7 @@ def inspect_dataset(root: Path, symbol: str = "600519.SH") -> dict[str, object]:
             "columns": ["股票代码", "交易日", "开盘价", "最高价", "最低价", "收盘价", "成交量（手）", "成交额（千元）", "复权因子", "当日涨停价", "当日跌停价"],
             "unit_mapping": {"成交量（手）": "股; ×100", "成交额（千元）": "CNY; ×1000"},
             "price_basis": "raw-price inference cross-checked on one date; full period still requires verification",
+            "price_limit_field_audit": daily_limit_audit,
             "last_file_price_buyability": buyability,
         },
         "five_minute": {
@@ -451,8 +512,10 @@ def inspect_dataset(root: Path, symbol: str = "600519.SH") -> dict[str, object]:
             "sample_daily_reconciliation": reconciliation,
         },
         "unresolved": [
-            "No mapped, verified source found yet for historical calendar, listing/ST/suspension status, and effective-date trading-rule table.",
-            "No mapped Moutai corporate-action event table with announcement, ex-date, payment date, and correction availability was verified.",
+            "Moutai status files exist for 2022–2026, but their source-time metadata explicitly prevents PIT use; listing/delisting lifecycle and daily suspension/ST eligibility still require an accepted point-in-time source.",
+            "The mapped PIT calendar begins 2024-01-02; a 2023 exchange calendar is not yet mapped. Current-session scheduling cannot be inferred from natural weekdays.",
+            "Daily source limit-up/down fields cover the 2023–2024 window and match a rounded 10% previous-close arithmetic check; source provenance and effective-date rule evidence still require verification before they can serve as formal execution constraints.",
+            "Four official 2023–2024 Moutai cash-dividend events are mapped; announcement-correction availability, tax treatment, non-cash actions and full event completeness remain open.",
             "Adjustment-factor publication/availability time is unknown; do not use it in point-in-time features.",
             "Five-minute timestamp-to-interval semantics and special 09:30/15:00 row meaning require source evidence and broader reconciliation.",
             "Five-minute files currently end at 2026-04-10; do not claim coverage beyond this date.",

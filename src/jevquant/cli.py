@@ -34,6 +34,10 @@ def main() -> None:
     inventory.add_argument("--root", type=Path, default=None)
     inventory.add_argument("--output", type=Path, default=Path("artifacts/preflight"))
     inventory.add_argument("--symbol", default="600519.SH")
+    support_audit = sub.add_parser("audit-support", help="inventory existing calendar/status evidence without modifying it")
+    support_audit.add_argument("--project-data-root", type=Path, required=True)
+    support_audit.add_argument("--output", type=Path, default=Path("artifacts/preflight/support_data_audit.json"))
+    support_audit.add_argument("--symbol", default="600519.SH")
     minute_audit = sub.add_parser("audit-minutes", help="audit all raw minute partitions for one symbol")
     minute_audit.add_argument("--root", type=Path, required=True)
     minute_audit.add_argument("--daily-csv", type=Path, default=None)
@@ -73,6 +77,28 @@ def main() -> None:
         from .data import write_inventory
         path = write_inventory(root, args.output, args.symbol)
         print(path.resolve())
+        return
+    if args.command == "audit-support":
+        from .support_data import audit_local_support_data
+        report = audit_local_support_data(args.project_data_root, args.symbol)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({
+            "output": str(args.output.resolve()),
+            "status_sources": {
+                key: {"present": value["present"], "classification": value["classification"],
+                      "rows": value.get("rows"), "coverage_start": value.get("coverage_start"),
+                      "coverage_end": value.get("coverage_end")}
+                for key, value in report["status_sources"].items()
+            },
+            "calendar": {"present": report["calendar_source"]["present"],
+                         "classification": report["calendar_source"]["classification"],
+                         "sessions": report["calendar_source"].get("sessions"),
+                         "coverage_start": report["calendar_source"].get("coverage_start"),
+                         "coverage_end": report["calendar_source"].get("coverage_end")},
+            "calendar_status_coverage_comparison": report["calendar_status_coverage_comparison"],
+            "formal_pit_status_gate": report["formal_pit_status_gate"],
+        }, ensure_ascii=False, indent=2))
         return
     if args.command == "audit-minutes":
         from .data import audit_minute_partitions

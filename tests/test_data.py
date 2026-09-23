@@ -7,7 +7,7 @@ import pytest
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from jevquant.data import audit_minute_partitions, read_daily_vendor_csv, read_vendor_minute_day
+from jevquant.data import audit_daily_limit_fields, audit_minute_partitions, read_daily_vendor_csv, read_vendor_minute_day
 from jevquant.actions import load_cash_dividends
 from jevquant.features import daily_features_asof, daily_total_return_features_asof
 from jevquant.models import Bar
@@ -38,6 +38,27 @@ def test_daily_csv_units_are_normalized_without_mutating_source(tmp_path: Path):
     assert row["amount_cny"] == D("5440082548.000")
     assert row["close_raw"] == D("1685.01")
     assert path.read_bytes() == before
+
+
+def test_daily_limit_fields_are_preserved_and_checked_without_claiming_pit(tmp_path: Path):
+    path = tmp_path / "600519.SH.csv"
+    path.write_text(
+        "股票代码,交易日,开盘价,最高价,最低价,收盘价,前收盘价,成交量（手）,成交额（千元）,当日涨停价,当日跌停价\n"
+        "600519.SH,20240102,10,10.5,9.5,10,10,100,1000,11,9\n"
+        "600519.SH,20240103,10,11,9,10,10,100,1000,11.01,9\n",
+        encoding="utf-8",
+    )
+    rows = read_daily_vendor_csv(path, "600519.SH")
+    assert rows[0]["previous_close_raw"] == D("10")
+    assert rows[0]["limit_up_raw"] == D("11")
+    assert rows[0]["limit_down_raw"] == D("9")
+    audit = audit_daily_limit_fields(rows, date(2024, 1, 1), date(2024, 1, 4))
+    assert audit["daily_rows"] == 2
+    assert audit["complete_up_down_band_rows"] == 2
+    assert audit["ohlc_within_band_rows"] == 2
+    assert audit["previous_close_10pct_formula_match_rows"] == 1
+    assert len(audit["previous_close_10pct_formula_mismatches"]) == 1
+    assert "not certified" in audit["interpretation"]
 
 
 def test_parquet_reader_preserves_labels_and_flags_special_endpoints(tmp_path: Path):
