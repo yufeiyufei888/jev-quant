@@ -1,0 +1,13 @@
+{
+  "schema": "jevquant-minute-volume-unit-overrides/v1",
+  "symbol": "600519.SH",
+  "corrections": [
+    {"date": "2024-04-03", "raw_volume_to_shares": "0.01", "source_file_sha256": "0067f484eaa85fbbaa930ee6ecf6419d80bd4787d393b701161fbd899a401f43", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 26"},
+    {"date": "2024-04-19", "raw_volume_to_shares": "0.01", "source_file_sha256": "06727fadf1cd21453fe551f39269d187b636cd009a9bf4228ce39a8aeae9ae2b", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within per-bar OHLC on 48/49 bars; amount differs from daily amount by CNY 28"},
+    {"date": "2024-04-26", "raw_volume_to_shares": "0.01", "source_file_sha256": "13605a0d816540e5c2e59b5d1679b329e1689ebaf43b4451fbad84f4bdc207e6", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 3"},
+    {"date": "2024-04-30", "raw_volume_to_shares": "0.01", "source_file_sha256": "49b093550a1d93e455efca548dfc27b38b30b0c6cfc6f0f81d64a316c7322469", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 10"},
+    {"date": "2024-05-24", "raw_volume_to_shares": "0.01", "source_file_sha256": "4b483d0fe19a3f925785fc5d31c7d53d112208ccf1091077e00bb7b0d19bde6a", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 5"},
+    {"date": "2024-05-31", "raw_volume_to_shares": "0.01", "source_file_sha256": "f0ae53e1aee419796daa69316fdb348d154747ae59f65cecc3926f34dca637e2", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 6"},
+    {"date": "2024-06-14", "raw_volume_to_shares": "0.01", "source_file_sha256": "c3ae8fb91048b858ae9a2c35f805abf13941085047d5a31958fd9a0407338800", "proof": "sum after scale equals daily share count; all raw bar volumes divisible by 100; amount-per-corrected-share falls within that session price range; amount differs from daily amount by CNY 16"}
+  ]
+}

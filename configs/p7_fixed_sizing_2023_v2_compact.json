@@ -1,0 +1,53 @@
+{
+  "schema": "jevquant-p7-fixed-sizing-protocol/v2",
+  "experiment_id": "p7-fixed-sizing-2023-v2-compact",
+  "purpose": "Measure JEV entry and exit judgments at the exact completed-bar snapshot price while reducing repeated input tokens.",
+  "symbol": "600519.SH",
+  "initial_cash_cny": "1000000.00",
+  "window": {
+    "start": "2023-01-03",
+    "trading_sessions": 242,
+    "role": "development",
+    "note": "2022 minute history is used for warm-up; 2023 is a previously inspected development year, not a blind test."
+  },
+  "model": {
+    "provider_model_id": "jev-1.13.0",
+    "prompt_variant": "baseline",
+    "input_schema": "compact_v1",
+    "prompt_changes_during_run": false,
+    "input_note": "Send current completed five-minute OHLC, relative volume, derived intraday/daily features, limit room, account state, and data caveats. Omit repeated 24-bar history and 65 prior daily close array."
+  },
+  "execution": {
+    "mode": "instant_snapshot_close",
+    "fill_price": "exact close of the completed five-minute bar shown in the same JEV snapshot",
+    "delay_minutes": 0,
+    "slippage_bps": 0,
+    "liquidity_cap": false,
+    "dated_fees": true,
+    "board_lot_sizing": true,
+    "t_plus_one": true,
+    "purpose_note": "Idealized decision-attribution diagnostic; not executable return evidence."
+  },
+  "accounts": [
+    {"account_id": "fixed-entry-80", "target_entry_fraction": "0.80"},
+    {"account_id": "fixed-entry-50", "target_entry_fraction": "0.50"}
+  ],
+  "spend_guard": {
+    "account_limit_usd": "5.00",
+    "required_baseline": "Refresh the TypeSafe Usage page before every live run and pass its displayed spend plus timestamp.",
+    "local_guard": "Before each uncached call, add a conservative token-cost reserve and all local JevQuant spend logged after the supplied baseline timestamp. Stop before the projected total exceeds the account limit.",
+    "caveat": "Usage dashboard says statistics may be delayed; avoid concurrent callers on the same account during a guarded run."
+  },
+  "controls": {
+    "accounts_are_independent": true,
+    "failed_api_requests_are_not_converted_to_wait": true,
+    "historical_run_is_not_blind_or_forward_evidence": true
+  },
+  "known_data_limitations": [
+    "Five-minute labels are assumed to mark interval ends; provider semantics are unverified.",
+    "Availability is assumed at interval end; actual historical publication delay is unknown.",
+    "Security status is retrospective, not point-in-time proven.",
+    "Cash dividend event coverage in the current table is scoped to 2023-2024.",
+    "The 2023-01-01 through 2023-04-09 trading-rule interval remains uncovered by the current effective-date registry."
+  ]
+}

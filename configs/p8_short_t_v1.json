@@ -1,0 +1,60 @@
+{
+  "schema": "jevquant-short-t-protocol/v1",
+  "start": "2023-01-03",
+  "development_sessions": 242,
+  "research_only": true,
+  "universe": {
+    "size": 5,
+    "selection_time": "before first session of each research year",
+    "prior_trading_sessions": 20,
+    "minimum_median_turnover_cny": 100000000,
+    "close_price_range_cny": [5, 200],
+    "minimum_listed_sessions": 120,
+    "exclusions": ["ST", "suspended", "unknown status", "missing minute data", "missing action source"],
+    "ranking": ["descending median turnover", "ascending symbol"]
+  },
+  "account": {
+    "initial_cash_cny": 1000000,
+    "base_weight_per_symbol": "0.10",
+    "tactical_cash_reserved": "0.30",
+    "safety_cash_reserved": "0.20",
+    "tactical_order_weight": "0.02",
+    "max_symbol_weight": "0.16",
+    "max_total_weight": "0.80",
+    "max_open_cycles": 3,
+    "t_plus_one": true
+  },
+  "signals": {
+    "completed_bar_minutes": 5,
+    "vwap_bars": 12,
+    "atr_bars": 12,
+    "open_absolute_z": "1.25",
+    "close_absolute_z": "0.25",
+    "minimum_estimated_net_profit_bps": "15",
+    "maximum_adverse_return": "0.015",
+    "maximum_cycle_sessions": 2,
+    "new_cycle_time_window": ["10:30", "14:30"]
+  },
+  "risk": {
+    "pause_new_at_drawdown": "0.10",
+    "resume_below_drawdown": "0.08",
+    "terminal_exit_at_drawdown": "0.15"
+  },
+  "execution": {
+    "delay_minutes": 5,
+    "limit_offset_bps": 50,
+    "adverse_slippage_bps_or_one_tick": 5,
+    "max_share_of_execution_bar_volume": "0.01",
+    "explicit_fees": true,
+    "source_bar_interval_semantics": "retrospective end-label assumption"
+  },
+  "jev": {
+    "model": "jev-1.13.0",
+    "actions": ["EXECUTE", "SKIP"],
+    "maximum_reviews_per_day": 3,
+    "total_account_spend_cap_usd": "5.00",
+    "candidate_direction_quantity_price_immutable": true
+  },
+  "comparison_accounts": ["base", "pure", "mock or jev"],
+  "historical_role": "retrospective diagnostic; 2023 development, 2024 only after source and engineering gates"
+}

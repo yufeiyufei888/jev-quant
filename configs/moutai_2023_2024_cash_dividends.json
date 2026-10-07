@@ -1,0 +1,52 @@
+{
+  "schema": "jevquant-cash-dividends/v1",
+  "symbol": "600519.SH",
+  "basis": "gross_cash_per_share_cny",
+  "events": [
+    {
+      "event_id": "600519-2022-annual-dividend-ex-20230630",
+      "cash_per_share": "25.911",
+      "announcement_date": "2023-06-26",
+      "known_at": "2023-06-26T23:59:59+08:00",
+      "record_date": "2023-06-29",
+      "ex_date": "2023-06-30",
+      "payment_date": "2023-06-30",
+      "evidence_level": "OFFICIAL_IMPLEMENTATION_NOTICE",
+      "source_url": "https://www.moutaichina.com/maotaigf/fileDir/resource/cms/article/408428/561111/2023062617072666236.pdf"
+    },
+    {
+      "event_id": "600519-2023-special-dividend-ex-20231220",
+      "cash_per_share": "19.106",
+      "announcement_date": "2023-12-14",
+      "known_at": "2023-12-14T23:59:59+08:00",
+      "record_date": "2023-12-19",
+      "ex_date": "2023-12-20",
+      "payment_date": "2023-12-20",
+      "evidence_level": "OFFICIAL_IMPLEMENTATION_NOTICE",
+      "source_url": "https://www.sse.com.cn/disclosure/listedinfo/announcement/c/new/2023-12-14/600519_20231214_WR1C.pdf"
+    },
+    {
+      "event_id": "600519-2023-annual-dividend-ex-20240619",
+      "cash_per_share": "30.876",
+      "announcement_date": "2024-06-12",
+      "known_at": "2024-06-12T23:59:59+08:00",
+      "record_date": "2024-06-18",
+      "ex_date": "2024-06-19",
+      "payment_date": "2024-06-19",
+      "evidence_level": "OFFICIAL_IMPLEMENTATION_NOTICE",
+      "source_url": "https://www.moutaichina.com/mtgf/attachDir/2024/06/2024061210531834730.pdf"
+    },
+    {
+      "event_id": "600519-2024-interim-dividend-ex-20241220",
+      "cash_per_share": "23.882",
+      "announcement_date": "2024-12-14",
+      "known_at": "2024-12-14T23:59:59+08:00",
+      "record_date": "2024-12-19",
+      "ex_date": "2024-12-20",
+      "payment_date": "2024-12-20",
+      "evidence_level": "OFFICIAL_IMPLEMENTATION_NOTICE",
+      "source_url": "https://www.moutaichina.com/mtgf/attachDir/2024/12/2024121711072586971.pdf"
+    }
+  ],
+  "timestamp_policy": "Announcement dates without a reliable clock time are conservatively available at 23:59:59 Asia/Shanghai. This event table is scoped to 2023-2024 and does not assert complete corporate-action coverage outside that period."
+}

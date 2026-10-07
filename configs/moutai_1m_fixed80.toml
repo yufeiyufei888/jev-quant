@@ -1,0 +1,37 @@
+[project]
+name = "moutai_1m_fixed80"
+symbol = "600519.SH"
+initial_cash_cny = "1000000.00"
+
+[strategy]
+name = "fixed_entry_80"
+entry_target_weight = "0.80"
+entry_once = true
+
+[execution]
+decision_interval_minutes = 5
+latency_minutes = 5
+price_protection_bps = 50
+slippage_bps = 5
+min_cash_reserve_cny = "1000.00"
+whole_lot_shares = 100
+
+[fees]
+commission_rate = "0.0003"
+min_commission_cny = "5.00"
+stamp_duty_sell_before_2023_08_28 = "0.001"
+stamp_duty_sell_from_2023_08_28 = "0.0005"
+transfer_fee_before_2022_04_29 = "0.00002"
+transfer_fee_from_2022_04_29 = "0.00001"
+
+[data]
+root_env = "JEVQUANT_DATA_ROOT"
+time_label_semantics = "unverified"
+raw_price_required = true
+api_key_env = "TYPESAFE_API_KEY"
+
+[api_usage]
+hard_limits_enabled = false
+record_model_and_tokens = true
+record_estimated_cost = true
+automatic_stop_on_cost = false
